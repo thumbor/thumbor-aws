@@ -147,3 +147,28 @@ class FileStorageTestCase(BaseS3TestCase):
         exists = await storage.exists(filepath)
 
         expect(exists).to_be_true()
+
+    @gen_test
+    async def test_can_remove(self):
+        storage = await self.ensure_bucket()
+        filepath = f"/test/can_put_file_{uuid4()}"
+        await storage.upload(filepath, b'{"some": "data"}')
+        exists = await storage.exists(filepath)
+        expect(exists).to_be_true()
+
+        await storage.remove(filepath)
+
+        exists = await storage.exists(filepath)
+        expect(exists).to_be_false()
+
+    @gen_test
+    async def test_can_remove_invalid_file(self):
+        storage = await self.ensure_bucket()
+        filepath = f"/test/can_put_file_{uuid4()}"
+        exists = await storage.exists(filepath)
+        expect(exists).to_be_false()
+
+        await storage.remove(filepath)
+
+        exists = await storage.exists(filepath)
+        expect(exists).to_be_false()
