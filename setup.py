@@ -68,6 +68,8 @@ thumbor_aws provides extensions for thumbor using AWS services
         package_data={"": ["*.xml"]},
         install_requires=[
             "thumbor>=7.0.0a5",
+            "aiobotocore>=2.0.0,<3.0.0",
+            "pycurl>=7.44.1,<8.0.0",
         ],
         extras_require={"tests": TESTS_REQUIREMENTS},
         entry_points={
