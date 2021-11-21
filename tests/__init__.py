@@ -16,6 +16,10 @@ from thumbor_aws.storage import Storage
 
 
 class BaseS3TestCase(TestCase):
+    @property
+    def bucket_name(self):
+        return self.context.config.AWS_STORAGE_BUCKET_NAME
+
     def get_context(self):
         cfg = Config(SECURITY_KEY="ACME-SEC")
         cfg.STORAGE = "thumbor_aws.storage"
@@ -29,13 +33,13 @@ class BaseS3TestCase(TestCase):
         server.security_key = "ACME-SEC"
         return Context(server, cfg, importer)
 
-    async def ensure_bucket(self):
-        storage = Storage(self.context)
+    async def ensure_bucket(self, cls=Storage):
+        storage = cls(self.context)
         location = {"LocationConstraint": self.context.config.AWS_STORAGE_REGION_NAME}
         async with storage.get_client() as client:
             try:
                 await client.create_bucket(
-                    Bucket=self.context.config.AWS_STORAGE_BUCKET_NAME,
+                    Bucket=self.bucket_name,
                     CreateBucketConfiguration=location,
                 )
             except client.exceptions.BucketAlreadyOwnedByYou:

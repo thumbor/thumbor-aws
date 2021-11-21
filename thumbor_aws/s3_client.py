@@ -52,10 +52,72 @@ Config.define(
     "Storage",
 )
 
+Config.define(
+    "AWS_RESULT_STORAGE_REGION_NAME",
+    "us-east-1",
+    "Region where thumbor's objects are going to be stored.",
+    "Storage",
+)
+
+Config.define(
+    "AWS_RESULT_STORAGE_BUCKET_NAME",
+    "thumbor",
+    "S3 Bucket where thumbor's objects are going to be stored.",
+    "Storage",
+)
+
+Config.define(
+    "AWS_RESULT_STORAGE_S3_SECRET_ACCESS_KEY",
+    None,
+    "Secret access key for S3 to allow thumbor to store objects there.",
+    "Storage",
+)
+
+Config.define(
+    "AWS_RESULT_STORAGE_S3_ACCESS_KEY_ID",
+    None,
+    "Access key ID for S3 to allow thumbor to store objects there.",
+    "Storage",
+)
+
+Config.define(
+    "AWS_RESULT_STORAGE_S3_ENDPOINT_URL",
+    None,
+    "Endpoint URL for S3 API. Very useful for testing.",
+    "Storage",
+)
+
+Config.define(
+    "AWS_RESULT_STORAGE_ROOT_PATH",
+    "/rs",
+    "Result Storage prefix path.",
+    "Result Storage",
+)
+
 
 class S3Client:
     __session: AioSession = None
     __client: AioBaseClient = None
+
+    @property
+    def region_name(self) -> str:
+        return self.context.config.AWS_STORAGE_REGION_NAME
+
+    @property
+    def secret_access_key(self) -> str:
+        return self.context.config.AWS_STORAGE_S3_SECRET_ACCESS_KEY
+
+    @property
+    def access_key_id(self) -> str:
+        return self.context.config.AWS_STORAGE_S3_ACCESS_KEY_ID
+
+    @property
+    def endpoint_url(self) -> str:
+        return self.context.config.AWS_STORAGE_S3_ENDPOINT_URL
+
+    @property
+    def bucket_name(self) -> str:
+        return self.context.config.AWS_STORAGE_BUCKET_NAME
 
     @property
     def Session(self) -> AioSession:
@@ -66,10 +128,10 @@ class S3Client:
     def get_client(self) -> AioBaseClient:
         return self.Session.create_client(
             "s3",
-            region_name=self.context.config.AWS_STORAGE_REGION_NAME,
-            aws_secret_access_key=self.context.config.AWS_STORAGE_S3_SECRET_ACCESS_KEY,
-            aws_access_key_id=self.context.config.AWS_STORAGE_S3_ACCESS_KEY_ID,
-            endpoint_url=self.context.config.AWS_STORAGE_S3_ENDPOINT_URL,
+            region_name=self.region_name,
+            aws_secret_access_key=self.secret_access_key,
+            aws_access_key_id=self.access_key_id,
+            endpoint_url=self.endpoint_url,
         )
 
     async def upload(
@@ -77,13 +139,12 @@ class S3Client:
         filepath: str,
         data: bytes,
     ) -> str:
-        bucket = self.context.config.AWS_STORAGE_BUCKET_NAME
         path = filepath.lstrip("/")
         async with self.get_client() as client:
             response = None
             try:
                 response = await client.put_object(
-                    Bucket=bucket,
+                    Bucket=self.bucket_name,
                     Key=path,
                     Body=data,
                 )
@@ -107,10 +168,9 @@ class S3Client:
     async def get_data(
         self, filepath: str, expiration: int = None
     ) -> (int, bytes, Optional[datetime.datetime]):
-        bucket = self.context.config.AWS_STORAGE_BUCKET_NAME
         path = filepath.lstrip("/")
         async with self.get_client() as client:
-            response = await client.get_object(Bucket=bucket, Key=path)
+            response = await client.get_object(Bucket=self.bucket_name, Key=path)
 
             status_code = self.get_status_code(response)
             if status_code != 200:

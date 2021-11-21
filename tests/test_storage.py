@@ -19,7 +19,7 @@ from thumbor.context import Context, ServerParameters
 from thumbor.importer import Importer
 
 
-class FileStorageTestCase(BaseS3TestCase):
+class StorageTestCase(BaseS3TestCase):
     def get_context(self):
         cfg = Config(SECURITY_KEY="ACME-SEC")
         cfg.STORAGE = "thumbor_aws.storage"

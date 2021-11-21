@@ -68,10 +68,11 @@ class Storage(storages.BaseStorage, S3Client):
         return loads(body)
 
     async def exists(self, path: str) -> bool:
-        bucket = self.context.config.AWS_STORAGE_BUCKET_NAME
         async with self.get_client() as client:
             try:
-                await client.get_object_acl(Bucket=bucket, Key=path.lstrip("/"))
+                await client.get_object_acl(
+                    Bucket=self.bucket_name, Key=path.lstrip("/")
+                )
                 return True
             except client.exceptions.NoSuchKey:
                 return False
@@ -81,9 +82,10 @@ class Storage(storages.BaseStorage, S3Client):
         if not exists:
             return
 
-        bucket = self.context.config.AWS_STORAGE_BUCKET_NAME
         async with self.get_client() as client:
-            response = await client.delete_object(Bucket=bucket, Key=path.lstrip("/"))
+            response = await client.delete_object(
+                Bucket=self.bucket_name, Key=path.lstrip("/")
+            )
             status = self.get_status_code(response)
             if status >= 300:
                 raise RuntimeError(f"Failed to remove {path}: Status {status}")

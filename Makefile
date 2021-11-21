@@ -13,7 +13,7 @@ test:
 	@$(MAKE) kill_redis
 
 unit:
-	@pytest -n `nproc` --cov=thumbor_aws tests/
+	@pytest --cov=thumbor_aws tests/
 
 sequential-unit:
 	@pytest -sv --junit-xml=test-results/unit/results.xml --cov=thumbor_aws tests/
