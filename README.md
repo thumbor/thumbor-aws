@@ -5,7 +5,7 @@ This is a project to provide modern thumbor>7.0.0 AWS Extensions.
 At this point the following are supported:
 
 * S3 Storage - Retrieve and store source files from an S3 bucket and use them in thumbor for transforming images, as well as storing detector data and security keys for each file;
-* S3 Result Storage - Retrieve and store resulting images to avoid recalculating them.
+* S3 Result Storage - Retrieve and store resulting images to S3 and avoid recalculating them. These can be set to be public-read and thus be served directly from S3.
 
 In the future there are plans of adding support for other AWS services.
 
@@ -103,7 +103,22 @@ Below you can see the result of running thumbor's config generation after import
 ################################################################################
 ```
 
+## Caveats
+
+1. thumbor-aws does not create buckets for you. If they don't exist you are getting errors.
+
 ## Hacking
+
+Hacking on thumbor-aws requires a modern python 3 (>3.9 is what has been tested) and a virtualenv with it.
+
+1. Install dependencies using `make setup`;
+2. Run localstack to simulate AWS using `make services` in a different terminal tab (this requires docker);
+3. Run `make test` to run tests;
+4. Hack away! And keep running tests and adding new tests.
+
+Don't forget to run `make flake` and `make pylint` to catch syntatic and linting problems.
+
+As soon as you have something to contribute, just create a PR and send it our way.
 
 ## License
 

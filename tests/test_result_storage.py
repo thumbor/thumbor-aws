@@ -45,6 +45,11 @@ class ResultStorageTestCase(BaseS3TestCase):
 
     @gen_test
     async def test_can_put_file_in_s3(self):
+        (
+            """Verifies that submitting an image to S3 through"""
+            """Result Storage works and the image is there"""
+        )
+
         filepath = f"/test/can_put_file_{uuid4()}"
         self.context.request = Mock(url=filepath)
         storage = await self.ensure_bucket(cls=Storage)
@@ -61,6 +66,7 @@ class ResultStorageTestCase(BaseS3TestCase):
 
     @gen_test
     async def test_can_get_result_in_s3(self):
+        """Verifies that an image can be retrieved from S3 through Result Storage"""
         filepath = f"/test/can_put_file_{uuid4()}"
         self.context.request = Mock(url=filepath)
         storage = await self.ensure_bucket(cls=Storage)
@@ -77,6 +83,7 @@ class ResultStorageTestCase(BaseS3TestCase):
 
     @gen_test
     async def test_can_get_result_in_s3_for_invalid_file(self):
+        """Verifies that if an image does not exist, Result Storage returns None"""
         filepath = f"/test/can_put_file_{uuid4()}"
         self.context.request = Mock(url=filepath)
         storage = await self.ensure_bucket(cls=Storage)
@@ -84,3 +91,17 @@ class ResultStorageTestCase(BaseS3TestCase):
         data = await storage.get()
 
         expect(data).to_be_null()
+
+    @gen_test
+    async def test_can_check_deprecated_last_updated_method(self):
+        """Verifies that Result Storage deprecated last_updated method works"""
+
+        filepath = f"/test/can_put_file_{uuid4()}"
+        self.context.request = Mock(url=filepath)
+        storage = await self.ensure_bucket(cls=Storage)
+        expected = self.test_images["default"]
+        await storage.put(expected)
+
+        last_updated = await storage.last_updated()
+
+        expect(last_updated).not_to_be_null()

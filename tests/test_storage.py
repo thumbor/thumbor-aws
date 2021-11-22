@@ -38,6 +38,8 @@ class StorageTestCase(BaseS3TestCase):
 
     @gen_test
     async def test_can_put_file_in_s3(self):
+        """Verifies that an image can be placed in S3 using Storage and that it's there"""
+
         storage = await self.ensure_bucket()
         filepath = f"/test/can_put_file_{uuid4()}"
         expected = self.test_images["default"]
@@ -53,6 +55,8 @@ class StorageTestCase(BaseS3TestCase):
 
     @gen_test
     async def test_can_put_crypto_in_s3(self):
+        """Verifies that security information can be placed in S3 using Storage"""
+
         storage = await self.ensure_bucket()
         filepath = f"/test/can_put_file_{uuid4()}"
 
@@ -67,6 +71,8 @@ class StorageTestCase(BaseS3TestCase):
 
     @gen_test
     async def test_can_put_detector_data_in_s3(self):
+        """Verifies that detector data can be placed in S3 using Storage"""
+
         storage = await self.ensure_bucket()
         filepath = f"/test/can_put_file_{uuid4()}"
 
@@ -86,6 +92,8 @@ class StorageTestCase(BaseS3TestCase):
 
     @gen_test
     async def test_can_load_file_in_s3(self):
+        """Verifies that an image can be loaded from S3 using Storage"""
+
         storage = await self.ensure_bucket()
         filepath = f"/test/can_load_file_{uuid4()}"
         expected = self.test_images["default"]
@@ -97,6 +105,7 @@ class StorageTestCase(BaseS3TestCase):
 
     @gen_test
     async def test_can_handle_expired_data(self):
+        """Verifies that an image won't be loaded from S3 using Storage if it is expired"""
         storage = await self.ensure_bucket()
         filepath = f"/test/can_load_file_{uuid4()}"
         expected = self.test_images["default"]
@@ -109,6 +118,7 @@ class StorageTestCase(BaseS3TestCase):
 
     @gen_test
     async def test_can_get_crypto_from_s3(self):
+        """Verifies that security information can be loaded from S3 using Storage"""
         storage = await self.ensure_bucket()
         filepath = f"/test/can_put_file_{uuid4()}"
         await storage.upload(filepath + ".txt", b"ACME-SEC2", "application/text")
@@ -119,6 +129,7 @@ class StorageTestCase(BaseS3TestCase):
 
     @gen_test
     async def test_can_get_detector_data_from_s3(self):
+        """Verifies that detector data can be loaded from S3 using Storage"""
         storage = await self.ensure_bucket()
         filepath = f"/test/can_put_file_{uuid4()}"
         await storage.upload(
@@ -135,6 +146,8 @@ class StorageTestCase(BaseS3TestCase):
 
     @gen_test
     async def test_verify_file_does_not_exist(self):
+        """Verifies that Storage can tell if a file does not exist in S3"""
+
         storage = await self.ensure_bucket()
         filepath = f"/test/can_put_file_{uuid4()}"
 
@@ -144,6 +157,8 @@ class StorageTestCase(BaseS3TestCase):
 
     @gen_test
     async def test_verify_file_does_exist(self):
+        """Verifies that Storage can tell if a file exists in S3"""
+
         storage = await self.ensure_bucket()
         filepath = f"/test/can_put_file_{uuid4()}"
         await storage.upload(filepath, self.test_images["default"], "image/jpeg")
@@ -154,6 +169,8 @@ class StorageTestCase(BaseS3TestCase):
 
     @gen_test
     async def test_can_remove(self):
+        """Verifies that Storage can remove a file from S3"""
+
         storage = await self.ensure_bucket()
         filepath = f"/test/can_put_file_{uuid4()}"
         await storage.upload(filepath, self.test_images["default"], "image/jpeg")
@@ -167,6 +184,8 @@ class StorageTestCase(BaseS3TestCase):
 
     @gen_test
     async def test_can_remove_invalid_file(self):
+        """Verifies that removing a file that does not exist does not cause Storage to fail"""
+
         storage = await self.ensure_bucket()
         filepath = f"/test/can_put_file_{uuid4()}"
         exists = await storage.exists(filepath)

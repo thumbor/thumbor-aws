@@ -6,11 +6,12 @@ OS := $(shell uname)
 setup:
 	@$(PYTHON) -m pip install -e .[tests]
 
+services:
+	@docker run --rm -it -p 4566:4566 -p 4571:4571 -e"SERVICES=s3" localstack/localstack
+
 test:
 	@$(MAKE) unit coverage
-	@$(MAKE) integration_run
 	@$(MAKE) flake
-	@$(MAKE) kill_redis
 
 unit:
 	@pytest --cov=thumbor_aws tests/
@@ -22,10 +23,10 @@ format:
 	@black .
 
 flake:
-	@flake8 --config flake8
+	@flake8 --config .flake8
 
 pylint:
-	@pylint thumbor tests
+	@pylint thumbor_aws tests
 
 run:
 	@thumbor -c thumbor.conf -l debug

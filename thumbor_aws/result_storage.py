@@ -9,8 +9,10 @@
 # Copyright (c) 2021 Bernardo Heynemann heynemann@gmail.com
 
 
-from datetime import timezone
+from datetime import datetime, timezone
 from urllib.parse import unquote
+
+from deprecated import deprecated
 
 from thumbor.engines import BaseEngine
 from thumbor.result_storages import BaseStorage, ResultStorageResult
@@ -45,21 +47,24 @@ class Storage(BaseStorage, S3Client):
 
     @property
     def root_path(self) -> str:
+        """Defines the path prefix for all result storage images in S3"""
         return self.context.config.AWS_RESULT_STORAGE_ROOT_PATH.rstrip("/")
 
     async def put(self, image_bytes: bytes) -> str:
         file_abspath = self.normalize_path(self.context.request.url)
-        logger.debug(f"[RESULT_STORAGE] putting at {file_abspath}")
+        logger.debug("[RESULT_STORAGE] putting at %s", file_abspath)
         content_type = BaseEngine.get_mimetype(image_bytes)
         response = await self.upload(file_abspath, image_bytes, content_type)
-        logger.info(f"[RESULT_STORAGE] Image uploaded successfully to {file_abspath}")
+        logger.info("[RESULT_STORAGE] Image uploaded successfully to %s", file_abspath)
         return response
 
     @property
     def is_auto_webp(self) -> bool:
+        """Identifies the current request if it's being auto converted to webp"""
         return self.context.config.AUTO_WEBP and self.context.request.accepts_webp
 
     def normalize_path(self, path: str) -> str:
+        """Returns the path used for result storage"""
         prefix = "auto_webp" if self.is_auto_webp else "default"
         fs_path = unquote(path).lstrip("/")
         return f"{self.root_path}/{prefix}/{fs_path}"
@@ -78,10 +83,14 @@ class Storage(BaseStorage, S3Client):
         status, body, last_modified = await self.get_data(file_abspath)
 
         if status != 200 or self._is_expired(last_modified):
-            logger.debug(f"[RESULT_STORAGE] cached image has expired (status {status})")
+            logger.debug(
+                "[RESULT_STORAGE] cached image has expired (status %s)", status
+            )
             return None
 
-        logger.info(f"[RESULT_STORAGE] Image retrieved successfully at {file_abspath}.")
+        logger.info(
+            "[RESULT_STORAGE] Image retrieved successfully at %s.", file_abspath
+        )
 
         return ResultStorageResult(
             buffer=body,
@@ -90,4 +99,18 @@ class Storage(BaseStorage, S3Client):
                 "ContentLength": len(body),
                 "ContentType": BaseEngine.get_mimetype(body),
             },
+        )
+
+    @deprecated(version="7.0.0", reason="Use result's last_modified instead")
+    async def last_updated(  # pylint: disable=invalid-overridden-method
+        self,
+    ) -> datetime:
+        path = self.context.request.url
+        file_abspath = self.normalize_path(path)
+        logger.debug("[RESULT_STORAGE] getting from %s", file_abspath)
+
+        response = await self.get_object_acl(file_abspath)
+        return datetime.strptime(
+            response["ResponseMetadata"]["HTTPHeaders"]["last-modified"],
+            "%a, %d %b %Y %H:%M:%S %Z",
         )
