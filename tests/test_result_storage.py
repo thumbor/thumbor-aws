@@ -10,6 +10,7 @@
 
 from uuid import uuid4
 
+import pytest
 from mock import Mock
 from preggy import expect
 from tornado.testing import gen_test
@@ -21,6 +22,7 @@ from thumbor.importer import Importer
 from thumbor_aws.result_storage import Storage
 
 
+@pytest.mark.usefixtures("test_images")
 class ResultStorageTestCase(BaseS3TestCase):
     @property
     def bucket_name(self):
@@ -46,7 +48,7 @@ class ResultStorageTestCase(BaseS3TestCase):
         filepath = f"/test/can_put_file_{uuid4()}"
         self.context.request = Mock(url=filepath)
         storage = await self.ensure_bucket(cls=Storage)
-        expected = b"test data"
+        expected = self.test_images["default"]
 
         path = await storage.put(expected)
 
@@ -56,3 +58,29 @@ class ResultStorageTestCase(BaseS3TestCase):
         status, data, _ = await storage.get_data(f"/test-rs/default{filepath}")
         expect(status).to_equal(200)
         expect(data).to_equal(expected)
+
+    @gen_test
+    async def test_can_get_result_in_s3(self):
+        filepath = f"/test/can_put_file_{uuid4()}"
+        self.context.request = Mock(url=filepath)
+        storage = await self.ensure_bucket(cls=Storage)
+        expected = self.test_images["default"]
+        await storage.put(expected)
+
+        data = await storage.get()
+
+        expect(data).not_to_be_null()
+        expect(data.buffer).to_equal(expected)
+        expect(data.metadata).to_include("LastModified")
+        expect(data.metadata["ContentLength"]).to_equal(5319)
+        expect(data.metadata["ContentType"]).to_equal("image/jpeg")
+
+    @gen_test
+    async def test_can_get_result_in_s3_for_invalid_file(self):
+        filepath = f"/test/can_put_file_{uuid4()}"
+        self.context.request = Mock(url=filepath)
+        storage = await self.ensure_bucket(cls=Storage)
+
+        data = await storage.get()
+
+        expect(data).to_be_null()

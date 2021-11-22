@@ -14,84 +14,98 @@ from typing import Any, Mapping, Optional
 from aiobotocore.client import AioBaseClient
 from aiobotocore.session import AioSession, get_session
 
-from thumbor.config import Config
+from thumbor.config import Config, config
 from thumbor.utils import logger
 
 Config.define(
     "AWS_STORAGE_REGION_NAME",
     "us-east-1",
     "Region where thumbor's objects are going to be stored.",
-    "Storage",
+    "AWS Storage",
 )
 
 Config.define(
     "AWS_STORAGE_BUCKET_NAME",
     "thumbor",
     "S3 Bucket where thumbor's objects are going to be stored.",
-    "Storage",
+    "AWS Storage",
 )
 
 Config.define(
     "AWS_STORAGE_S3_SECRET_ACCESS_KEY",
     None,
     "Secret access key for S3 to allow thumbor to store objects there.",
-    "Storage",
+    "AWS Storage",
 )
 
 Config.define(
     "AWS_STORAGE_S3_ACCESS_KEY_ID",
     None,
     "Access key ID for S3 to allow thumbor to store objects there.",
-    "Storage",
+    "AWS Storage",
 )
 
 Config.define(
     "AWS_STORAGE_S3_ENDPOINT_URL",
     None,
     "Endpoint URL for S3 API. Very useful for testing.",
-    "Storage",
+    "AWS Storage",
+)
+
+Config.define(
+    "AWS_STORAGE_S3_ACL",
+    None,
+    "ACL to use for storing items in S3.",
+    "AWS Storage",
 )
 
 Config.define(
     "AWS_RESULT_STORAGE_REGION_NAME",
     "us-east-1",
     "Region where thumbor's objects are going to be stored.",
-    "Storage",
+    "AWS Result Storage",
 )
 
 Config.define(
     "AWS_RESULT_STORAGE_BUCKET_NAME",
     "thumbor",
     "S3 Bucket where thumbor's objects are going to be stored.",
-    "Storage",
+    "AWS Result Storage",
 )
 
 Config.define(
     "AWS_RESULT_STORAGE_S3_SECRET_ACCESS_KEY",
     None,
     "Secret access key for S3 to allow thumbor to store objects there.",
-    "Storage",
+    "AWS Result Storage",
 )
 
 Config.define(
     "AWS_RESULT_STORAGE_S3_ACCESS_KEY_ID",
     None,
     "Access key ID for S3 to allow thumbor to store objects there.",
-    "Storage",
+    "AWS Result Storage",
 )
 
 Config.define(
     "AWS_RESULT_STORAGE_S3_ENDPOINT_URL",
     None,
     "Endpoint URL for S3 API. Very useful for testing.",
-    "Storage",
+    "AWS Result Storage",
 )
 
 Config.define(
     "AWS_RESULT_STORAGE_ROOT_PATH",
     "/rs",
     "Result Storage prefix path.",
-    "Result Storage",
+    "AWS Result Storage",
+)
+
+Config.define(
+    "AWS_RESULT_STORAGE_S3_ACL",
+    None,
+    "ACL to use for storing items in S3.",
+    "AWS Storage",
 )
 
 
@@ -120,6 +134,10 @@ class S3Client:
         return self.context.config.AWS_STORAGE_BUCKET_NAME
 
     @property
+    def file_acl(self) -> str:
+        return self.context.config.AWS_STORAGE_S3_ACL
+
+    @property
     def Session(self) -> AioSession:
         if self.__session is None:
             self.__session = get_session()
@@ -138,16 +156,22 @@ class S3Client:
         self,
         filepath: str,
         data: bytes,
+        content_type,
     ) -> str:
         path = filepath.lstrip("/")
         async with self.get_client() as client:
             response = None
             try:
-                response = await client.put_object(
+                settings = dict(
                     Bucket=self.bucket_name,
                     Key=path,
                     Body=data,
+                    ContentType=content_type,
                 )
+                if self.file_acl is not None:
+                    settings["ACL"] = self.file_acl
+
+                response = await client.put_object(**settings)
             except Exception as e:
                 msg = f"Unable to upload image to {path}: {e} ({type(e)})"
                 logger.error(msg)
@@ -179,12 +203,22 @@ class S3Client:
                 return status_code, msg, None
 
             last_modified = response["LastModified"]
-            if self.__is_expired(last_modified, expiration):
+            if self._is_expired(last_modified, expiration):
                 return 410, b"", last_modified
 
             body = await self.get_body(response)
 
             return status_code, body, last_modified
+
+    async def object_exists(self, filepath: str):
+        async with self.get_client() as client:
+            try:
+                await client.get_object_acl(
+                    Bucket=self.bucket_name, Key=filepath.lstrip("/")
+                )
+                return True
+            except client.exceptions.NoSuchKey:
+                return False
 
     def get_status_code(self, response: Mapping[str, Any]) -> int:
         if (
@@ -207,7 +241,7 @@ class S3Client:
         async with response["Body"] as stream:
             return await stream.read()
 
-    def __is_expired(
+    def _is_expired(
         self, last_modified: datetime.datetime, expiration: int = None
     ) -> bool:
         if expiration is None:
@@ -219,3 +253,11 @@ class S3Client:
         print(last_modified)
         timediff = datetime.datetime.now(datetime.timezone.utc) - last_modified
         return timediff.total_seconds() > expiration
+
+
+def generate_config():
+    config.generate_config()
+
+
+if __name__ == "__main__":
+    generate_config()

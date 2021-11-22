@@ -26,3 +26,6 @@ flake:
 
 pylint:
 	@pylint thumbor tests
+
+run:
+	@thumbor -c thumbor.conf -l debug

@@ -10,6 +10,7 @@
 
 from uuid import uuid4
 
+import pytest
 from preggy import expect
 from tornado.testing import gen_test
 
@@ -19,6 +20,7 @@ from thumbor.context import Context, ServerParameters
 from thumbor.importer import Importer
 
 
+@pytest.mark.usefixtures("test_images")
 class StorageTestCase(BaseS3TestCase):
     def get_context(self):
         cfg = Config(SECURITY_KEY="ACME-SEC")
@@ -38,7 +40,7 @@ class StorageTestCase(BaseS3TestCase):
     async def test_can_put_file_in_s3(self):
         storage = await self.ensure_bucket()
         filepath = f"/test/can_put_file_{uuid4()}"
-        expected = b"test data"
+        expected = self.test_images["default"]
 
         path = await storage.put(filepath, expected)
 
@@ -86,7 +88,7 @@ class StorageTestCase(BaseS3TestCase):
     async def test_can_load_file_in_s3(self):
         storage = await self.ensure_bucket()
         filepath = f"/test/can_load_file_{uuid4()}"
-        expected = b"test data"
+        expected = self.test_images["default"]
         await storage.put(filepath, expected)
 
         data = await storage.get(filepath)
@@ -97,7 +99,7 @@ class StorageTestCase(BaseS3TestCase):
     async def test_can_handle_expired_data(self):
         storage = await self.ensure_bucket()
         filepath = f"/test/can_load_file_{uuid4()}"
-        expected = b"test data"
+        expected = self.test_images["default"]
         await storage.put(filepath, expected)
 
         status, data, _ = await storage.get_data(filepath, expiration=0)
@@ -109,7 +111,7 @@ class StorageTestCase(BaseS3TestCase):
     async def test_can_get_crypto_from_s3(self):
         storage = await self.ensure_bucket()
         filepath = f"/test/can_put_file_{uuid4()}"
-        await storage.upload(filepath + ".txt", b"ACME-SEC2")
+        await storage.upload(filepath + ".txt", b"ACME-SEC2", "application/text")
 
         data = await storage.get_crypto(filepath)
 
@@ -119,7 +121,9 @@ class StorageTestCase(BaseS3TestCase):
     async def test_can_get_detector_data_from_s3(self):
         storage = await self.ensure_bucket()
         filepath = f"/test/can_put_file_{uuid4()}"
-        await storage.upload(filepath + ".detectors.txt", b'{"some": "data"}')
+        await storage.upload(
+            filepath + ".detectors.txt", b'{"some": "data"}', "application/json"
+        )
 
         data = await storage.get_detector_data(filepath)
 
@@ -139,10 +143,10 @@ class StorageTestCase(BaseS3TestCase):
         expect(exists).to_be_false()
 
     @gen_test
-    async def test_verify_file_does_exists(self):
+    async def test_verify_file_does_exist(self):
         storage = await self.ensure_bucket()
         filepath = f"/test/can_put_file_{uuid4()}"
-        await storage.upload(filepath, b'{"some": "data"}')
+        await storage.upload(filepath, self.test_images["default"], "image/jpeg")
 
         exists = await storage.exists(filepath)
 
@@ -152,7 +156,7 @@ class StorageTestCase(BaseS3TestCase):
     async def test_can_remove(self):
         storage = await self.ensure_bucket()
         filepath = f"/test/can_put_file_{uuid4()}"
-        await storage.upload(filepath, b'{"some": "data"}')
+        await storage.upload(filepath, self.test_images["default"], "image/jpeg")
         exists = await storage.exists(filepath)
         expect(exists).to_be_true()
 

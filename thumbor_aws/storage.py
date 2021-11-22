@@ -12,13 +12,15 @@ from json import dumps, loads
 from typing import Any
 
 import thumbor.storages as storages
+from thumbor.engines import BaseEngine
 from thumbor.utils import logger
 from thumbor_aws.s3_client import S3Client
 
 
 class Storage(storages.BaseStorage, S3Client):
     async def put(self, path: str, file_bytes: bytes) -> str:
-        path = await self.upload(path, file_bytes)
+        content_type = BaseEngine.get_mimetype(file_bytes)
+        path = await self.upload(path, file_bytes, content_type)
         return path
 
     async def put_crypto(self, path: str) -> str:
@@ -33,7 +35,7 @@ class Storage(storages.BaseStorage, S3Client):
 
         crypto_path = f"{path}.txt"
         key = self.context.server.security_key.encode()
-        s3_path = await self.upload(crypto_path, key)
+        s3_path = await self.upload(crypto_path, key, "application/text")
 
         logger.debug("Stored crypto at %s", crypto_path)
 
@@ -42,7 +44,7 @@ class Storage(storages.BaseStorage, S3Client):
     async def put_detector_data(self, path: str, data: Any) -> str:
         filepath = f"{path}.detectors.txt"
         details = dumps(data)
-        return await self.upload(filepath, details)
+        return await self.upload(filepath, details, "application/json")
 
     async def get(self, path: str) -> bytes:
         status, body, _ = await self.get_data(path)
@@ -68,14 +70,7 @@ class Storage(storages.BaseStorage, S3Client):
         return loads(body)
 
     async def exists(self, path: str) -> bool:
-        async with self.get_client() as client:
-            try:
-                await client.get_object_acl(
-                    Bucket=self.bucket_name, Key=path.lstrip("/")
-                )
-                return True
-            except client.exceptions.NoSuchKey:
-                return False
+        return await self.object_exists(path)
 
     async def remove(self, path: str):
         exists = await self.exists(path)
