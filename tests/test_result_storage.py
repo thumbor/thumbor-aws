@@ -16,9 +16,6 @@ from preggy import expect
 from tornado.testing import gen_test
 
 from tests import BaseS3TestCase
-from thumbor.config import Config
-from thumbor.context import Context, ServerParameters
-from thumbor.importer import Importer
 from thumbor_aws.result_storage import Storage
 
 
@@ -27,21 +24,6 @@ class ResultStorageTestCase(BaseS3TestCase):
     @property
     def bucket_name(self):
         return self.context.config.AWS_RESULT_STORAGE_BUCKET_NAME
-
-    def get_context(self):
-        cfg = Config(SECURITY_KEY="ACME-SEC")
-        cfg.RESULT_STORAGE = "thumbor_aws.result_storage"
-        cfg.AWS_RESULT_STORAGE_REGION_NAME = "local"
-        cfg.AWS_RESULT_STORAGE_BUCKET_NAME = "test-bucket"
-        cfg.AWS_RESULT_STORAGE_S3_ENDPOINT_URL = "https://localhost:4566"
-        cfg.AWS_RESULT_STORAGE_ROOT_PATH = "/test-rs"
-        cfg.STORES_CRYPTO_KEY_FOR_EACH_IMAGE = True
-
-        importer = Importer(cfg)
-        importer.import_modules()
-        server = ServerParameters(8889, "localhost", "thumbor.conf", None, "info", None)
-        server.security_key = "ACME-SEC"
-        return Context(server, cfg, importer)
 
     @gen_test
     async def test_can_put_file_in_s3(self):

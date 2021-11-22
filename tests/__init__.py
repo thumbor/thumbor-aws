@@ -26,9 +26,19 @@ class BaseS3TestCase(TestCase):
     def get_context(self):
         cfg = Config(SECURITY_KEY="ACME-SEC")
         cfg.STORAGE = "thumbor_aws.storage"
+        cfg.RESULT_STORAGE = "thumbor_aws.result_storage"
+
+        # Storage Config
         cfg.AWS_STORAGE_REGION_NAME = "local"
         cfg.AWS_STORAGE_BUCKET_NAME = "test-bucket"
         cfg.AWS_STORAGE_S3_ENDPOINT_URL = "https://localhost:4566"
+
+        # Result Storage Config
+        cfg.AWS_RESULT_STORAGE_REGION_NAME = "local"
+        cfg.AWS_RESULT_STORAGE_BUCKET_NAME = "test-bucket"
+        cfg.AWS_RESULT_STORAGE_S3_ENDPOINT_URL = "https://localhost:4566"
+        cfg.AWS_RESULT_STORAGE_ROOT_PATH = "/test-rs"
+        cfg.STORES_CRYPTO_KEY_FOR_EACH_IMAGE = True
 
         importer = Importer(cfg)
         importer.import_modules()

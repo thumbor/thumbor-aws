@@ -15,27 +15,10 @@ from preggy import expect
 from tornado.testing import gen_test
 
 from tests import BaseS3TestCase
-from thumbor.config import Config
-from thumbor.context import Context, ServerParameters
-from thumbor.importer import Importer
 
 
 @pytest.mark.usefixtures("test_images")
 class StorageTestCase(BaseS3TestCase):
-    def get_context(self):
-        cfg = Config(SECURITY_KEY="ACME-SEC")
-        cfg.STORAGE = "thumbor_aws.storage"
-        cfg.AWS_STORAGE_REGION_NAME = "local"
-        cfg.AWS_STORAGE_BUCKET_NAME = "test-bucket"
-        cfg.AWS_STORAGE_S3_ENDPOINT_URL = "https://localhost:4566"
-        cfg.STORES_CRYPTO_KEY_FOR_EACH_IMAGE = True
-
-        importer = Importer(cfg)
-        importer.import_modules()
-        server = ServerParameters(8889, "localhost", "thumbor.conf", None, "info", None)
-        server.security_key = "ACME-SEC"
-        return Context(server, cfg, importer)
-
     @gen_test
     async def test_can_put_file_in_s3(self):
         """Verifies that an image can be placed in S3 using Storage and that it's there"""

@@ -11,7 +11,7 @@
 from json import dumps, loads
 from typing import Any
 
-import thumbor.storages as storages
+from thumbor import storages
 from thumbor.engines import BaseEngine
 from thumbor.utils import logger
 from thumbor_aws.s3_client import S3Client

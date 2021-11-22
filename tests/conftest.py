@@ -8,6 +8,7 @@ ROOT_PATH = dirname(__file__)
 
 @pytest.fixture(scope="class")
 def test_images(request) -> Mapping[str, bytes]:
+    """Returns all the test images used in tests in thumbor-aws"""
     images = [
         ("default", "image.jpg"),
     ]
