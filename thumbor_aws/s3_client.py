@@ -105,7 +105,7 @@ Config.define(
     "AWS_RESULT_STORAGE_S3_ACL",
     None,
     "ACL to use for storing items in S3.",
-    "AWS Storage",
+    "AWS Result Storage",
 )
 
 
