@@ -125,7 +125,7 @@ As soon as you have something to contribute, just create a PR and send it our wa
 
 MIT License
 
-Copyright (c) 2021 Thumbor (by @globocom)
+Copyright (c) 2021 thumbor-aws (by @heynemann)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
