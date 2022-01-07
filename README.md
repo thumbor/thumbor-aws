@@ -106,7 +106,6 @@ Below you can see the result of running thumbor's config generation after import
 ## Caveats
 
 1. thumbor-aws does not create buckets for you. If they don't exist you are getting errors.
-2. thumbor-aws currently depends on 'thumbor>=7.0.0'. Since thumbor is not out yet, you need to install it from github using `pip install https://github.com/thumbor/thumbor/archive/refs/heads/master.zip`. As soon as 7.0.0 leaves alpha this step won't be required anymore.
 
 ## Hacking
 
