@@ -16,6 +16,7 @@ except ImportError:
     __version__ = "0.0.0"
 
 TESTS_REQUIREMENTS = [
+    "pre-commit>=2.17.0",
     "coverage==5.*,>=5.0.3",
     "flake8==3.*,>=3.7.9",
     "isort==4.*,>=4.3.21",
