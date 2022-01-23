@@ -146,6 +146,14 @@ Below you can see the result of running thumbor's config generation after import
 
 1. thumbor-aws does not create buckets for you. If they don't exist you are getting errors.
 
+You can easily create a bucket using [aws-cli](https://aws.amazon.com/cli/?nc1=h_ls) with:
+
+```
+$ aws s3api create-bucket --bucket <bucket name> --region <your region>
+```
+
+Or through your [AWS Console UI](https://console.aws.amazon.com/s3/home?region=us-east-1).
+
 ### Troubles?
 
 If you experience any troubles, try running:
