@@ -30,10 +30,22 @@ $ make setup
 
 ## Running the Tests
 
-Running the tests is as easy as:
+Before running the tests you need to have dependencies up:
+
+```
+$ make services
+```
+
+Then you can run the tests with:
 
 ```
 $ make test
+```
+
+Or you can run both in the same command with:
+
+```
+$ make ci
 ```
 
 You should see the results of running your tests after an instant.
