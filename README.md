@@ -16,6 +16,8 @@ This is a project to provide modern thumbor>7.0.0 AWS Extensions.
   <a href='https://codeclimate.com/github/thumbor/thumbor-aws' target='_blank'>
     <img src='https://codeclimate.com/github/thumbor/thumbor-aws/badges/gpa.svg'/>
   </a>
+</p>
+<p align="center">
   <a href='https://github.com/thumbor/thumbor-aws/pulls' target='_blank'>
     <img src='https://img.shields.io/github/issues-pr-raw/thumbor/thumbor-aws.svg'/>
   </a>
