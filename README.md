@@ -1,5 +1,3 @@
-If you use thumbor, please take 1 minute and answer [this survey](http://t.co/qPBLXJX0mi)? Only 2 questions!
-
 <p align="center">
 <img src="https://raw.github.com/thumbor/thumbor/master/logo-thumbor.png" />
 </p>
@@ -8,13 +6,6 @@ If you use thumbor, please take 1 minute and answer [this survey](http://t.co/qP
 
 <p align="center">
 This is a project to provide modern thumbor>7.0.0 AWS Extensions.
-
-At this point the following are supported:
-
-* S3 Storage - Retrieve and store source files from an S3 bucket and use them in thumbor for transforming images, as well as storing detector data and security keys for each file;
-* S3 Result Storage - Retrieve and store resulting images to S3 and avoid recalculating them. These can be set to be public-read and thus be served directly from S3.
-
-In the future there are plans of adding support for other AWS services.
 </p>
 
 <p align="center">
@@ -40,10 +31,6 @@ In the future there are plans of adding support for other AWS services.
 </p>
 
 ## ⚙️ Installation
-
-Decide which installation option you want to use.
-
-### Option 1: pip
 
 ```bash
 pip install thumbor-aws
@@ -73,7 +60,7 @@ As usual for thumbor, you don't need to use both at the same time. Feel free to 
 
 thumbor-aws allows you to configure each storage independently, so there are configuration keys for each.
 
-### Storage
+#### Storage
 
 Below you can see the result of running thumbor's config generation after importing thumbor-aws:
 
@@ -115,7 +102,7 @@ Below you can see the result of running thumbor's config generation after import
 ################################################################################
 ```
 
-### Result Storage
+#### Result Storage
 
 Below you can see the result of running thumbor's config generation after importing thumbor-aws:
 
@@ -153,7 +140,7 @@ Below you can see the result of running thumbor's config generation after import
 ################################################################################
 ```
 
-### Caveats
+#### Caveats
 
 1. thumbor-aws does not create buckets for you. If they don't exist you are getting errors.
 
@@ -165,13 +152,15 @@ If you experience any troubles, try running:
 thumbor-doctor
 ```
 
-If you still need help, please [raise an issue](https://github.com/thumbor/thumbor/issues).
+If you still need help, please [raise an issue](https://github.com/thumbor/thumbor-aws/issues).
 
 ## 🎯 Features
 
-- AWS Storage and Result Storage structures
+- Asynchronous non-blocking AWS S3 support
 - Conforms with thumbor 7 new storage and results storage specs
 - Python 3 compliant
+- S3 Storage - Retrieve and store source files, detector data and security keys;
+- S3 Result Storage - Retrieve and store resulting images. These can be set to be public-read and served directly from S3.
 
 ## 👍 Contribute
 
