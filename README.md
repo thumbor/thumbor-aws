@@ -1,5 +1,12 @@
-# thumbor-aws
+If you use thumbor, please take 1 minute and answer [this survey](http://t.co/qPBLXJX0mi)? Only 2 questions!
 
+<p align="center">
+<img src="https://raw.github.com/thumbor/thumbor/master/logo-thumbor.png" />
+</p>
+
+<h3 align="center">thumbor-aws</h3>
+
+<p align="center">
 This is a project to provide modern thumbor>7.0.0 AWS Extensions.
 
 At this point the following are supported:
@@ -8,10 +15,45 @@ At this point the following are supported:
 * S3 Result Storage - Retrieve and store resulting images to S3 and avoid recalculating them. These can be set to be public-read and thus be served directly from S3.
 
 In the future there are plans of adding support for other AWS services.
+</p>
+
+<p align="center">
+  <img src='https://github.com/thumbor/thumbor-aws/workflows/build/badge.svg' />
+  <a href='https://coveralls.io/github/thumbor/thumbor-aws?branch=master' target='_blank'>
+    <img src='https://coveralls.io/repos/thumbor/thumbor-aws/badge.svg?branch=master&service=github'/>
+  </a>
+  <a href='https://codeclimate.com/github/thumbor/thumbor-aws' target='_blank'>
+    <img src='https://codeclimate.com/github/thumbor/thumbor-aws/badges/gpa.svg'/>
+  </a>
+  <a href='https://github.com/thumbor/thumbor-aws/pulls' target='_blank'>
+    <img src='https://img.shields.io/github/issues-pr-raw/thumbor/thumbor-aws.svg'/>
+  </a>
+  <a href='https://github.com/thumbor/thumbor-aws/issues' target='_blank'>
+    <img src='https://img.shields.io/github/issues-raw/thumbor/thumbor-aws.svg'/>
+  </a>
+  <a href='https://pypi.python.org/pypi/thumbor-aws' target='_blank'>
+    <img src='https://img.shields.io/pypi/v/thumbor-aws.svg'/>
+  </a>
+  <a href='https://pypi.python.org/pypi/thumbor-aws' target='_blank'>
+    <img src='https://img.shields.io/pypi/dm/thumbor-aws.svg'/>
+  </a>
+</p>
+
+## ⚙️ Installation
+
+Decide which installation option you want to use.
+
+### Option 1: pip
+
+```bash
+pip install thumbor-aws
+```
 
 ## Usage
 
-Using thumbor-aws is simple. Install it using `pip install thumbor-aws` (or add the dependency to your library, requirements.txt or setup.py) and add the following configuration to your `thumbor.conf`:
+### Configuring thumbor
+
+Configure your `thumbor.conf` file to point to `thumbor_aws`:
 
 ```
 ## The file storage thumbor should use to store original images. This must be the
@@ -27,7 +69,7 @@ RESULT_STORAGE = 'thumbor_aws.result_storage'
 
 As usual for thumbor, you don't need to use both at the same time. Feel free to use only what's needed.
 
-## Configuration
+### Configuration
 
 thumbor-aws allows you to configure each storage independently, so there are configuration keys for each.
 
@@ -40,27 +82,35 @@ Below you can see the result of running thumbor's config generation after import
 
 ## Region where thumbor's objects are going to be stored.
 ## Defaults to: 'us-east-1'
-#AWS_STORAGE_REGION_NAME = 'us-east-1'
+# AWS_STORAGE_REGION_NAME = 'us-east-1'
 
 ## S3 Bucket where thumbor's objects are going to be stored.
 ## Defaults to: 'thumbor'
-#AWS_STORAGE_BUCKET_NAME = 'thumbor'
+# AWS_STORAGE_BUCKET_NAME = 'thumbor'
 
 ## Secret access key for S3 to allow thumbor to store objects there.
 ## Defaults to: None
-#AWS_STORAGE_S3_SECRET_ACCESS_KEY = None
+# AWS_STORAGE_S3_SECRET_ACCESS_KEY = None
 
 ## Access key ID for S3 to allow thumbor to store objects there.
 ## Defaults to: None
-#AWS_STORAGE_S3_ACCESS_KEY_ID = None
+# AWS_STORAGE_S3_ACCESS_KEY_ID = None
 
 ## Endpoint URL for S3 API. Very useful for testing.
 ## Defaults to: None
-#AWS_STORAGE_S3_ENDPOINT_URL = None
+# AWS_STORAGE_S3_ENDPOINT_URL = None
 
-## ACL to use for storing items in S3.
+## Endpoint URL for S3 API. Very useful for testing.
 ## Defaults to: None
-#AWS_STORAGE_S3_ACL = None
+# AWS_STORAGE_S3_ENDPOINT_URL = None
+
+## Storage prefix path.
+## Defaults to: '/st'
+# AWS_STORAGE_ROOT_PATH = '/st'
+
+## Storage ACL for files written in bucket
+## Defaults to: 'public-read'
+# AWS_STORAGE_S3_ACL = 'public-read'
 
 ################################################################################
 ```
@@ -74,51 +124,66 @@ Below you can see the result of running thumbor's config generation after import
 
 ## Region where thumbor's objects are going to be stored.
 ## Defaults to: 'us-east-1'
-#AWS_RESULT_STORAGE_REGION_NAME = 'us-east-1'
+# AWS_RESULT_STORAGE_REGION_NAME = 'us-east-1'
 
 ## S3 Bucket where thumbor's objects are going to be stored.
 ## Defaults to: 'thumbor'
-#AWS_RESULT_STORAGE_BUCKET_NAME = 'thumbor'
+# AWS_RESULT_STORAGE_BUCKET_NAME = 'thumbor'
 
 ## Secret access key for S3 to allow thumbor to store objects there.
 ## Defaults to: None
-#AWS_RESULT_STORAGE_S3_SECRET_ACCESS_KEY = None
+# AWS_RESULT_STORAGE_S3_SECRET_ACCESS_KEY = None
 
 ## Access key ID for S3 to allow thumbor to store objects there.
 ## Defaults to: None
-#AWS_RESULT_STORAGE_S3_ACCESS_KEY_ID = None
+# AWS_RESULT_STORAGE_S3_ACCESS_KEY_ID = None
 
 ## Endpoint URL for S3 API. Very useful for testing.
 ## Defaults to: None
-#AWS_RESULT_STORAGE_S3_ENDPOINT_URL = None
+# AWS_RESULT_STORAGE_S3_ENDPOINT_URL = None
 
 ## Result Storage prefix path.
 ## Defaults to: '/rs'
-#AWS_RESULT_STORAGE_ROOT_PATH = '/rs'
+# AWS_RESULT_STORAGE_ROOT_PATH = '/rs'
 
 ## ACL to use for storing items in S3.
 ## Defaults to: None
-#AWS_RESULT_STORAGE_S3_ACL = None
+# AWS_RESULT_STORAGE_S3_ACL = None
 
 ################################################################################
 ```
 
-## Caveats
+### Caveats
 
 1. thumbor-aws does not create buckets for you. If they don't exist you are getting errors.
 
-## Hacking
+### Troubles?
 
-Hacking on thumbor-aws requires a modern python 3 (>3.9 is what has been tested) and a virtualenv with it.
+If you experience any troubles, try running:
 
-1. Install dependencies using `make setup`;
-2. Run localstack to simulate AWS using `make services` in a different terminal tab (this requires docker);
-3. Run `make test` to run tests;
-4. Hack away! And keep running tests and adding new tests.
+```bash
+thumbor-doctor
+```
 
-Don't forget to run `make flake` and `make pylint` to catch syntatic and linting problems.
+If you still need help, please [raise an issue](https://github.com/thumbor/thumbor/issues).
 
-As soon as you have something to contribute, just create a PR and send it our way.
+## 🎯 Features
+
+- AWS Storage and Result Storage structures
+- Conforms with thumbor 7 new storage and results storage specs
+- Python 3 compliant
+
+## 👍 Contribute
+
+thumbor-aws is an open-source project with many contributors. Join them
+[contributing code](https://github.com/thumbor/thumbor-aws/blob/master/CONTRIBUTING.md) or
+[contributing documentation](https://github.com/thumbor/thumbor-aws/blob/master/CONTRIBUTING.md).
+
+Join the chat at https://gitter.im/thumbor/thumbor
+
+## 👀 Demo
+
+You can see thumbor in action at http://thumborize.me/
 
 ## License
 
