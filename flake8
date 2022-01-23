@@ -1,6 +1,3 @@
-[metadata]
-description-file = README.md
-
 [flake8]
 ignore = W801,E501,W605,W504,W606,W503,E203,E266
 max-line-length = 120
