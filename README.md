@@ -172,6 +172,10 @@ If you still need help, please [raise an issue](https://github.com/thumbor/thumb
 - S3 Storage - Retrieve and store source files, detector data and security keys;
 - S3 Result Storage - Retrieve and store resulting images. These can be set to be public-read and served directly from S3.
 
+## 👀 Thumbor
+
+[thumbor-aws](https://github.com/thumbor/thumbor-aws) stands on the shoulders of [thumbor](https://github.com/thumbor/thumbor)! If you are not familiar with [thumbor](https://github.com/thumbor/thumbor), please check the [docs](https://thumbor.readthedocs.io/en/latest/) or you can see a demo at http://thumborize.me/
+
 ## 👍 Contribute
 
 thumbor-aws is an open-source project with many contributors. Join them
@@ -179,10 +183,6 @@ thumbor-aws is an open-source project with many contributors. Join them
 [contributing documentation](https://github.com/thumbor/thumbor-aws/blob/master/CONTRIBUTING.md).
 
 Join the chat at https://gitter.im/thumbor/thumbor
-
-## 👀 Thumbor
-
-[thumbor-aws](https://github.com/thumbor/thumbor-aws) stands on the shoulders of [thumbor](https://github.com/thumbor/thumbor)! If you are not familiar with [thumbor](https://github.com/thumbor/thumbor), please check the [docs](https://thumbor.readthedocs.io/en/latest/) or you can see a demo at http://thumborize.me/
 
 ## License
 
