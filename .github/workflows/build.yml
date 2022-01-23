@@ -15,9 +15,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: APT Update
-        run: apt-get update -y
+        run: sudo apt-get update -y
       - name: APT Install
-        run: apt-get install -y python3-dev libcurl4-openssl-dev libgnutls28-dev python3-all-dev make zlib1g-dev gcc libssl-dev build-essential
+        run: sudo apt-get install -y python3-dev libcurl4-openssl-dev libgnutls28-dev python3-all-dev make zlib1g-dev gcc libssl-dev build-essential
       - name: Setup
         run: make setup
       - name: Run Unit Tests
