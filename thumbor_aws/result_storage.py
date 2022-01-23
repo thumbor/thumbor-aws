@@ -13,10 +13,10 @@ from datetime import datetime, timezone
 from urllib.parse import unquote
 
 from deprecated import deprecated
-
 from thumbor.engines import BaseEngine
 from thumbor.result_storages import BaseStorage, ResultStorageResult
 from thumbor.utils import logger
+
 from thumbor_aws.s3_client import S3Client
 
 
@@ -54,7 +54,12 @@ class Storage(BaseStorage, S3Client):
         file_abspath = self.normalize_path(self.context.request.url)
         logger.debug("[RESULT_STORAGE] putting at %s", file_abspath)
         content_type = BaseEngine.get_mimetype(image_bytes)
-        response = await self.upload(file_abspath, image_bytes, content_type)
+        response = await self.upload(
+            file_abspath,
+            image_bytes,
+            content_type,
+            self.context.config.AWS_DEFAULT_LOCATION,
+        )
         logger.info("[RESULT_STORAGE] Image uploaded successfully to %s", file_abspath)
         return response
 

@@ -15,6 +15,7 @@ from urllib.parse import unquote
 from thumbor import storages
 from thumbor.engines import BaseEngine
 from thumbor.utils import logger
+
 from thumbor_aws.s3_client import S3Client
 
 
@@ -28,7 +29,12 @@ class Storage(storages.BaseStorage, S3Client):
         content_type = BaseEngine.get_mimetype(file_bytes)
         normalized_path = self.normalize_path(path)
         logger.debug("[STORAGE] putting at %s", normalized_path)
-        path = await self.upload(normalized_path, file_bytes, content_type)
+        path = await self.upload(
+            normalized_path,
+            file_bytes,
+            content_type,
+            self.context.config.AWS_DEFAULT_LOCATION,
+        )
         return path
 
     async def put_crypto(self, path: str) -> str:
@@ -44,7 +50,12 @@ class Storage(storages.BaseStorage, S3Client):
         normalized_path = self.normalize_path(path)
         crypto_path = f"{normalized_path}.txt"
         key = self.context.server.security_key.encode()
-        s3_path = await self.upload(crypto_path, key, "application/text")
+        s3_path = await self.upload(
+            crypto_path,
+            key,
+            "application/text",
+            self.context.config.AWS_DEFAULT_LOCATION,
+        )
 
         logger.debug("Stored crypto at %s", crypto_path)
 
@@ -54,7 +65,12 @@ class Storage(storages.BaseStorage, S3Client):
         normalized_path = self.normalize_path(path)
         filepath = f"{normalized_path}.detectors.txt"
         details = dumps(data)
-        return await self.upload(filepath, details, "application/json")
+        return await self.upload(
+            filepath,
+            details,
+            "application/json",
+            self.context.config.AWS_DEFAULT_LOCATION,
+        )
 
     async def get(self, path: str) -> bytes:
         normalized_path = self.normalize_path(path)

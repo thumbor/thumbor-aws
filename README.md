@@ -62,6 +62,17 @@ As usual for thumbor, you don't need to use both at the same time. Feel free to 
 
 thumbor-aws allows you to configure each storage independently, so there are configuration keys for each.
 
+#### General
+
+Some S3 providers fail to return a valid location header when uploading a new object. For that scenario, `thumbor-aws` allows users to set the location template to be used.
+
+```
+## Default location to use if S3 does not return location header.
+## Can use {bucket_name} var.
+## Defaults to: 'https://{bucket_name}.s3.amazonaws.com'
+AWS_DEFAULT_LOCATION = "https://{bucket_name}.s3.amazonaws.com"
+```
+
 #### Storage
 
 Below you can see the result of running thumbor's config generation after importing thumbor-aws:

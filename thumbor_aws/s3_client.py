@@ -13,10 +13,19 @@ from typing import Any, Mapping, Optional
 
 from aiobotocore.client import AioBaseClient
 from aiobotocore.session import AioSession, get_session
-
 from thumbor.config import Config, config
 from thumbor.context import Context
 from thumbor.utils import logger
+
+Config.define(
+    "AWS_DEFAULT_LOCATION",
+    "https://{bucket_name}.s3.amazonaws.com",
+    (
+        "Default location to use if S3 does not return location header."
+        " Can use {bucket_name} var."
+    ),
+    "AWS Storage",
+)
 
 Config.define(
     "AWS_STORAGE_REGION_NAME",
@@ -173,6 +182,7 @@ class S3Client:
         path: str,
         data: bytes,
         content_type,
+        default_location,
     ) -> str:
         """Uploads a File to S3"""
 
@@ -198,14 +208,15 @@ class S3Client:
                 msg = f"Unable to upload image to {path}: Status Code {status_code}"
                 logger.error(msg)
                 raise RuntimeError(msg)
+
             location = self.get_location(response)
             if location is None:
                 msg = (
                     f"Unable to process response from AWS to {path}: "
                     "Location Headers was not found in response"
                 )
-                logger.error(msg)
-                raise RuntimeError(msg)
+                logger.warning(msg)
+                location = default_location.format(bucket_name=self.bucket_name)
 
             return f"{location.rstrip('/')}/{path.lstrip('/')}"
 

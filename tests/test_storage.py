@@ -8,6 +8,7 @@
 # http://www.opensource.org/licenses/mit-license
 # Copyright (c) 2021 Bernardo Heynemann heynemann@gmail.com
 
+from unittest.mock import patch
 from uuid import uuid4
 
 import pytest
@@ -106,14 +107,34 @@ class StorageTestCase(BaseS3TestCase):
         expect(data).to_equal(b"")
 
     @gen_test
+    async def test_can_upload_with_valid_location(self):
+        """Verifies that uploading with valid location returns location"""
+        storage = await self.ensure_bucket()
+        filepath = f"/test/can_put_file_{uuid4()}"
+
+        with patch.object(storage.__class__, "get_location", return_value=None):
+            response = await storage.upload(
+                storage.normalize_path(filepath),
+                b"ACME-SEC2",
+                "application/text",
+                "https://my-site.com/{bucket_name}",
+            )
+
+            expect(response).to_equal(
+                f"https://my-site.com/{self.bucket_name}/st{filepath}"
+            )
+
+    @gen_test
     async def test_can_get_crypto_from_s3(self):
         """Verifies that security information can be loaded from S3 using Storage"""
         storage = await self.ensure_bucket()
         filepath = f"/test/can_put_file_{uuid4()}"
+
         await storage.upload(
             storage.normalize_path(filepath + ".txt"),
             b"ACME-SEC2",
             "application/text",
+            "http://my-site.com",
         )
 
         data = await storage.get_crypto(filepath)
@@ -129,6 +150,7 @@ class StorageTestCase(BaseS3TestCase):
             storage.normalize_path(filepath + ".detectors.txt"),
             b'{"some": "data"}',
             "application/text",
+            "",
         )
 
         data = await storage.get_detector_data(filepath)
