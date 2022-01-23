@@ -180,9 +180,9 @@ thumbor-aws is an open-source project with many contributors. Join them
 
 Join the chat at https://gitter.im/thumbor/thumbor
 
-## 👀 Demo
+## 👀 Thumbor
 
-You can see thumbor in action at http://thumborize.me/
+[thumbor-aws](https://github.com/thumbor/thumbor-aws) stands on the shoulders of [thumbor](https://github.com/thumbor/thumbor)! If you are not familiar with [thumbor](https://github.com/thumbor/thumbor), please check the [docs](https://thumbor.readthedocs.io/en/latest/) or you can see [thumbor](https://github.com/thumbor/thumbor) in action at http://thumborize.me/
 
 ## License
 
