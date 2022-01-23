@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 			- name: APT
-				run:  apt-get update -y && apt-get install -y python3-dev libcurl4-openssl-dev libgnutls28-dev libjpeg-progs libimage-exiftool-perl gifsicle scons python3-all-dev libboost-python-dev libexiv2-dev ffmpeg make zlib1g-dev gcc libssl-dev libjpeg-dev libwebp-dev redis && apt-get clean
+				run: "apt-get update -y && apt-get install -y python3-dev libcurl4-openssl-dev libgnutls28-dev libjpeg-progs libimage-exiftool-perl gifsicle scons python3-all-dev libboost-python-dev libexiv2-dev ffmpeg make zlib1g-dev gcc libssl-dev libjpeg-dev libwebp-dev redis && apt-get clean"
       - name: Setup
         run: make setup
       - name: Run Unit Tests
