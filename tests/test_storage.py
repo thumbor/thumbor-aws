@@ -9,7 +9,6 @@
 # Copyright (c) 2021 Bernardo Heynemann heynemann@gmail.com
 
 from uuid import uuid4
-import asyncio
 
 import pytest
 from preggy import expect
