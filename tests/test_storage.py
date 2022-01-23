@@ -9,6 +9,7 @@
 # Copyright (c) 2021 Bernardo Heynemann heynemann@gmail.com
 
 from uuid import uuid4
+import asyncio
 
 import pytest
 from preggy import expect
@@ -30,9 +31,9 @@ class StorageTestCase(BaseS3TestCase):
         path = await storage.put(filepath, expected)
 
         expect(path).to_equal(
-            f"https://test-bucket.s3.localhost.localstack.cloud:4566{filepath}",
+            f"https://test-bucket.s3.localhost.localstack.cloud:4566/st{filepath}",
         )
-        status, data, _ = await storage.get_data(filepath)
+        status, data, _ = await storage.get_data(storage.normalize_path(filepath))
         expect(status).to_equal(200)
         expect(data).to_equal(expected)
 
@@ -46,9 +47,11 @@ class StorageTestCase(BaseS3TestCase):
         path = await storage.put_crypto(filepath)
 
         expect(path).to_equal(
-            f"https://test-bucket.s3.localhost.localstack.cloud:4566{filepath}.txt",
+            f"https://test-bucket.s3.localhost.localstack.cloud:4566/st{filepath}.txt",
         )
-        status, data, _ = await storage.get_data(filepath + ".txt")
+        status, data, _ = await storage.get_data(
+            storage.normalize_path(filepath + ".txt")
+        )
         expect(status).to_equal(200)
         expect(data).to_equal("ACME-SEC")
 
@@ -67,9 +70,11 @@ class StorageTestCase(BaseS3TestCase):
         )
 
         expect(path).to_equal(
-            f"https://test-bucket.s3.localhost.localstack.cloud:4566{filepath}.detectors.txt",
+            f"https://test-bucket.s3.localhost.localstack.cloud:4566/st{filepath}.detectors.txt",
         )
-        status, data, _ = await storage.get_data(filepath + ".detectors.txt")
+        status, data, _ = await storage.get_data(
+            storage.normalize_path(filepath + ".detectors.txt")
+        )
         expect(status).to_equal(200)
         expect(data).to_equal(b'{"some": "data"}')
 
@@ -94,7 +99,9 @@ class StorageTestCase(BaseS3TestCase):
         expected = self.test_images["default"]
         await storage.put(filepath, expected)
 
-        status, data, _ = await storage.get_data(filepath, expiration=0)
+        status, data, _ = await storage.get_data(
+            storage.normalize_path(filepath), expiration=0
+        )
 
         expect(status).to_equal(410)
         expect(data).to_equal(b"")
@@ -104,7 +111,11 @@ class StorageTestCase(BaseS3TestCase):
         """Verifies that security information can be loaded from S3 using Storage"""
         storage = await self.ensure_bucket()
         filepath = f"/test/can_put_file_{uuid4()}"
-        await storage.upload(filepath + ".txt", b"ACME-SEC2", "application/text")
+        await storage.upload(
+            storage.normalize_path(filepath + ".txt"),
+            b"ACME-SEC2",
+            "application/text",
+        )
 
         data = await storage.get_crypto(filepath)
 
@@ -116,7 +127,9 @@ class StorageTestCase(BaseS3TestCase):
         storage = await self.ensure_bucket()
         filepath = f"/test/can_put_file_{uuid4()}"
         await storage.upload(
-            filepath + ".detectors.txt", b'{"some": "data"}', "application/json"
+            storage.normalize_path(filepath + ".detectors.txt"),
+            b'{"some": "data"}',
+            "application/text",
         )
 
         data = await storage.get_detector_data(filepath)
@@ -144,19 +157,20 @@ class StorageTestCase(BaseS3TestCase):
 
         storage = await self.ensure_bucket()
         filepath = f"/test/can_put_file_{uuid4()}"
-        await storage.upload(filepath, self.test_images["default"], "image/jpeg")
+        await storage.put(filepath, self.test_images["default"])
 
         exists = await storage.exists(filepath)
 
         expect(exists).to_be_true()
 
+    @pytest.mark.focus
     @gen_test
     async def test_can_remove(self):
         """Verifies that Storage can remove a file from S3"""
 
         storage = await self.ensure_bucket()
         filepath = f"/test/can_put_file_{uuid4()}"
-        await storage.upload(filepath, self.test_images["default"], "image/jpeg")
+        await storage.put(filepath, self.test_images["default"])
         exists = await storage.exists(filepath)
         expect(exists).to_be_true()
 

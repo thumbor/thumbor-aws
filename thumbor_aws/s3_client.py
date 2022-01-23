@@ -54,9 +54,16 @@ Config.define(
 )
 
 Config.define(
+    "AWS_STORAGE_ROOT_PATH",
+    "/st",
+    "Storage prefix path.",
+    "AWS Storage",
+)
+
+Config.define(
     "AWS_STORAGE_S3_ACL",
-    None,
-    "ACL to use for storing items in S3.",
+    "public-read",
+    "Storage ACL for files written in bucket",
     "AWS Storage",
 )
 
@@ -163,13 +170,12 @@ class S3Client:
 
     async def upload(
         self,
-        filepath: str,
+        path: str,
         data: bytes,
         content_type,
     ) -> str:
         """Uploads a File to S3"""
 
-        path = filepath.lstrip("/")
         async with self.get_client() as client:
             response = None
             try:
@@ -201,16 +207,18 @@ class S3Client:
                 logger.error(msg)
                 raise RuntimeError(msg)
 
-            return f"{location.rstrip('/')}/{path}"
+            return f"{location.rstrip('/')}/{path.lstrip('/')}"
 
     async def get_data(
-        self, filepath: str, expiration: int = None
+        self, path: str, expiration: int = None
     ) -> (int, bytes, Optional[datetime.datetime]):
         """Gets an object's data from S3"""
 
-        path = filepath.lstrip("/")
         async with self.get_client() as client:
-            response = await client.get_object(Bucket=self.bucket_name, Key=path)
+            try:
+                response = await client.get_object(Bucket=self.bucket_name, Key=path)
+            except client.exceptions.NoSuchKey:
+                return 404, b"", None
 
             status_code = self.get_status_code(response)
             if status_code != 200:
@@ -231,9 +239,7 @@ class S3Client:
 
         async with self.get_client() as client:
             try:
-                await client.get_object_acl(
-                    Bucket=self.bucket_name, Key=filepath.lstrip("/")
-                )
+                await client.get_object_acl(Bucket=self.bucket_name, Key=filepath)
                 return True
             except client.exceptions.NoSuchKey:
                 return False
@@ -242,9 +248,7 @@ class S3Client:
         """Gets an object's metadata"""
 
         async with self.get_client() as client:
-            return await client.get_object_acl(
-                Bucket=self.bucket_name, Key=filepath.lstrip("/")
-            )
+            return await client.get_object_acl(Bucket=self.bucket_name, Key=filepath)
 
     def get_status_code(self, response: Mapping[str, Any]) -> int:
         """Gets the status code from an AWS response object"""

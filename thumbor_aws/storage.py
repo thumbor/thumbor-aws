@@ -10,6 +10,7 @@
 
 from json import dumps, loads
 from typing import Any
+from urllib.parse import unquote
 
 from thumbor import storages
 from thumbor.engines import BaseEngine
@@ -18,9 +19,16 @@ from thumbor_aws.s3_client import S3Client
 
 
 class Storage(storages.BaseStorage, S3Client):
+    @property
+    def root_path(self) -> str:
+        """Defines the path prefix for all storage images in S3"""
+        return self.context.config.AWS_STORAGE_ROOT_PATH.rstrip("/")
+
     async def put(self, path: str, file_bytes: bytes) -> str:
         content_type = BaseEngine.get_mimetype(file_bytes)
-        path = await self.upload(path, file_bytes, content_type)
+        normalized_path = self.normalize_path(path)
+        logger.debug("[STORAGE] putting at %s", normalized_path)
+        path = await self.upload(normalized_path, file_bytes, content_type)
         return path
 
     async def put_crypto(self, path: str) -> str:
@@ -33,7 +41,8 @@ class Storage(storages.BaseStorage, S3Client):
                 "True if no SECURITY_KEY specified"
             )
 
-        crypto_path = f"{path}.txt"
+        normalized_path = self.normalize_path(path)
+        crypto_path = f"{normalized_path}.txt"
         key = self.context.server.security_key.encode()
         s3_path = await self.upload(crypto_path, key, "application/text")
 
@@ -42,35 +51,41 @@ class Storage(storages.BaseStorage, S3Client):
         return s3_path
 
     async def put_detector_data(self, path: str, data: Any) -> str:
-        filepath = f"{path}.detectors.txt"
+        normalized_path = self.normalize_path(path)
+        filepath = f"{normalized_path}.detectors.txt"
         details = dumps(data)
         return await self.upload(filepath, details, "application/json")
 
     async def get(self, path: str) -> bytes:
-        status, body, _ = await self.get_data(path)
+        normalized_path = self.normalize_path(path)
+        status, body, _ = await self.get_data(normalized_path)
         if status != 200:
-            raise RuntimeError(body)
+            return None
 
         return body
 
     async def get_crypto(self, path: str) -> str:
-        crypto_path = f"{path}.txt"
+        normalized_path = self.normalize_path(path)
+        crypto_path = f"{normalized_path}.txt"
         status, body, _ = await self.get_data(crypto_path)
         if status != 200:
-            raise RuntimeError(f"Failed to get crypto for {path}: {body}")
+            return None
 
         return body.decode("utf-8")
 
     async def get_detector_data(self, path: str) -> Any:
-        detector_path = f"{path}.detectors.txt"
+        normalized_path = self.normalize_path(path)
+        detector_path = f"{normalized_path}.detectors.txt"
         status, body, _ = await self.get_data(detector_path)
         if status != 200:
-            raise RuntimeError(f"Failed to get detector data for {path}: {body}")
+            return None
 
         return loads(body)
 
     async def exists(self, path: str) -> bool:
-        return await self.object_exists(path)
+        normalized_path = self.normalize_path(path)
+        print(normalized_path)
+        return await self.object_exists(normalized_path)
 
     async def remove(self, path: str):
         exists = await self.exists(path)
@@ -78,9 +93,18 @@ class Storage(storages.BaseStorage, S3Client):
             return
 
         async with self.get_client() as client:
+            normalized_path = self.normalize_path(path)
             response = await client.delete_object(
-                Bucket=self.bucket_name, Key=path.lstrip("/")
+                Bucket=self.bucket_name,
+                Key=normalized_path,
             )
             status = self.get_status_code(response)
             if status >= 300:
-                raise RuntimeError(f"Failed to remove {path}: Status {status}")
+                raise RuntimeError(
+                    f"Failed to remove {normalized_path}: Status {status}"
+                )
+
+    def normalize_path(self, path: str) -> str:
+        """Returns the path used for storage"""
+        path = unquote(path).lstrip("/")
+        return f"{self.root_path}/{path}"

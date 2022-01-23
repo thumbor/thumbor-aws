@@ -21,7 +21,7 @@ TESTS_REQUIREMENTS = [
     "isort==4.*,>=4.3.21",
     "preggy==1.*,>=1.4.4",
     "pylint==2.*,>=2.4.4",
-    "pytest==5.*,>=5.3.5",
+    "pytest==6.*,>=6.2.5",
     "pytest-asyncio==0.*,>=0.10.0",
     "pytest-cov==2.*,>=2.8.1",
     "pytest-tldr==0.*,>=0.2.1",

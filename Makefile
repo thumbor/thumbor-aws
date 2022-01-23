@@ -7,10 +7,15 @@ setup:
 	@$(PYTHON) -m pip install -e .[tests]
 
 services:
-	@docker run --rm -it -p 4566:4566 -p 4571:4571 -e"SERVICES=s3" localstack/localstack
+	@docker-compose up
+
+ci:
+	@docker-compose up -d
+	@./wait-for-it.sh localhost:4566 -- echo "Docker Compose is Up. Running tests..."
+	@pytest -sv --junit-xml=test-results/unit/results.xml --cov=thumbor_aws tests/
 
 test:
-	@$(MAKE) unit coverage
+	@$(MAKE) unit
 	@$(MAKE) flake
 
 unit:
