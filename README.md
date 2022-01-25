@@ -10,9 +10,8 @@ This is a project to provide modern thumbor>7.0.0 AWS Extensions.
 
 <p align="center">
   <img src='https://github.com/thumbor/thumbor-aws/workflows/build/badge.svg' />
-  <a href='https://coveralls.io/github/thumbor/thumbor-aws?branch=master' target='_blank'>
-    <img src='https://coveralls.io/repos/thumbor/thumbor-aws/badge.svg?branch=master&service=github'/>
-  </a>
+  <a href='https://coveralls.io/github/thumbor/thumbor-aws?branch=main'><img src='https://coveralls.io/repos/github/thumbor/thumbor-aws/badge.svg?branch=main' alt='Coverage Status' /></a>
+
   <a href='https://codeclimate.com/github/thumbor/thumbor-aws' target='_blank'>
     <img src='https://codeclimate.com/github/thumbor/thumbor-aws/badges/gpa.svg'/>
   </a>

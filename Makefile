@@ -11,7 +11,7 @@ services: docker-down
 
 ci: docker-down docker-up
 	@./wait-for-it.sh localhost:4566 -- echo "Docker Compose is Up. Running tests..."
-	@pytest -sv --junit-xml=test-results/unit/results.xml --cov=thumbor_aws tests/
+	@coverage run -m pytest --cov=thumbor_aws -sv tests && coverage xml && mv coverage.xml cobertura.xml
 
 docker-up:
 	@docker-compose up --remove-orphan -d

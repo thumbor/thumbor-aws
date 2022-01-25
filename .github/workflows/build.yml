@@ -1,3 +1,4 @@
+---
 name: build
 on: [push, pull_request]
 jobs:
@@ -14,10 +15,19 @@ jobs:
     # container: thumbororg/thumbor-test:${{ matrix.image-tag }}
     steps:
       - uses: actions/checkout@v2
+      - name: Code Climate Before Build
+        if: matrix.image-tag == '310'
+        env:
+          code_climate_token: ${{ secrets.CODE_CLIMATE_TOKEN }}
+        run: |-
+          curl -L -O https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
+          chmod +x test-reporter-latest-linux-amd64
+          ./test-reporter-latest-linux-amd64 before-build
       - name: APT Update
         run: sudo apt-get update -y
       - name: APT Install
-        run: sudo apt-get install -y python3-dev libcurl4-openssl-dev libgnutls28-dev python3-all-dev make zlib1g-dev gcc libssl-dev build-essential
+        run: sudo apt-get install -y python3-dev libcurl4-openssl-dev libgnutls28-dev
+          python3-all-dev make zlib1g-dev gcc libssl-dev build-essential
       - name: Setup
         run: make setup
       - name: Run Unit Tests
@@ -35,4 +45,9 @@ jobs:
         run: |
           pip install --upgrade coveralls
           coveralls --service=github
-
+      - name: Code Climate After Build
+        if: matrix.image-tag == '310'
+        env:
+          code_climate_token: ${{ secrets.CODE_CLIMATE_TOKEN }}
+        run: |-
+          ./test-reporter-latest-linux-amd64 after-build -t cobertura --exit-code 0 -r ${code_climate_token}
