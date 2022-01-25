@@ -28,8 +28,12 @@ jobs:
       - name: APT Install
         run: sudo apt-get install -y python3-dev libcurl4-openssl-dev libgnutls28-dev
           python3-all-dev make zlib1g-dev gcc libssl-dev build-essential
+      - name: Create Virtualenv
+        run: python3 -m venv thumbor-aws
+      - name: Activate Virtualenv
+        run: source ./thumbor-aws/bin/activate
       - name: Setup
-        run: pip install --user -e .[tests] || exit 1
+        run: make setup
       - name: Run Unit Tests
         run: make ci
         env:
