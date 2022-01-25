@@ -46,7 +46,7 @@ thumbor_aws provides extensions for thumbor using AWS services
     ),
     author="Bernardo Heynemann",
     author_email="heynemann@gmail.com",
-    url="https://github.com/thumbor/thumbor_aws",
+    url="https://github.com/thumbor/thumbor-aws",
     license="MIT",
     python_requires=">=3.6",
     classifiers=[
