@@ -4,7 +4,8 @@ PYTHON = python
 OS := $(shell uname)
 
 setup:
-	@$(PYTHON) -m pip install -e .[tests]
+	@pip install -u pip
+	@pip install -e .[tests]
 
 services: docker-down
 	@docker-compose up --remove-orphans
