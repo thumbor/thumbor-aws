@@ -29,7 +29,7 @@ jobs:
         run: sudo apt-get install -y python3-dev libcurl4-openssl-dev libgnutls28-dev
           python3-all-dev make zlib1g-dev gcc libssl-dev build-essential
       - name: Setup
-        run: make setup
+        run: pip install --user -e .[tests] || exit 1
       - name: Run Unit Tests
         run: make ci
         env:
