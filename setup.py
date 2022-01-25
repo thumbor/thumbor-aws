@@ -41,10 +41,12 @@ setup(
     long_description="""
 thumbor_aws provides extensions for thumbor using AWS services
 """,
-    keywords=("imaging face detection feature thumbnail imagemagick pil opencv"),
+    keywords=(
+        "imaging face detection feature thumbnail imagemagick pil opencv"
+    ),
     author="Bernardo Heynemann",
     author_email="heynemann@gmail.com",
-    url="https://github.com/thumbor/thumbor_aws",
+    url="https://github.com/thumbor/thumbor-aws",
     license="MIT",
     python_requires=">=3.6",
     classifiers=[

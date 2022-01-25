@@ -16,14 +16,80 @@ from thumbor import storages
 from thumbor.engines import BaseEngine
 from thumbor.utils import logger
 
+from thumbor_aws.config import Config
 from thumbor_aws.s3_client import S3Client
+
+Config.define(
+    "AWS_STORAGE_REGION_NAME",
+    "us-east-1",
+    "Region where thumbor's objects are going to be stored.",
+    "AWS Storage",
+)
+
+Config.define(
+    "AWS_STORAGE_BUCKET_NAME",
+    "thumbor",
+    "S3 Bucket where thumbor's objects are going to be stored.",
+    "AWS Storage",
+)
+
+Config.define(
+    "AWS_STORAGE_S3_SECRET_ACCESS_KEY",
+    None,
+    "Secret access key for S3 to allow thumbor to store objects there.",
+    "AWS Storage",
+)
+
+Config.define(
+    "AWS_STORAGE_S3_ACCESS_KEY_ID",
+    None,
+    "Access key ID for S3 to allow thumbor to store objects there.",
+    "AWS Storage",
+)
+
+Config.define(
+    "AWS_STORAGE_S3_ENDPOINT_URL",
+    None,
+    "Endpoint URL for S3 API. Very useful for testing.",
+    "AWS Storage",
+)
+
+Config.define(
+    "AWS_STORAGE_ROOT_PATH",
+    "/st",
+    "Storage prefix path.",
+    "AWS Storage",
+)
+
+Config.define(
+    "AWS_STORAGE_S3_ACL",
+    "public-read",
+    "Storage ACL for files written in bucket",
+    "AWS Storage",
+)
 
 
 class Storage(storages.BaseStorage, S3Client):
+    def __init__(self, context):
+        S3Client.__init__(self, context)
+        storages.BaseStorage.__init__(self, context)
+        if self.compatibility_mode:
+            self.configuration["region_name"] = self.config.TC_AWS_REGION
+            self.configuration["endpoint_url"] = self.config.TC_AWS_ENDPOINT
+            self.configuration[
+                "bucket_name"
+            ] = self.config.TC_AWS_STORAGE_BUCKET
+            self.configuration[
+                "root_path"
+            ] = self.config.TC_AWS_STORAGE_ROOT_PATH
+
     @property
     def root_path(self) -> str:
         """Defines the path prefix for all storage images in S3"""
-        return self.context.config.AWS_STORAGE_ROOT_PATH.rstrip("/")
+        return self.configuration.get(
+            "root_path",
+            self.config.AWS_STORAGE_ROOT_PATH,
+        )
 
     async def put(self, path: str, file_bytes: bytes) -> str:
         content_type = BaseEngine.get_mimetype(file_bytes)
@@ -100,7 +166,6 @@ class Storage(storages.BaseStorage, S3Client):
 
     async def exists(self, path: str) -> bool:
         normalized_path = self.normalize_path(path)
-        print(normalized_path)
         return await self.object_exists(normalized_path)
 
     async def remove(self, path: str):
@@ -123,4 +188,4 @@ class Storage(storages.BaseStorage, S3Client):
     def normalize_path(self, path: str) -> str:
         """Returns the path used for storage"""
         path = unquote(path).lstrip("/")
-        return f"{self.root_path}/{path}"
+        return f"{self.root_path.rstrip('/')}/{path.lstrip('/')}"

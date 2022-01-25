@@ -28,3 +28,7 @@ disable=
       fixme,
       R0801,
       deprecated-module,
+
+[MISCELLANEOUS]
+# List of note tags to take in consideration, separated by a comma.
+notes=FIXME

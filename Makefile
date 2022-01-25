@@ -4,15 +4,23 @@ PYTHON = python
 OS := $(shell uname)
 
 setup:
-	@$(PYTHON) -m pip install -e .[tests]
+	@pip install -U pip
+	@pip install -U coverage
+	@pip install -e .[tests]
 
-services:
-	@docker-compose up
+services: docker-down
+	@docker-compose up --remove-orphans
 
-ci:
-	@docker-compose up -d
+ci: docker-down docker-up
 	@./wait-for-it.sh localhost:4566 -- echo "Docker Compose is Up. Running tests..."
-	@pytest -sv --junit-xml=test-results/unit/results.xml --cov=thumbor_aws tests/
+	@coverage run -m pytest tests && coverage xml && mv coverage.xml cobertura.xml
+
+docker-up:
+	@docker-compose up --remove-orphan -d
+
+docker-down:
+	@docker-compose stop
+	@docker-compose rm -f
 
 test:
 	@$(MAKE) unit
