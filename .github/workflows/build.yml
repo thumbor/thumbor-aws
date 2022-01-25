@@ -8,15 +8,19 @@ jobs:
       fail-fast: false
       matrix:
         image-tag:
-          - 37
-          - 38
-          - 39
-          - 310
+          - 7
+          - 8
+          - 9
+          - 10
     # container: thumbororg/thumbor-test:${{ matrix.image-tag }}
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.{{ matrix.image-tag }}
+          architecture: x64
       - name: Code Climate Before Build
-        if: matrix.image-tag == '310'
+        if: matrix.image-tag == '10'
         env:
           code_climate_token: ${{ secrets.CODE_CLIMATE_TOKEN }}
         run: |-
@@ -43,14 +47,14 @@ jobs:
       - name: Lint
         run: make flake pylint
       - name: Coveralls
-        if: matrix.image-tag == '310'
+        if: matrix.image-tag == '10'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pip install --upgrade coveralls
           coveralls --service=github
       - name: Code Climate After Build
-        if: matrix.image-tag == '310'
+        if: matrix.image-tag == '10'
         env:
           code_climate_token: ${{ secrets.CODE_CLIMATE_TOKEN }}
         run: |-
