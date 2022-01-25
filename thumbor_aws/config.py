@@ -11,10 +11,6 @@
 
 from thumbor.config import Config, config
 
-import thumbor_aws.loader  # noqa pylint: disable=import-error,unused-import,no-name-in-module
-import thumbor_aws.result_storage  # noqa pylint: disable=import-error,unused-import,no-name-in-module
-import thumbor_aws.storage  # noqa pylint: disable=import-error,unused-import,no-name-in-module
-
 Config.define(
     "AWS_DEFAULT_LOCATION",
     "https://{bucket_name}.s3.amazonaws.com",

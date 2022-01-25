@@ -13,10 +13,10 @@ from typing import Any
 from urllib.parse import unquote
 
 from thumbor import storages
-from thumbor.config import Config
 from thumbor.engines import BaseEngine
 from thumbor.utils import logger
 
+from thumbor_aws.config import Config
 from thumbor_aws.s3_client import S3Client
 
 Config.define(

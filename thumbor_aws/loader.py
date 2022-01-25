@@ -9,9 +9,9 @@
 # Copyright (c) 2011 globo.com thumbor@googlegroups.com
 
 
-from thumbor.config import Config
 from thumbor.loaders import LoaderResult
 
+from thumbor_aws.config import Config
 from thumbor_aws.s3_client import S3Client
 
 Config.define(

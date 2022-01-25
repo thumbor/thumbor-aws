@@ -13,11 +13,11 @@ from datetime import datetime, timezone
 from urllib.parse import unquote
 
 from deprecated import deprecated
-from thumbor.config import Config
 from thumbor.engines import BaseEngine
 from thumbor.result_storages import BaseStorage, ResultStorageResult
 from thumbor.utils import logger
 
+from thumbor_aws.config import Config
 from thumbor_aws.s3_client import S3Client
 
 Config.define(
