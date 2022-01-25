@@ -13,152 +13,60 @@ from typing import Any, Mapping, Optional
 
 from aiobotocore.client import AioBaseClient
 from aiobotocore.session import AioSession, get_session
-from thumbor.config import Config, config
+from thumbor.config import Config
 from thumbor.context import Context
 from thumbor.utils import logger
-
-Config.define(
-    "AWS_DEFAULT_LOCATION",
-    "https://{bucket_name}.s3.amazonaws.com",
-    (
-        "Default location to use if S3 does not return location header."
-        " Can use {bucket_name} var."
-    ),
-    "AWS Storage",
-)
-
-Config.define(
-    "AWS_STORAGE_REGION_NAME",
-    "us-east-1",
-    "Region where thumbor's objects are going to be stored.",
-    "AWS Storage",
-)
-
-Config.define(
-    "AWS_STORAGE_BUCKET_NAME",
-    "thumbor",
-    "S3 Bucket where thumbor's objects are going to be stored.",
-    "AWS Storage",
-)
-
-Config.define(
-    "AWS_STORAGE_S3_SECRET_ACCESS_KEY",
-    None,
-    "Secret access key for S3 to allow thumbor to store objects there.",
-    "AWS Storage",
-)
-
-Config.define(
-    "AWS_STORAGE_S3_ACCESS_KEY_ID",
-    None,
-    "Access key ID for S3 to allow thumbor to store objects there.",
-    "AWS Storage",
-)
-
-Config.define(
-    "AWS_STORAGE_S3_ENDPOINT_URL",
-    None,
-    "Endpoint URL for S3 API. Very useful for testing.",
-    "AWS Storage",
-)
-
-Config.define(
-    "AWS_STORAGE_ROOT_PATH",
-    "/st",
-    "Storage prefix path.",
-    "AWS Storage",
-)
-
-Config.define(
-    "AWS_STORAGE_S3_ACL",
-    "public-read",
-    "Storage ACL for files written in bucket",
-    "AWS Storage",
-)
-
-Config.define(
-    "AWS_RESULT_STORAGE_REGION_NAME",
-    "us-east-1",
-    "Region where thumbor's objects are going to be stored.",
-    "AWS Result Storage",
-)
-
-Config.define(
-    "AWS_RESULT_STORAGE_BUCKET_NAME",
-    "thumbor",
-    "S3 Bucket where thumbor's objects are going to be stored.",
-    "AWS Result Storage",
-)
-
-Config.define(
-    "AWS_RESULT_STORAGE_S3_SECRET_ACCESS_KEY",
-    None,
-    "Secret access key for S3 to allow thumbor to store objects there.",
-    "AWS Result Storage",
-)
-
-Config.define(
-    "AWS_RESULT_STORAGE_S3_ACCESS_KEY_ID",
-    None,
-    "Access key ID for S3 to allow thumbor to store objects there.",
-    "AWS Result Storage",
-)
-
-Config.define(
-    "AWS_RESULT_STORAGE_S3_ENDPOINT_URL",
-    None,
-    "Endpoint URL for S3 API. Very useful for testing.",
-    "AWS Result Storage",
-)
-
-Config.define(
-    "AWS_RESULT_STORAGE_ROOT_PATH",
-    "/rs",
-    "Result Storage prefix path.",
-    "AWS Result Storage",
-)
-
-Config.define(
-    "AWS_RESULT_STORAGE_S3_ACL",
-    None,
-    "ACL to use for storing items in S3.",
-    "AWS Result Storage",
-)
 
 
 class S3Client:
     __session: AioSession = None
     context: Context = None
+    configuration: dict[str, object] = {}
+
+    @property
+    def config(self) -> Config:
+        """Thumbor config from context"""
+        return self.context.config
 
     @property
     def region_name(self) -> str:
         """Region to save the file to"""
-        return self.context.config.AWS_STORAGE_REGION_NAME
+        return self.configuration.get(
+            "region_name", self.config.AWS_STORAGE_REGION_NAME
+        )
 
     @property
     def secret_access_key(self) -> str:
         """Secret access key to connect to AWS with"""
-        return self.context.config.AWS_STORAGE_S3_SECRET_ACCESS_KEY
+        return self.configuration.get(
+            "secret_access_key", self.config.AWS_STORAGE_S3_SECRET_ACCESS_KEY
+        )
 
     @property
     def access_key_id(self) -> str:
         """Access key ID to connect to AWS with"""
-        return self.context.config.AWS_STORAGE_S3_ACCESS_KEY_ID
+        return self.configuration.get(
+            "access_key_id", self.config.AWS_STORAGE_S3_ACCESS_KEY_ID
+        )
 
     @property
     def endpoint_url(self) -> str:
         """AWS Endpoint URL. Very useful for testing"""
-        return self.context.config.AWS_STORAGE_S3_ENDPOINT_URL
+        return self.configuration.get(
+            "endpoint_url", self.config.AWS_STORAGE_S3_ENDPOINT_URL
+        )
 
     @property
     def bucket_name(self) -> str:
         """Bucket to save the file to"""
-        return self.context.config.AWS_STORAGE_BUCKET_NAME
+        return self.configuration.get(
+            "bucket_name", self.config.AWS_STORAGE_BUCKET_NAME
+        )
 
     @property
     def file_acl(self) -> str:
         """ACL to save the files with"""
-        return self.context.config.AWS_STORAGE_S3_ACL
+        return self.configuration.get("file_acl", self.config.AWS_STORAGE_S3_ACL)
 
     @property
     def session(self) -> AioSession:
@@ -291,18 +199,10 @@ class S3Client:
         """Identifies whether an AWS S3 object is expired"""
 
         if expiration is None:
-            expiration = self.context.config.STORAGE_EXPIRATION_SECONDS
+            expiration = self.config.STORAGE_EXPIRATION_SECONDS
 
         if expiration is None:
             return False
 
         timediff = datetime.datetime.now(datetime.timezone.utc) - last_modified
         return timediff.total_seconds() > expiration
-
-
-def __generate_config():
-    config.generate_config()
-
-
-if __name__ == "__main__":
-    __generate_config()

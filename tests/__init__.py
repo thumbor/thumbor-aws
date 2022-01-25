@@ -12,6 +12,7 @@ from thumbor.config import Config
 from thumbor.context import Context, ServerParameters
 from thumbor.importer import Importer
 from thumbor.testing import TestCase
+
 from thumbor_aws.storage import Storage
 
 
@@ -39,6 +40,11 @@ class BaseS3TestCase(TestCase):
         cfg.AWS_RESULT_STORAGE_S3_ENDPOINT_URL = "https://localhost:4566"
         cfg.AWS_RESULT_STORAGE_ROOT_PATH = "/test-rs"
         cfg.STORES_CRYPTO_KEY_FOR_EACH_IMAGE = True
+
+        # Loader Config
+        cfg.AWS_LOADER_REGION_NAME = "local"
+        cfg.AWS_LOADER_BUCKET_NAME = "test-bucket"
+        cfg.AWS_LOADER_S3_ENDPOINT_URL = "https://localhost:4566"
 
         importer = Importer(cfg)
         importer.import_modules()

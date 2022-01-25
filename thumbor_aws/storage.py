@@ -13,10 +13,60 @@ from typing import Any
 from urllib.parse import unquote
 
 from thumbor import storages
+from thumbor.config import Config
 from thumbor.engines import BaseEngine
 from thumbor.utils import logger
 
 from thumbor_aws.s3_client import S3Client
+
+Config.define(
+    "AWS_STORAGE_REGION_NAME",
+    "us-east-1",
+    "Region where thumbor's objects are going to be stored.",
+    "AWS Storage",
+)
+
+Config.define(
+    "AWS_STORAGE_BUCKET_NAME",
+    "thumbor",
+    "S3 Bucket where thumbor's objects are going to be stored.",
+    "AWS Storage",
+)
+
+Config.define(
+    "AWS_STORAGE_S3_SECRET_ACCESS_KEY",
+    None,
+    "Secret access key for S3 to allow thumbor to store objects there.",
+    "AWS Storage",
+)
+
+Config.define(
+    "AWS_STORAGE_S3_ACCESS_KEY_ID",
+    None,
+    "Access key ID for S3 to allow thumbor to store objects there.",
+    "AWS Storage",
+)
+
+Config.define(
+    "AWS_STORAGE_S3_ENDPOINT_URL",
+    None,
+    "Endpoint URL for S3 API. Very useful for testing.",
+    "AWS Storage",
+)
+
+Config.define(
+    "AWS_STORAGE_ROOT_PATH",
+    "/st",
+    "Storage prefix path.",
+    "AWS Storage",
+)
+
+Config.define(
+    "AWS_STORAGE_S3_ACL",
+    "public-read",
+    "Storage ACL for files written in bucket",
+    "AWS Storage",
+)
 
 
 class Storage(storages.BaseStorage, S3Client):

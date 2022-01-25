@@ -13,11 +13,61 @@ from datetime import datetime, timezone
 from urllib.parse import unquote
 
 from deprecated import deprecated
+from thumbor.config import Config
 from thumbor.engines import BaseEngine
 from thumbor.result_storages import BaseStorage, ResultStorageResult
 from thumbor.utils import logger
 
 from thumbor_aws.s3_client import S3Client
+
+Config.define(
+    "AWS_RESULT_STORAGE_REGION_NAME",
+    "us-east-1",
+    "Region where thumbor's objects are going to be stored.",
+    "AWS Result Storage",
+)
+
+Config.define(
+    "AWS_RESULT_STORAGE_BUCKET_NAME",
+    "thumbor",
+    "S3 Bucket where thumbor's objects are going to be stored.",
+    "AWS Result Storage",
+)
+
+Config.define(
+    "AWS_RESULT_STORAGE_S3_SECRET_ACCESS_KEY",
+    None,
+    "Secret access key for S3 to allow thumbor to store objects there.",
+    "AWS Result Storage",
+)
+
+Config.define(
+    "AWS_RESULT_STORAGE_S3_ACCESS_KEY_ID",
+    None,
+    "Access key ID for S3 to allow thumbor to store objects there.",
+    "AWS Result Storage",
+)
+
+Config.define(
+    "AWS_RESULT_STORAGE_S3_ENDPOINT_URL",
+    None,
+    "Endpoint URL for S3 API. Very useful for testing.",
+    "AWS Result Storage",
+)
+
+Config.define(
+    "AWS_RESULT_STORAGE_ROOT_PATH",
+    "/rs",
+    "Result Storage prefix path.",
+    "AWS Result Storage",
+)
+
+Config.define(
+    "AWS_RESULT_STORAGE_S3_ACL",
+    None,
+    "ACL to use for storing items in S3.",
+    "AWS Result Storage",
+)
 
 
 class Storage(BaseStorage, S3Client):
