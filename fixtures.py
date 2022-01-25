@@ -13,15 +13,17 @@ from os import listdir
 from os.path import abspath, dirname, isfile, join
 
 from aiobotocore.session import get_session
-
 from thumbor.utils import logger
 
 ROOT_PATH = dirname(__file__)
 
 
 async def upload():
+    """Uploads file to S3"""
     images_path = abspath(join(ROOT_PATH, "tests", "fixtures"))
-    all_images = [f for f in listdir(images_path) if isfile(join(images_path, f))]
+    all_images = [
+        f for f in listdir(images_path) if isfile(join(images_path, f))
+    ]
 
     session = get_session()
     async with session.create_client(
@@ -53,13 +55,19 @@ async def upload():
                         ContentType="image/jpeg",
                         ACL="public-read",
                     )
-                except Exception as e:
-                    msg = f"Unable to upload image to {image_path}: {e} ({type(e)})"
+                except Exception as err:
+                    msg = (
+                        "Unable to upload image to "
+                        f"{image_path}: {err} ({type(err)})"
+                    )
                     logger.error(msg)
-                    raise RuntimeError(msg)
+                    raise RuntimeError(msg) from err
                 status_code = response["ResponseMetadata"]["HTTPStatusCode"]
                 if status_code != 200:
-                    msg = f"Unable to upload image to {image_path}: Status Code {status_code}"
+                    msg = (
+                        "Unable to upload image to "
+                        f"{image_path}: Status Code {status_code}"
+                    )
                     logger.error(msg)
                     raise RuntimeError(msg)
 

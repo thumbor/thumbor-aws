@@ -48,14 +48,18 @@ class BaseS3TestCase(TestCase):
 
         importer = Importer(cfg)
         importer.import_modules()
-        server = ServerParameters(8889, "localhost", "thumbor.conf", None, "info", None)
+        server = ServerParameters(
+            8889, "localhost", "thumbor.conf", None, "info", None
+        )
         server.security_key = "ACME-SEC"
         return Context(server, cfg, importer)
 
     async def ensure_bucket(self, cls=Storage):
         """Ensures the test bucket is created"""
         storage = cls(self.context)
-        location = {"LocationConstraint": self.context.config.AWS_STORAGE_REGION_NAME}
+        location = {
+            "LocationConstraint": self.context.config.AWS_STORAGE_REGION_NAME
+        }
         async with storage.get_client() as client:
             try:
                 await client.create_bucket(

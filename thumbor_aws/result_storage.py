@@ -110,13 +110,17 @@ class Storage(BaseStorage, S3Client):
             content_type,
             self.context.config.AWS_DEFAULT_LOCATION,
         )
-        logger.info("[RESULT_STORAGE] Image uploaded successfully to %s", file_abspath)
+        logger.info(
+            "[RESULT_STORAGE] Image uploaded successfully to %s", file_abspath
+        )
         return response
 
     @property
     def is_auto_webp(self) -> bool:
         """Identifies the current request if it's being auto converted to webp"""
-        return self.context.config.AUTO_WEBP and self.context.request.accepts_webp
+        return (
+            self.context.config.AUTO_WEBP and self.context.request.accepts_webp
+        )
 
     def normalize_path(self, path: str) -> str:
         """Returns the path used for result storage"""
@@ -132,7 +136,9 @@ class Storage(BaseStorage, S3Client):
 
         exists = await self.object_exists(file_abspath)
         if not exists:
-            logger.debug("[RESULT_STORAGE] image not found at %s", file_abspath)
+            logger.debug(
+                "[RESULT_STORAGE] image not found at %s", file_abspath
+            )
             return None
 
         status, body, last_modified = await self.get_data(file_abspath)
@@ -144,7 +150,8 @@ class Storage(BaseStorage, S3Client):
             return None
 
         logger.info(
-            "[RESULT_STORAGE] Image retrieved successfully at %s.", file_abspath
+            "[RESULT_STORAGE] Image retrieved successfully at %s.",
+            file_abspath,
         )
 
         return ResultStorageResult(

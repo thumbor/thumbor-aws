@@ -66,7 +66,9 @@ class S3Client:
     @property
     def file_acl(self) -> str:
         """ACL to save the files with"""
-        return self.configuration.get("file_acl", self.config.AWS_STORAGE_S3_ACL)
+        return self.configuration.get(
+            "file_acl", self.config.AWS_STORAGE_S3_ACL
+        )
 
     @property
     def session(self) -> AioSession:
@@ -124,7 +126,9 @@ class S3Client:
                     "Location Headers was not found in response"
                 )
                 logger.warning(msg)
-                location = default_location.format(bucket_name=self.bucket_name)
+                location = default_location.format(
+                    bucket_name=self.bucket_name
+                )
 
             return f"{location.rstrip('/')}/{path.lstrip('/')}"
 
@@ -135,7 +139,9 @@ class S3Client:
 
         async with self.get_client() as client:
             try:
-                response = await client.get_object(Bucket=self.bucket_name, Key=path)
+                response = await client.get_object(
+                    Bucket=self.bucket_name, Key=path
+                )
             except client.exceptions.NoSuchKey:
                 return 404, b"", None
 
@@ -158,7 +164,9 @@ class S3Client:
 
         async with self.get_client() as client:
             try:
-                await client.get_object_acl(Bucket=self.bucket_name, Key=filepath)
+                await client.get_object_acl(
+                    Bucket=self.bucket_name, Key=filepath
+                )
                 return True
             except client.exceptions.NoSuchKey:
                 return False
@@ -167,7 +175,9 @@ class S3Client:
         """Gets an object's metadata"""
 
         async with self.get_client() as client:
-            return await client.get_object_acl(Bucket=self.bucket_name, Key=filepath)
+            return await client.get_object_acl(
+                Bucket=self.bucket_name, Key=filepath
+            )
 
     def get_status_code(self, response: Mapping[str, Any]) -> int:
         """Gets the status code from an AWS response object"""

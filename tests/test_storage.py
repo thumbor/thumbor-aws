@@ -33,7 +33,9 @@ class StorageTestCase(BaseS3TestCase):
         expect(path).to_equal(
             f"https://test-bucket.s3.localhost.localstack.cloud:4566/st{filepath}",
         )
-        status, data, _ = await storage.get_data(storage.normalize_path(filepath))
+        status, data, _ = await storage.get_data(
+            storage.normalize_path(filepath)
+        )
         expect(status).to_equal(200)
         expect(data).to_equal(expected)
 
@@ -112,7 +114,9 @@ class StorageTestCase(BaseS3TestCase):
         storage = await self.ensure_bucket()
         filepath = f"/test/can_put_file_{uuid4()}"
 
-        with patch.object(storage.__class__, "get_location", return_value=None):
+        with patch.object(
+            storage.__class__, "get_location", return_value=None
+        ):
             response = await storage.upload(
                 storage.normalize_path(filepath),
                 b"ACME-SEC2",
