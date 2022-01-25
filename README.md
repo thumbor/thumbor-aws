@@ -41,9 +41,10 @@ pip install thumbor-aws
 - Asynchronous non-blocking AWS S3 support
 - Conforms with thumbor 7 new storage and results storage specs
 - Python 3 compliant
-- S3 Storage - Retrieve and store source files, detector data and security keys;
-- S3 Result Storage - Retrieve and store resulting images. These can be set to be public-read and served directly from S3.
-- Compatibility mode for users of tc_aws: currently supported loader, storage and result storage.
+- S3 Storage - Load source files from S3
+- S3 Storage - Retrieve and store source files, detector data and security keys
+- S3 Result Storage - Retrieve and store resulting images
+- Compatibility mode for users of tc_aws: currently supported loader, storage and result storage
 
 ## Usage
 
