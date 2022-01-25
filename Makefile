@@ -4,7 +4,7 @@ PYTHON = python
 OS := $(shell uname)
 
 setup:
-	@pip install -u pip
+	@pip install -U pip
 	@pip install -e .[tests]
 
 services: docker-down
