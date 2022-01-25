@@ -29,8 +29,7 @@ jobs:
         run: sudo apt-get install -y python3-dev libcurl4-openssl-dev libgnutls28-dev
           python3-all-dev make zlib1g-dev gcc libssl-dev build-essential
       - name: Setup
-        run: python3 -m venv thumbor-aws && source ./thumbor-aws/bin/activate && make
-          setup
+        run: make setup
       - name: Run Unit Tests
         run: make ci
         env:
