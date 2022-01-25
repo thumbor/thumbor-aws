@@ -69,7 +69,7 @@ async def load(context, path):
         "bucket_name": context.config.AWS_LOADER_BUCKET_NAME,
         "root_path": context.config.AWS_LOADER_ROOT_PATH,
     }
-    if context.config.RUN_IN_COMPATIBILITY_MODE is True:
+    if client.compatibility_mode is True:
         client.configuration["region_name"] = context.config.TC_AWS_REGION
         client.configuration["endpoint_url"] = context.config.TC_AWS_ENDPOINT
         client.configuration[

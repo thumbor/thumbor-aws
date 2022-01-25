@@ -33,7 +33,7 @@ class ResultStorageTestCase(BaseS3TestCase):
     @property
     def region_name(self):
         """Name of the bucket to put test files in"""
-        if self.context.config.RUN_IN_COMPATIBILITY_MODE:
+        if self.context.config.THUMBOR_AWS_RUN_IN_COMPATIBILITY_MODE:
             return self.context.config.TC_AWS_REGION
         return self.context.config.AWS_RESULT_STORAGE_REGION_NAME
 

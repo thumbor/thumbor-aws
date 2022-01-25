@@ -23,7 +23,7 @@ Config.define(
 
 # TC_AWS Compatibility settings
 Config.define(
-    "RUN_IN_COMPATIBILITY_MODE",
+    "THUMBOR_AWS_RUN_IN_COMPATIBILITY_MODE",
     False,
     "Runs in compatibility mode using the configurations for tc_aws.",
     "tc_aws Compatibility",

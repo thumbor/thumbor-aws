@@ -73,7 +73,7 @@ class Storage(storages.BaseStorage, S3Client):
     def __init__(self, context):
         S3Client.__init__(self, context)
         storages.BaseStorage.__init__(self, context)
-        if self.context.config.RUN_IN_COMPATIBILITY_MODE is True:
+        if self.compatibility_mode:
             self.configuration["region_name"] = self.config.TC_AWS_REGION
             self.configuration["endpoint_url"] = self.config.TC_AWS_ENDPOINT
             self.configuration[

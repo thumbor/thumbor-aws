@@ -33,6 +33,11 @@ class S3Client:
         return self.context.config
 
     @property
+    def compatibility_mode(self) -> bool:
+        """Should thumbor-aws run in compatibility mode?"""
+        return self.context.config.THUMBOR_AWS_RUN_IN_COMPATIBILITY_MODE
+
+    @property
     def region_name(self) -> str:
         """Region to save the file to"""
         return self.configuration.get(

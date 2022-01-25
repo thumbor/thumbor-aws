@@ -37,6 +37,14 @@ This is a project to provide modern thumbor>7.0.0 AWS Extensions.
 ```bash
 pip install thumbor-aws
 ```
+## 🎯 Features
+
+- Asynchronous non-blocking AWS S3 support
+- Conforms with thumbor 7 new storage and results storage specs
+- Python 3 compliant
+- S3 Storage - Retrieve and store source files, detector data and security keys;
+- S3 Result Storage - Retrieve and store resulting images. These can be set to be public-read and served directly from S3.
+- Compatibility mode for users of tc_aws: currently supported loader, storage and result storage.
 
 ## Usage
 
@@ -192,6 +200,74 @@ Below you can see the result of running thumbor's config generation after import
 ################################################################################
 ```
 
+### Configuring thumbor in compatibility mode with tc_aws
+
+If you are a [tc_aws](https://github.com/thumbor-community/aws) user, thumbor-aws has a compatibility mode where you can use the same configuration you are already used to:
+
+```python
+############################# tc_aws Compatibility #############################
+
+## Runs in compatibility mode using the configurations for tc_aws.
+## Defaults to: False
+THUMBOR_AWS_RUN_IN_COMPATIBILITY_MODE = True
+
+## AWS Region the bucket is located in.
+## Defaults to: 'us-east-1'
+TC_AWS_REGION = 'us-east-1'
+
+## Max retries for get image from S3 Bucket. Default is 0
+## Defaults to: 0
+TC_AWS_MAX_RETRY = 0  # This is not yet supported
+
+## S3 bucket for Loader. If given, source urls are interpreted as keys within
+## this bucket. If not given, source urls are expected to containthe bucket
+## name, such as 's3-bucket/keypath'.
+## Defaults to: ''
+TC_AWS_LOADER_BUCKET = 'my-bucket'
+
+## S3 path prefix for Loader bucket. If given, this is prefixed to all S3 keys.
+## Defaults to: ''
+TC_AWS_LOADER_ROOT_PATH = 'source-files'
+
+## S3 bucket for Storage
+## Defaults to: ''
+TC_AWS_STORAGE_BUCKET = 'my-bucket'
+
+## S3 path prefix for Storage bucket
+## Defaults to: ''
+TC_AWS_STORAGE_ROOT_PATH = 'source-files'
+
+## put data into S3 using the Server Side Encryption functionality to encrypt
+## data at rest in S3 https://aws.amazon.com/about-aws/whats-
+## new/2011/10/04/amazon-s3-announces-server-side-encryption-support/
+## Defaults to: False
+TC_AWS_STORAGE_SSE = False  # This is not yet supported
+
+## put data into S3 with Reduced Redundancy https://aws.amazon.com/about-
+## aws/whats-new/2010/05/19/announcing-amazon-s3-reduced-redundancy-storage/
+## Defaults to: False
+TC_AWS_STORAGE_RRS = False  # This is not yet supported
+
+## S3 bucket for result Storage
+## Defaults to: ''
+TC_AWS_RESULT_STORAGE_BUCKET = 'my-bucket'
+
+## S3 path prefix for Result storage bucket
+## Defaults to: ''
+TC_AWS_RESULT_STORAGE_ROOT_PATH = 'result-storage'
+
+## Store result with metadata (for instance content-type)
+## Defaults to: False
+# This configuration won't matter as thumbor-aws stores metadata anyway
+TC_AWS_STORE_METADATA = False
+
+################################################################################
+```
+
+Please notice the addition of `THUMBOR_AWS_RUN_IN_COMPATIBILITY_MODE = True` to tell `thumbor_aws` you want compatibility with `tc_aws`.
+
+If you have any issues with this
+
 #### Caveats
 
 1. thumbor-aws does not create buckets for you. If they don't exist you are getting errors.
@@ -213,14 +289,6 @@ thumbor-doctor
 ```
 
 If you still need help, please [raise an issue](https://github.com/thumbor/thumbor-aws/issues).
-
-## 🎯 Features
-
-- Asynchronous non-blocking AWS S3 support
-- Conforms with thumbor 7 new storage and results storage specs
-- Python 3 compliant
-- S3 Storage - Retrieve and store source files, detector data and security keys;
-- S3 Result Storage - Retrieve and store resulting images. These can be set to be public-read and served directly from S3.
 
 ## 👀 Thumbor
 

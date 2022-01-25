@@ -29,7 +29,7 @@ class BaseS3TestCase(TestCase):
     @property
     def region_name(self):
         """Name of the bucket to put test files in"""
-        if self.context.config.RUN_IN_COMPATIBILITY_MODE:
+        if self.context.config.THUMBOR_AWS_RUN_IN_COMPATIBILITY_MODE:
             return self.context.config.TC_AWS_REGION
         return self.context.config.AWS_STORAGE_REGION_NAME
 
@@ -74,7 +74,7 @@ class BaseS3TestCase(TestCase):
         cfg.STORAGE = "thumbor_aws.storage"
         cfg.RESULT_STORAGE = "thumbor_aws.result_storage"
 
-        cfg.RUN_IN_COMPATIBILITY_MODE = True
+        cfg.THUMBOR_AWS_RUN_IN_COMPATIBILITY_MODE = True
         cfg.TC_AWS_REGION = "local"
         cfg.TC_AWS_MAX_RETRY = 0
         cfg.TC_AWS_ENDPOINT = "https://localhost:4566"
@@ -107,7 +107,7 @@ class BaseS3TestCase(TestCase):
     async def ensure_bucket(self):
         """Ensures the test bucket is created"""
         s3client = S3Client(self.context)
-        if self.context.config.RUN_IN_COMPATIBILITY_MODE is True:
+        if self.context.config.THUMBOR_AWS_RUN_IN_COMPATIBILITY_MODE is True:
             s3client.configuration["region_name"] = self.config.TC_AWS_REGION
             s3client.configuration[
                 "endpoint_url"
