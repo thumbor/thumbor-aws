@@ -17,13 +17,14 @@ from thumbor.config import Config
 from tornado.testing import gen_test
 
 from tests import BaseS3TestCase
+from thumbor_aws.storage import Storage
 
 
 @pytest.mark.usefixtures("test_images")
 class StorageTestCase(BaseS3TestCase):
     @property
     def _prefix(self):
-        return "/st"
+        return "/test-st"
 
     @gen_test
     async def test_can_put_file_in_s3(self):
@@ -31,8 +32,8 @@ class StorageTestCase(BaseS3TestCase):
         Verifies that an image can be placed in S3
         using Storage and that it's there
         """
-
-        storage = await self.ensure_bucket()
+        await self.ensure_bucket()
+        storage = Storage(self.context)
         filepath = f"/test/can_put_file_{uuid4()}"
         expected = self.test_images["default"]
 
@@ -54,8 +55,8 @@ class StorageTestCase(BaseS3TestCase):
         Verifies that security information can
         be placed in S3 using Storage
         """
-
-        storage = await self.ensure_bucket()
+        await self.ensure_bucket()
+        storage = Storage(self.context)
         filepath = f"/test/can_put_file_{uuid4()}"
 
         path = await storage.put_crypto(filepath)
@@ -73,8 +74,8 @@ class StorageTestCase(BaseS3TestCase):
     @gen_test
     async def test_can_put_detector_data_in_s3(self):
         """Verifies that detector data can be placed in S3 using Storage"""
-
-        storage = await self.ensure_bucket()
+        await self.ensure_bucket()
+        storage = Storage(self.context)
         filepath = f"/test/can_put_file_{uuid4()}"
 
         path = await storage.put_detector_data(
@@ -97,8 +98,8 @@ class StorageTestCase(BaseS3TestCase):
     @gen_test
     async def test_can_load_file_in_s3(self):
         """Verifies that an image can be loaded from S3 using Storage"""
-
-        storage = await self.ensure_bucket()
+        await self.ensure_bucket()
+        storage = Storage(self.context)
         filepath = f"/test/can_load_file_{uuid4()}"
         expected = self.test_images["default"]
         await storage.put(filepath, expected)
@@ -113,7 +114,8 @@ class StorageTestCase(BaseS3TestCase):
         Verifies that an image won't be loaded from S3
         using Storage if it is expired
         """
-        storage = await self.ensure_bucket()
+        await self.ensure_bucket()
+        storage = Storage(self.context)
         filepath = f"/test/can_load_file_{uuid4()}"
         expected = self.test_images["default"]
         await storage.put(filepath, expected)
@@ -128,7 +130,8 @@ class StorageTestCase(BaseS3TestCase):
     @gen_test
     async def test_can_upload_with_valid_location(self):
         """Verifies that uploading with valid location returns location"""
-        storage = await self.ensure_bucket()
+        await self.ensure_bucket()
+        storage = Storage(self.context)
         filepath = f"/test/can_put_file_{uuid4()}"
 
         with patch.object(
@@ -152,7 +155,8 @@ class StorageTestCase(BaseS3TestCase):
         Verifies that security information can be
         loaded from S3 using Storage
         """
-        storage = await self.ensure_bucket()
+        await self.ensure_bucket()
+        storage = Storage(self.context)
         filepath = f"/test/can_put_file_{uuid4()}"
 
         await storage.upload(
@@ -169,7 +173,8 @@ class StorageTestCase(BaseS3TestCase):
     @gen_test
     async def test_can_get_detector_data_from_s3(self):
         """Verifies that detector data can be loaded from S3 using Storage"""
-        storage = await self.ensure_bucket()
+        await self.ensure_bucket()
+        storage = Storage(self.context)
         filepath = f"/test/can_put_file_{uuid4()}"
         await storage.upload(
             storage.normalize_path(filepath + ".detectors.txt"),
@@ -189,8 +194,8 @@ class StorageTestCase(BaseS3TestCase):
     @gen_test
     async def test_verify_file_does_not_exist(self):
         """Verifies that Storage can tell if a file does not exist in S3"""
-
-        storage = await self.ensure_bucket()
+        await self.ensure_bucket()
+        storage = Storage(self.context)
         filepath = f"/test/can_put_file_{uuid4()}"
 
         exists = await storage.exists(filepath)
@@ -200,8 +205,8 @@ class StorageTestCase(BaseS3TestCase):
     @gen_test
     async def test_verify_file_does_exist(self):
         """Verifies that Storage can tell if a file exists in S3"""
-
-        storage = await self.ensure_bucket()
+        await self.ensure_bucket()
+        storage = Storage(self.context)
         filepath = f"/test/can_put_file_{uuid4()}"
         await storage.put(filepath, self.test_images["default"])
 
@@ -209,12 +214,11 @@ class StorageTestCase(BaseS3TestCase):
 
         expect(exists).to_be_true()
 
-    @pytest.mark.focus
     @gen_test
     async def test_can_remove(self):
         """Verifies that Storage can remove a file from S3"""
-
-        storage = await self.ensure_bucket()
+        await self.ensure_bucket()
+        storage = Storage(self.context)
         filepath = f"/test/can_put_file_{uuid4()}"
         await storage.put(filepath, self.test_images["default"])
         exists = await storage.exists(filepath)
@@ -231,8 +235,8 @@ class StorageTestCase(BaseS3TestCase):
         Verifies that removing a file that does not exist
         does not cause Storage to fail
         """
-
-        storage = await self.ensure_bucket()
+        await self.ensure_bucket()
+        storage = Storage(self.context)
         filepath = f"/test/can_put_file_{uuid4()}"
         exists = await storage.exists(filepath)
         expect(exists).to_be_false()
@@ -246,34 +250,11 @@ class StorageTestCase(BaseS3TestCase):
 @pytest.mark.usefixtures("test_images")
 class StorageCompatibilityModeTestCase(StorageTestCase):
     def get_config(self) -> Config:
-        cfg = Config(SECURITY_KEY="ACME-SEC")
-        cfg.LOADER = "thumbor_aws.loader"
-        cfg.STORAGE = "thumbor_aws.storage"
-        cfg.RESULT_STORAGE = "thumbor_aws.result_storage"
-
-        cfg.RUN_IN_COMPATIBILITY_MODE = True
-        cfg.TC_AWS_REGION = "local"
-        cfg.TC_AWS_MAX_RETRY = 0
-        cfg.TC_AWS_ENDPOINT = "https://localhost:4566"
-
-        # Storage Config
-        cfg.TC_AWS_STORAGE_BUCKET = "test-bucket-compat"
-        cfg.TC_AWS_STORAGE_ROOT_PATH = "/test-st"
-
-        # Result Storage Config
-        cfg.TC_AWS_RESULT_STORAGE_BUCKET = "test-bucket-compat"
-        cfg.TC_AWS_RESULT_STORAGE_ROOT_PATH = "/test-rs"
-        cfg.STORES_CRYPTO_KEY_FOR_EACH_IMAGE = True
-
-        # Loader Config
-        cfg.TC_AWS_LOADER_BUCKET = "local"
-        cfg.TC_AWS_LOADER_ROOT_PATH = "/test-st"
-
-        return cfg
+        return self.get_compatibility_config()
 
     @property
     def _prefix(self):
-        return "/test-st"
+        return "/test-compat-st"
 
     @property
     def bucket_name(self):

@@ -71,34 +71,68 @@ Config.define(
 
 
 class Storage(BaseStorage, S3Client):
+    def __init__(self, context):
+        BaseStorage.__init__(self, context)
+        S3Client.__init__(self, context)
+        if self.context.config.RUN_IN_COMPATIBILITY_MODE:
+            self.configuration["region_name"] = self.config.TC_AWS_REGION
+            self.configuration["endpoint_url"] = self.config.TC_AWS_ENDPOINT
+            self.configuration[
+                "bucket_name"
+            ] = self.config.TC_AWS_RESULT_STORAGE_BUCKET
+            self.configuration[
+                "root_path"
+            ] = self.config.TC_AWS_RESULT_STORAGE_ROOT_PATH
+
     @property
     def region_name(self) -> str:
-        return self.context.config.AWS_RESULT_STORAGE_REGION_NAME
+        return self.configuration.get(
+            "region_name", self.context.config.AWS_RESULT_STORAGE_REGION_NAME
+        )
 
     @property
     def secret_access_key(self) -> str:
-        return self.context.config.AWS_RESULT_STORAGE_S3_SECRET_ACCESS_KEY
+        return self.configuration.get(
+            "secret_access_key",
+            self.context.config.AWS_RESULT_STORAGE_S3_SECRET_ACCESS_KEY,
+        )
 
     @property
     def access_key_id(self) -> str:
-        return self.context.config.AWS_RESULT_STORAGE_S3_ACCESS_KEY_ID
+        return self.configuration.get(
+            "access_key_id",
+            self.context.config.AWS_RESULT_STORAGE_S3_ACCESS_KEY_ID,
+        )
 
     @property
     def endpoint_url(self) -> str:
-        return self.context.config.AWS_RESULT_STORAGE_S3_ENDPOINT_URL
+        return self.configuration.get(
+            "endpoint_url",
+            self.context.config.AWS_RESULT_STORAGE_S3_ENDPOINT_URL,
+        )
 
     @property
     def bucket_name(self) -> str:
-        return self.context.config.AWS_RESULT_STORAGE_BUCKET_NAME
+        return self.configuration.get(
+            "bucket_name",
+            self.context.config.AWS_RESULT_STORAGE_BUCKET_NAME,
+        )
 
     @property
     def file_acl(self) -> str:
-        return self.context.config.AWS_RESULT_STORAGE_S3_ACL
+        return self.configuration.get(
+            "file_acl",
+            self.context.config.AWS_RESULT_STORAGE_S3_ACL,
+        )
 
     @property
     def root_path(self) -> str:
         """Defines the path prefix for all result storage images in S3"""
-        return self.context.config.AWS_RESULT_STORAGE_ROOT_PATH.rstrip("/")
+
+        return self.configuration.get(
+            "root_path",
+            self.context.config.AWS_RESULT_STORAGE_ROOT_PATH,
+        )
 
     async def put(self, image_bytes: bytes) -> str:
         file_abspath = self.normalize_path(self.context.request.url)
@@ -117,7 +151,10 @@ class Storage(BaseStorage, S3Client):
 
     @property
     def is_auto_webp(self) -> bool:
-        """Identifies the current request if it's being auto converted to webp"""
+        """
+        Identifies the current request if it's
+        being auto converted to webp
+        """
         return (
             self.context.config.AUTO_WEBP and self.context.request.accepts_webp
         )
@@ -126,7 +163,11 @@ class Storage(BaseStorage, S3Client):
         """Returns the path used for result storage"""
         prefix = "auto_webp" if self.is_auto_webp else "default"
         fs_path = unquote(path).lstrip("/")
-        return f"{self.root_path}/{prefix}/{fs_path}"
+        return (
+            f"{self.root_path.rstrip('/')}/"
+            f"{prefix.lstrip('/')}/"
+            f"{fs_path.lstrip('/')}"
+        )
 
     async def get(self) -> ResultStorageResult:
         path = self.context.request.url

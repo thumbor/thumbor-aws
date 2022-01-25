@@ -71,16 +71,17 @@ Config.define(
 
 class Storage(storages.BaseStorage, S3Client):
     def __init__(self, context):
+        S3Client.__init__(self, context)
         storages.BaseStorage.__init__(self, context)
-        if self.context.config.RUN_IN_COMPATIBILITY_MODE:
+        if self.context.config.RUN_IN_COMPATIBILITY_MODE is True:
             self.configuration["region_name"] = self.config.TC_AWS_REGION
+            self.configuration["endpoint_url"] = self.config.TC_AWS_ENDPOINT
             self.configuration[
                 "bucket_name"
             ] = self.config.TC_AWS_STORAGE_BUCKET
             self.configuration[
                 "root_path"
             ] = self.config.TC_AWS_STORAGE_ROOT_PATH
-            self.configuration["endpoint_url"] = self.config.TC_AWS_ENDPOINT
 
     @property
     def root_path(self) -> str:
@@ -165,7 +166,6 @@ class Storage(storages.BaseStorage, S3Client):
 
     async def exists(self, path: str) -> bool:
         normalized_path = self.normalize_path(path)
-        print(normalized_path)
         return await self.object_exists(normalized_path)
 
     async def remove(self, path: str):

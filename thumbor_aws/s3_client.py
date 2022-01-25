@@ -21,7 +21,11 @@ from thumbor.utils import logger
 class S3Client:
     __session: AioSession = None
     context: Context = None
-    configuration: dict[str, object] = {}
+    configuration: dict[str, object] = None
+
+    def __init__(self, context):
+        self.context = context
+        self.configuration = {}
 
     @property
     def config(self) -> Config:
