@@ -5,10 +5,8 @@ OS := $(shell uname)
 
 setup:
 	@pip install -U pip
+	@pip install -U coverage
 	@pip install -e .[tests]
-
-setup-ci:
-	@python3 -m venv thumbor-aws && source ./thumbor-aws/bin/activate && $(MAKE) setup
 
 services: docker-down
 	@docker-compose up --remove-orphans
