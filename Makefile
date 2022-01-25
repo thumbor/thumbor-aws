@@ -13,7 +13,7 @@ services: docker-down
 
 ci: docker-down docker-up
 	@./wait-for-it.sh localhost:4566 -- echo "Docker Compose is Up. Running tests..."
-	@coverage run -m pytest --cov=thumbor_aws -sv tests && coverage xml && mv coverage.xml cobertura.xml
+	@coverage run -m pytest tests && coverage xml && mv coverage.xml cobertura.xml
 
 docker-up:
 	@docker-compose up --remove-orphan -d
