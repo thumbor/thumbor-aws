@@ -20,12 +20,23 @@ class BaseS3TestCase(TestCase):
     test_images = {}
 
     @property
+    def compatibility_mode(self):
+        """Whether to run in compatibility mode or not"""
+        return False
+
+    @property
     def bucket_name(self):
         """Name of the bucket to put test files in"""
         return self.context.config.AWS_STORAGE_BUCKET_NAME
 
-    def get_context(self):
+    @property
+    def region_name(self):
+        """Name of the bucket to put test files in"""
+        return self.context.config.AWS_STORAGE_REGION_NAME
+
+    def get_config(self) -> Config:
         cfg = Config(SECURITY_KEY="ACME-SEC")
+        cfg.LOADER = "thumbor_aws.loader"
         cfg.STORAGE = "thumbor_aws.storage"
         cfg.RESULT_STORAGE = "thumbor_aws.result_storage"
 
@@ -46,6 +57,10 @@ class BaseS3TestCase(TestCase):
         cfg.AWS_LOADER_BUCKET_NAME = "test-bucket"
         cfg.AWS_LOADER_S3_ENDPOINT_URL = "https://localhost:4566"
 
+        return cfg
+
+    def get_context(self) -> Context:
+        cfg = self.get_config()
         importer = Importer(cfg)
         importer.import_modules()
         server = ServerParameters(
@@ -58,7 +73,7 @@ class BaseS3TestCase(TestCase):
         """Ensures the test bucket is created"""
         storage = cls(self.context)
         location = {
-            "LocationConstraint": self.context.config.AWS_STORAGE_REGION_NAME
+            "LocationConstraint": self.region_name,
         }
         async with storage.get_client() as client:
             try:

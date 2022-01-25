@@ -70,10 +70,25 @@ Config.define(
 
 
 class Storage(storages.BaseStorage, S3Client):
+    def __init__(self, context):
+        storages.BaseStorage.__init__(self, context)
+        if self.context.config.RUN_IN_COMPATIBILITY_MODE:
+            self.configuration["region_name"] = self.config.TC_AWS_REGION
+            self.configuration[
+                "bucket_name"
+            ] = self.config.TC_AWS_STORAGE_BUCKET
+            self.configuration[
+                "root_path"
+            ] = self.config.TC_AWS_STORAGE_ROOT_PATH
+            self.configuration["endpoint_url"] = self.config.TC_AWS_ENDPOINT
+
     @property
     def root_path(self) -> str:
         """Defines the path prefix for all storage images in S3"""
-        return self.context.config.AWS_STORAGE_ROOT_PATH.rstrip("/")
+        return self.configuration.get(
+            "root_path",
+            self.config.AWS_STORAGE_ROOT_PATH,
+        )
 
     async def put(self, path: str, file_bytes: bytes) -> str:
         content_type = BaseEngine.get_mimetype(file_bytes)
@@ -173,4 +188,4 @@ class Storage(storages.BaseStorage, S3Client):
     def normalize_path(self, path: str) -> str:
         """Returns the path used for storage"""
         path = unquote(path).lstrip("/")
-        return f"{self.root_path}/{path}"
+        return f"{self.root_path.rstrip('/')}/{path.lstrip('/')}"
