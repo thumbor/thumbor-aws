@@ -9,7 +9,7 @@
 # Copyright (c) 2021 Bernardo Heynemann heynemann@gmail.com
 
 import datetime
-from typing import Any, Mapping, Optional
+from typing import Any, Dict, Mapping, Optional
 
 from aiobotocore.client import AioBaseClient
 from aiobotocore.session import AioSession, get_session
@@ -21,7 +21,7 @@ from thumbor.utils import logger
 class S3Client:
     __session: AioSession = None
     context: Context = None
-    configuration: dict[str, object] = None
+    configuration: Dict[str, object] = None
 
     def __init__(self, context):
         self.context = context
