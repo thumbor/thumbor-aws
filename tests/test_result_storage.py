@@ -8,10 +8,10 @@
 # http://www.opensource.org/licenses/mit-license
 # Copyright (c) 2021 Bernardo Heynemann heynemann@gmail.com
 
+from unittest.mock import Mock
 from uuid import uuid4
 
 import pytest
-from mock import Mock
 from preggy import expect
 from thumbor.config import Config
 from tornado.testing import gen_test

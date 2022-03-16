@@ -29,7 +29,6 @@ TESTS_REQUIREMENTS = [
     "pytest-xdist==1.*,>=1.31.0",
     "yanc==0.*,>=0.3.3",
     "localstack>=0.13,<1.0.0",
-    "mock==3.*,>=3.0.5",
     "pyssim==0.*,>=0.4.0",
 ]
 
