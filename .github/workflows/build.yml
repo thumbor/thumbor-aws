@@ -21,8 +21,6 @@ jobs:
           architecture: x64
       - name: Code Climate Before Build
         if: matrix.python-version == '3.10'
-        env:
-          code_climate_token: ${{ secrets.CODE_CLIMATE_TOKEN }}
         run: |-
           curl -L -O https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
           chmod +x test-reporter-latest-linux-amd64
@@ -55,7 +53,5 @@ jobs:
           coveralls --service=github
       - name: Code Climate After Build
         if: matrix.python-version == '3.10'
-        env:
-          code_climate_token: ${{ secrets.CODE_CLIMATE_TOKEN }}
         run: |-
-          ./test-reporter-latest-linux-amd64 after-build -t cobertura --exit-code 0 -r ${code_climate_token}
+          ./test-reporter-latest-linux-amd64 after-build -t cobertura --exit-code 0 -r "${{ secrets.CODE_CLIMATE_TOKEN }}"
