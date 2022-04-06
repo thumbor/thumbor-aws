@@ -51,7 +51,3 @@ jobs:
         run: |
           pip install --upgrade coveralls
           coveralls --service=github
-      - name: Code Climate After Build
-        if: matrix.python-version == '3.10'
-        run: |-
-          ./test-reporter-latest-linux-amd64 after-build -t cobertura --exit-code 0 -r "${{ secrets.CODE_CLIMATE_TOKEN }}"
