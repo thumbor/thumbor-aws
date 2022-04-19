@@ -28,6 +28,11 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python-version }}
+      - name: APT Update
+        run: sudo apt-get update -y
+      - name: APT Install
+        run: sudo apt-get install -y python3-dev libcurl4-openssl-dev libgnutls28-dev
+          python3-all-dev make zlib1g-dev gcc libssl-dev build-essential
       - name: Install Poetry
         uses: snok/install-poetry@v1
         with:
