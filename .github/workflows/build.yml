@@ -13,29 +13,37 @@ jobs:
           - '3.9'
           - '3.10'
     # container: thumbororg/thumbor-test:${{ matrix.image-tag }}
+    services:
+      localstack:
+        image: localstack/localstack
+        ports:
+        - "4510-4530:4510-4530"
+        - "4566:4566"
+        env:
+        - SERVICES=s3
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        id: setup-python
+        uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python-version }}
-          architecture: x64
-      - name: Code Climate Before Build
-        if: matrix.python-version == '3.10'
-        run: |-
-          curl -L -O https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
-          chmod +x test-reporter-latest-linux-amd64
-          ./test-reporter-latest-linux-amd64 before-build
-      - name: APT Update
-        run: sudo apt-get update -y
-      - name: APT Install
-        run: sudo apt-get install -y python3-dev libcurl4-openssl-dev libgnutls28-dev
-          python3-all-dev make zlib1g-dev gcc libssl-dev build-essential
-      - name: Create Virtualenv
-        run: python3 -m venv ~/thumbor-aws
-      - name: Activate Virtualenv
-        run: source ~/thumbor-aws/bin/activate
-      - name: Setup
-        run: make setup
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v2
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+      - name: Install dependencies
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --no-interaction --no-root
+      - name: Install thumbor-aws
+        run: poetry install --no-interaction
       - name: Run Unit Tests
         run: make ci
         env:
