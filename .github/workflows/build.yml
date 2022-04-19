@@ -20,7 +20,7 @@ jobs:
         - "4510-4530:4510-4530"
         - "4566:4566"
         env:
-        - SERVICES=s3
+         SERVICES: s3
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python
