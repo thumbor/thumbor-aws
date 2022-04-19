@@ -10,8 +10,11 @@ setup:
 services: docker-down
 	@docker-compose up --remove-orphans
 
-ci:
-	@poetry run coverage run -m pytest tests && coverage xml && mv coverage.xml cobertura.xml
+coverage:
+	@poetry run coverage report -m --fail-under=75
+	@poetry run coverage lcov
+
+ci: unit coverage
 
 docker-up:
 	@docker-compose up --remove-orphan -d
@@ -28,7 +31,7 @@ unit:
 	@poetry run pytest --cov=thumbor_aws tests/
 
 sequential-unit:
-	@poetry run pytest -sv --junit-xml=test-results/unit/results.xml --cov=thumbor_aws tests/
+	@poetry run pytest -sv --cov=thumbor_aws tests/
 
 format:
 	@poetry run  black .
