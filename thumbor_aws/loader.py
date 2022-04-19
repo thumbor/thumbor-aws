@@ -59,7 +59,6 @@ Config.define(
 
 async def load(context, path):
     """Loader to get source files from S3"""
-
     client = S3Client(context)
     client.configuration = {
         "region_name": context.config.AWS_LOADER_REGION_NAME,
@@ -82,7 +81,9 @@ async def load(context, path):
     norm_path = normalize_url(client.configuration["root_path"], path)
     result = LoaderResult()
 
-    status_code, body, last_modified = await client.get_data(norm_path)
+    status_code, body, last_modified = await client.get_data(
+        norm_path, expiration=None
+    )
 
     if status_code != 200:
         result.error = LoaderResult.ERROR_NOT_FOUND
