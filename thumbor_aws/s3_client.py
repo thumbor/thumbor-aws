@@ -17,6 +17,8 @@ from thumbor.config import Config
 from thumbor.context import Context
 from thumbor.utils import logger
 
+_default = object()
+
 
 class S3Client:
     __session: AioSession = None
@@ -142,7 +144,7 @@ class S3Client:
             return f"{location.rstrip('/')}/{path.lstrip('/')}"
 
     async def get_data(
-        self, path: str, expiration: int = None
+        self, path: str, expiration: int = _default
     ) -> (int, bytes, Optional[datetime.datetime]):
         """Gets an object's data from S3"""
 
@@ -213,15 +215,17 @@ class S3Client:
             return await stream.read()
 
     def _is_expired(
-        self, last_modified: datetime.datetime, expiration: int = None
+        self,
+        last_modified: datetime.datetime,
+        expiration: int = _default,
     ) -> bool:
         """Identifies whether an AWS S3 object is expired"""
 
         if expiration is None:
-            expiration = self.config.STORAGE_EXPIRATION_SECONDS
-
-        if expiration is None:
             return False
+
+        if expiration is _default:
+            expiration = self.config.STORAGE_EXPIRATION_SECONDS
 
         timediff = datetime.datetime.now(datetime.timezone.utc) - last_modified
         return timediff.total_seconds() > expiration
