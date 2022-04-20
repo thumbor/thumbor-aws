@@ -47,7 +47,6 @@ pytest-cov = "^2.8.1"
 pytest-tldr = "^0.2.1"
 pytest-xdist = "^1.31.0"
 yanc = "^0.3.3"
-localstack = "^0.13"
 pyssim = "^0.4.0"
 scipy = "^1.7.3"
 

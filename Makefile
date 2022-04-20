@@ -8,7 +8,7 @@ setup:
 	@poetry install
 
 services: docker-down
-	@docker-compose up --remove-orphans
+	@docker-compose up
 
 coverage:
 	@poetry run coverage report -m --fail-under=75
@@ -17,7 +17,7 @@ coverage:
 ci: unit coverage
 
 docker-up:
-	@docker-compose up --remove-orphan -d
+	@docker-compose up -d
 
 docker-down:
 	@docker-compose stop
