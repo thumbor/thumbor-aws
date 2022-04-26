@@ -44,7 +44,7 @@ class ResultStorageTestCase(BaseS3TestCase):
         Result Storage works and the image is there
         """
         await self.ensure_bucket()
-        filepath = f"/test/can_put_file_{uuid4()}"
+        filepath = f"test/can_put_file_{uuid4()}"
         self.context.request = Mock(url=filepath)
         storage = ResultStorage(self.context)
         expected = self.test_images["default"]
@@ -53,10 +53,10 @@ class ResultStorageTestCase(BaseS3TestCase):
 
         expect(path).to_equal(
             f"https://{self.bucket_name}.s3.localhost.localstack.cloud:4566"
-            f"{self._prefix}/default{filepath}",
+            f"{self._prefix}/{filepath}",
         )
         status, data, _ = await storage.get_data(
-            f"{self._prefix}/default{filepath}"
+            f"{self._prefix}/{filepath}"
         )
         expect(status).to_equal(200)
         expect(data).to_equal(expected)
