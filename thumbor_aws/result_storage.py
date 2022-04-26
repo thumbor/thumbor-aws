@@ -161,11 +161,11 @@ class Storage(BaseStorage, S3Client):
 
     def normalize_path(self, path: str) -> str:
         """Returns the path used for result storage"""
-        prefix = "auto_webp" if self.is_auto_webp else "default"
+        prefix = "auto_webp/" if self.is_auto_webp else ""
         fs_path = unquote(path).lstrip("/")
         return (
             f"{self.root_path.rstrip('/')}/"
-            f"{prefix.lstrip('/')}/"
+            f"{prefix.lstrip('/')}"
             f"{fs_path.lstrip('/')}"
         )
 
