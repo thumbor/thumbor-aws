@@ -1,8 +1,5 @@
 name: "thumbor-aws CodeQL config"
 
-paths:
-  - thumbor_aws
-  - tests
 paths-ignore:
   - .venv
-  - usr/lib
+  - 'usr/lib'
