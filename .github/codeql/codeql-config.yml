@@ -2,4 +2,4 @@ name: "thumbor-aws CodeQL config"
 
 paths-ignore:
   - .venv
-  - 'usr/lib'
+  - 'usr/lib/**'
