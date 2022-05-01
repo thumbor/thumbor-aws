@@ -21,10 +21,6 @@ import thumbor_aws.s3_client
 class BaseS3TestCase(TestCase):
     test_images = {}
 
-    def setUp(self):
-        super().setUp()
-        thumbor_aws.s3_client.S3_CLIENT = None
-
     @property
     def bucket_name(self):
         """Name of the bucket to put test files in"""

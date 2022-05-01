@@ -18,7 +18,6 @@ from thumbor.context import Context
 from thumbor.utils import logger
 
 _default = object()
-S3_CLIENT = None
 
 
 class S3Client:

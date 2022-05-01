@@ -16,12 +16,16 @@ from thumbor.config import Config
 from tornado.testing import gen_test
 
 from tests import BaseS3TestCase
-from thumbor_aws.loader import load
+import thumbor_aws.loader
 from thumbor_aws.storage import Storage
 
 
 @pytest.mark.usefixtures("test_images")
 class LoaderTestCase(BaseS3TestCase):
+    def setUp(self):
+        super().setUp()
+        thumbor_aws.loader.S3_CLIENT = None
+
     @property
     def bucket_name(self):
         """Name of the bucket to put test files in"""
@@ -41,7 +45,7 @@ class LoaderTestCase(BaseS3TestCase):
         exists = await storage.exists(filepath)
         expect(exists).to_be_true()
 
-        result = await load(self.context, filepath)
+        result = await thumbor_aws.loader.load(self.context, filepath)
 
         expect(result.successful).to_be_true()
         expect(result.buffer).to_equal(expected)

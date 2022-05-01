@@ -9,10 +9,11 @@
 # Copyright (c) 2011 globo.com thumbor@googlegroups.com
 
 
+from glob import glob
 from thumbor.loaders import LoaderResult
 
 from thumbor_aws.config import Config
-from thumbor_aws.s3_client import S3Client
+import thumbor_aws.s3_client
 
 Config.define(
     "AWS_LOADER_REGION_NAME",
@@ -57,36 +58,45 @@ Config.define(
 )
 
 
+S3_CLIENT = None
+
+
+def _get_s3_client(context):
+    global S3_CLIENT
+    if not S3_CLIENT:
+        S3_CLIENT = thumbor_aws.s3_client.S3Client(context)
+        S3_CLIENT.configuration = {
+            "region_name": context.config.AWS_LOADER_REGION_NAME,
+            "secret_access_key": context.config.AWS_LOADER_S3_SECRET_ACCESS_KEY,
+            "access_key_id": context.config.AWS_LOADER_S3_ACCESS_KEY_ID,
+            "endpoint_url": context.config.AWS_LOADER_S3_ENDPOINT_URL,
+            "bucket_name": context.config.AWS_LOADER_BUCKET_NAME,
+            "root_path": context.config.AWS_LOADER_ROOT_PATH,
+        }
+        if S3_CLIENT.compatibility_mode is True:
+            S3_CLIENT.configuration[
+                "region_name"
+            ] = context.config.TC_AWS_REGION
+            S3_CLIENT.configuration[
+                "endpoint_url"
+            ] = context.config.TC_AWS_ENDPOINT
+            S3_CLIENT.configuration[
+                "bucket_name"
+            ] = context.config.TC_AWS_LOADER_BUCKET
+            S3_CLIENT.configuration[
+                "root_path"
+            ] = context.config.TC_AWS_LOADER_ROOT_PATH
+    return S3_CLIENT
+
+
 async def load(context, path):
     """Loader to get source files from S3"""
-    client = S3Client(context)
-    client.configuration = {
-        "region_name": context.config.AWS_LOADER_REGION_NAME,
-        "secret_access_key": context.config.AWS_LOADER_S3_SECRET_ACCESS_KEY,
-        "access_key_id": context.config.AWS_LOADER_S3_ACCESS_KEY_ID,
-        "endpoint_url": context.config.AWS_LOADER_S3_ENDPOINT_URL,
-        "bucket_name": context.config.AWS_LOADER_BUCKET_NAME,
-        "root_path": context.config.AWS_LOADER_ROOT_PATH,
-    }
-    if client.compatibility_mode is True:
-        client.configuration["region_name"] = context.config.TC_AWS_REGION
-        client.configuration["endpoint_url"] = context.config.TC_AWS_ENDPOINT
-        client.configuration[
-            "bucket_name"
-        ] = context.config.TC_AWS_LOADER_BUCKET
-        client.configuration[
-            "root_path"
-        ] = context.config.TC_AWS_LOADER_ROOT_PATH
-
-    bucket, real_path = get_bucket_and_path(
-        client.configuration["bucket_name"], path
-    )
-
-    norm_path = normalize_url(client.configuration["root_path"], real_path)
+    s3_client = _get_s3_client(context)
+    norm_path = normalize_url(s3_client.configuration["root_path"], path)
     result = LoaderResult()
 
-    status_code, body, last_modified = await client.get_data(
-        bucket, norm_path, expiration=None
+    status_code, body, last_modified = await s3_client.get_data(
+        norm_path, expiration=None
     )
 
     if status_code != 200:
