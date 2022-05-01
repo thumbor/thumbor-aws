@@ -78,11 +78,15 @@ async def load(context, path):
             "root_path"
         ] = context.config.TC_AWS_LOADER_ROOT_PATH
 
-    norm_path = normalize_url(client.configuration["root_path"], path)
+    bucket, real_path = get_bucket_and_path(
+        client.configuration["bucket_name"], path
+    )
+
+    norm_path = normalize_url(client.configuration["root_path"], real_path)
     result = LoaderResult()
 
     status_code, body, last_modified = await client.get_data(
-        norm_path, expiration=None
+        bucket, norm_path, expiration=None
     )
 
     if status_code != 200:
@@ -100,6 +104,18 @@ async def load(context, path):
     )
 
     return result
+
+
+def get_bucket_and_path(configured_bucket: str, path: str) -> (str, str):
+    bucket = configured_bucket
+    real_path = path
+
+    if not bucket:
+        split_path = path.lstrip("/").split("/")
+        bucket = split_path[0]
+        real_path = "/".join(split_path[1:])
+
+    return bucket, real_path
 
 
 def normalize_url(prefix: str, path: str) -> str:

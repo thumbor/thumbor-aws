@@ -140,7 +140,9 @@ class Storage(storages.BaseStorage, S3Client):
 
     async def get(self, path: str) -> bytes:
         normalized_path = self.normalize_path(path)
-        status, body, _ = await self.get_data(normalized_path)
+        status, body, _ = await self.get_data(
+            self.bucket_name, normalized_path
+        )
         if status != 200:
             return None
 
@@ -149,7 +151,7 @@ class Storage(storages.BaseStorage, S3Client):
     async def get_crypto(self, path: str) -> str:
         normalized_path = self.normalize_path(path)
         crypto_path = f"{normalized_path}.txt"
-        status, body, _ = await self.get_data(crypto_path)
+        status, body, _ = await self.get_data(self.bucket_name, crypto_path)
         if status != 200:
             return None
 
@@ -158,7 +160,7 @@ class Storage(storages.BaseStorage, S3Client):
     async def get_detector_data(self, path: str) -> Any:
         normalized_path = self.normalize_path(path)
         detector_path = f"{normalized_path}.detectors.txt"
-        status, body, _ = await self.get_data(detector_path)
+        status, body, _ = await self.get_data(self.bucket_name, detector_path)
         if status != 200:
             return None
 

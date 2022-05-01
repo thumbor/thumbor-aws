@@ -144,15 +144,12 @@ class S3Client:
             return f"{location.rstrip('/')}/{path.lstrip('/')}"
 
     async def get_data(
-        self, path: str, expiration: int = _default
-    ) -> (int, bytes, Optional[datetime.datetime]):
+        self, bucket: str, path: str, expiration: int = _default
+    ) -> (int, bytes, bytes, Optional[datetime.datetime]):
         """Gets an object's data from S3"""
-
         async with self.get_client() as client:
             try:
-                response = await client.get_object(
-                    Bucket=self.bucket_name, Key=path
-                )
+                response = await client.get_object(Bucket=bucket, Key=path)
             except client.exceptions.NoSuchKey:
                 return 404, b"", None
 
@@ -163,6 +160,7 @@ class S3Client:
                 return status_code, msg, None
 
             last_modified = response["LastModified"]
+
             if self._is_expired(last_modified, expiration):
                 return 410, b"", last_modified
 
@@ -214,6 +212,15 @@ class S3Client:
         async with response["Body"] as stream:
             return await stream.read()
 
+    def _get_bucket_and_path(self, path) -> (str, str):
+        bucket = self.bucket_name
+        real_path = path
+        if not self.bucket_name:
+            split_path = path.lstrip("/").split("/")
+            bucket = split_path[0]
+            real_path = "/".join(split_path[1:])
+        return (bucket, real_path)
+
     def _is_expired(
         self,
         last_modified: datetime.datetime,
@@ -226,6 +233,8 @@ class S3Client:
 
         if expiration is _default:
             expiration = self.config.STORAGE_EXPIRATION_SECONDS
-
-        timediff = datetime.datetime.now(datetime.timezone.utc) - last_modified
-        return timediff.total_seconds() > expiration
+        timediff = (
+            datetime.datetime.now(datetime.timezone.utc).timestamp()
+            - last_modified.timestamp()
+        )
+        return timediff >= expiration
