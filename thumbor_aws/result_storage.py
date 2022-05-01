@@ -182,7 +182,9 @@ class Storage(BaseStorage, S3Client):
             )
             return None
 
-        status, body, last_modified = await self.get_data(file_abspath)
+        status, body, last_modified = await self.get_data(
+            self.bucket_name, file_abspath
+        )
 
         if status != 200 or self._is_expired(last_modified):
             logger.debug(

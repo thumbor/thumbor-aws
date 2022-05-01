@@ -56,7 +56,7 @@ class ResultStorageTestCase(BaseS3TestCase):
             f"{self._prefix}/{filepath}",
         )
         status, data, _ = await storage.get_data(
-            f"{self._prefix}/{filepath}"
+            self.bucket_name, f"{self._prefix}/{filepath}"
         )
         expect(status).to_equal(200)
         expect(data).to_equal(expected)

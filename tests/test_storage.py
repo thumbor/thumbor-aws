@@ -44,7 +44,7 @@ class StorageTestCase(BaseS3TestCase):
             f"{self._prefix}{filepath}",
         )
         status, data, _ = await storage.get_data(
-            storage.normalize_path(filepath)
+            self.bucket_name, storage.normalize_path(filepath)
         )
         expect(status).to_equal(200)
         expect(data).to_equal(expected)
@@ -66,7 +66,7 @@ class StorageTestCase(BaseS3TestCase):
             f"{self._prefix}{filepath}.txt",
         )
         status, data, _ = await storage.get_data(
-            storage.normalize_path(filepath + ".txt")
+            self.bucket_name, storage.normalize_path(filepath + ".txt")
         )
         expect(status).to_equal(200)
         expect(data).to_equal("ACME-SEC")
@@ -90,7 +90,8 @@ class StorageTestCase(BaseS3TestCase):
             f"{self._prefix}{filepath}.detectors.txt",
         )
         status, data, _ = await storage.get_data(
-            storage.normalize_path(filepath + ".detectors.txt")
+            self.bucket_name,
+            storage.normalize_path(filepath + ".detectors.txt"),
         )
         expect(status).to_equal(200)
         expect(data).to_equal(b'{"some": "data"}')
@@ -121,7 +122,7 @@ class StorageTestCase(BaseS3TestCase):
         await storage.put(filepath, expected)
 
         status, data, _ = await storage.get_data(
-            storage.normalize_path(filepath), expiration=0
+            self.bucket_name, storage.normalize_path(filepath), expiration=0
         )
 
         expect(status).to_equal(410)

@@ -62,3 +62,38 @@ class LoaderCompatibilityModeTestCase(LoaderTestCase):
     def bucket_name(self):
         """Name of the bucket to put test files in"""
         return "test-bucket-compat"
+
+
+@pytest.mark.usefixtures("test_images")
+class EmptyBucketConfigLoaderTestCase(BaseS3TestCase):
+    @property
+    def bucket_name(self):
+        """Name of the bucket to put test files in"""
+        return self.context.config.AWS_LOADER_BUCKET_NAME
+
+    @gen_test
+    async def test_can_load_file_from_s3(self):
+        """
+        Verifies that an image can be loaded from S3
+        using Loader and that it's there
+        """
+        await self.ensure_bucket()
+        storage = Storage(self.context)
+        filepath = f"/test/can_put_file_{uuid4()}"
+        expected = self.test_images["default"]
+        await storage.put(filepath, expected)
+        exists = await storage.exists(filepath)
+        expect(exists).to_be_true()
+
+        filepath_with_bucket = (
+            f"/{self.context.config.AWS_LOADER_BUCKET_NAME}{filepath}"
+        )
+
+        self.context.config.AWS_LOADER_BUCKET_NAME = ""
+
+        result = await load(self.context, filepath_with_bucket)
+
+        expect(result.successful).to_be_true()
+        expect(result.buffer).to_equal(expected)
+        expect(result.metadata["size"]).to_equal(len(expected))
+        expect(result.metadata["updated_at"]).not_to_be_null()
