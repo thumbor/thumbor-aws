@@ -58,7 +58,6 @@ class LoaderTestCase(BaseS3TestCase):
         Verifies that result is false when image not present in S3
         """
         await self.ensure_bucket()
-        storage = Storage(self.context)
         filepath = f"/test/can_put_file_{uuid4()}"
 
         result = await thumbor_aws.loader.load(self.context, filepath)
