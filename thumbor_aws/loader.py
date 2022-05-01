@@ -91,11 +91,14 @@ def get_s3_client(context):
 async def load(context, path):
     """Loader to get source files from S3"""
     s3_client = get_s3_client(context)
-    norm_path = normalize_url(s3_client.configuration["root_path"], path)
+    bucket, real_path = get_bucket_and_path(
+        s3_client.configuration["bucket_name"], path
+    )
+    norm_path = normalize_url(s3_client.configuration["root_path"], real_path)
     result = LoaderResult()
 
     status_code, body, last_modified = await s3_client.get_data(
-        norm_path, expiration=None
+        bucket, norm_path, expiration=None
     )
 
     if status_code != 200:

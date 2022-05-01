@@ -20,12 +20,14 @@ import thumbor_aws.loader
 from thumbor_aws.storage import Storage
 
 
-@pytest.mark.usefixtures("test_images")
-class LoaderTestCase(BaseS3TestCase):
+class LoaderBaseTestCase(BaseS3TestCase):
     def setUp(self):
         super().setUp()
         thumbor_aws.loader.S3_CLIENT = None
 
+
+@pytest.mark.usefixtures("test_images")
+class LoaderTestCase(LoaderBaseTestCase):
     @property
     def bucket_name(self):
         """Name of the bucket to put test files in"""
@@ -86,11 +88,11 @@ class LoaderCompatibilityModeTestCase(LoaderTestCase):
 
 
 @pytest.mark.usefixtures("test_images")
-class EmptyBucketConfigLoaderTestCase(BaseS3TestCase):
-    @property
-    def bucket_name(self):
-        """Name of the bucket to put test files in"""
-        return self.context.config.AWS_LOADER_BUCKET_NAME
+class EmptyBucketConfigLoaderTestCase(LoaderBaseTestCase):
+    def get_config(self) -> Config:
+        cfg = super().get_config()
+        cfg.AWS_LOADER_BUCKET_NAME = ""
+        return cfg
 
     @gen_test
     async def test_can_load_file_from_s3(self):
@@ -107,14 +109,25 @@ class EmptyBucketConfigLoaderTestCase(BaseS3TestCase):
         expect(exists).to_be_true()
 
         filepath_with_bucket = (
-            f"/{self.context.config.AWS_LOADER_BUCKET_NAME}{filepath}"
+            f"/{self.context.config.AWS_STORAGE_BUCKET_NAME}{filepath}"
         )
 
-        self.context.config.AWS_LOADER_BUCKET_NAME = ""
-
-        result = await load(self.context, filepath_with_bucket)
+        result = await thumbor_aws.loader.load(
+            self.context, filepath_with_bucket
+        )
 
         expect(result.successful).to_be_true()
         expect(result.buffer).to_equal(expected)
         expect(result.metadata["size"]).to_equal(len(expected))
         expect(result.metadata["updated_at"]).not_to_be_null()
+
+
+@pytest.mark.usefixtures("test_images")
+class LoaderNoPrefixTestCase(LoaderTestCase):
+    def get_config(self) -> Config:
+        cfg = super().get_config()
+        cfg.AWS_LOADER_BUCKET_NAME = "test-bucket-loader-no-prefix"
+        cfg.AWS_STORAGE_BUCKET_NAME = "test-bucket-loader-no-prefix"
+        cfg.AWS_LOADER_ROOT_PATH = ""
+        cfg.AWS_STORAGE_ROOT_PATH = ""
+        return cfg
