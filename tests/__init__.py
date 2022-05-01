@@ -15,11 +15,15 @@ from thumbor.context import Context, ServerParameters
 from thumbor.importer import Importer
 from thumbor.testing import TestCase
 
-from thumbor_aws.s3_client import S3Client
+import thumbor_aws.s3_client
 
 
 class BaseS3TestCase(TestCase):
     test_images = {}
+
+    def setUp(self):
+        super().setUp()
+        thumbor_aws.s3_client.S3_CLIENT = None
 
     @property
     def bucket_name(self):
@@ -106,7 +110,7 @@ class BaseS3TestCase(TestCase):
 
     async def ensure_bucket(self):
         """Ensures the test bucket is created"""
-        s3client = S3Client(self.context)
+        s3client = thumbor_aws.s3_client.S3Client(self.context)
         if self.context.config.THUMBOR_AWS_RUN_IN_COMPATIBILITY_MODE is True:
             s3client.configuration["region_name"] = self.config.TC_AWS_REGION
             s3client.configuration[
