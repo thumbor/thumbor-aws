@@ -53,6 +53,19 @@ class LoaderTestCase(BaseS3TestCase):
         expect(result.metadata["updated_at"]).not_to_be_null()
 
     @gen_test
+    async def test_result_false_when_file_not_in_s3(self):
+        """
+        Verifies that result is false when image not present in S3
+        """
+        await self.ensure_bucket()
+        storage = Storage(self.context)
+        filepath = f"/test/can_put_file_{uuid4()}"
+
+        result = await thumbor_aws.loader.load(self.context, filepath)
+
+        expect(result.successful).to_be_false()
+
+    @gen_test
     async def test_reuse_s3_client(self):
         """
         Verifies that the s3_client is reused
@@ -66,10 +79,6 @@ class LoaderTestCase(BaseS3TestCase):
 class LoaderCompatibilityModeTestCase(LoaderTestCase):
     def get_config(self) -> Config:
         return self.get_compatibility_config()
-
-    @property
-    def _prefix(self):
-        return "/test-compat-st"
 
     @property
     def bucket_name(self):
