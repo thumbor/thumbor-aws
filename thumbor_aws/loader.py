@@ -9,7 +9,6 @@
 # Copyright (c) 2011 globo.com thumbor@googlegroups.com
 
 
-from glob import glob
 from thumbor.loaders import LoaderResult
 
 from thumbor_aws.config import Config
@@ -61,8 +60,8 @@ Config.define(
 S3_CLIENT = None
 
 
-def _get_s3_client(context):
-    global S3_CLIENT
+def get_s3_client(context):
+    global S3_CLIENT  # pylint: disable=global-statement
     if not S3_CLIENT:
         S3_CLIENT = thumbor_aws.s3_client.S3Client(context)
         S3_CLIENT.configuration = {
@@ -91,7 +90,7 @@ def _get_s3_client(context):
 
 async def load(context, path):
     """Loader to get source files from S3"""
-    s3_client = _get_s3_client(context)
+    s3_client = get_s3_client(context)
     norm_path = normalize_url(s3_client.configuration["root_path"], path)
     result = LoaderResult()
 

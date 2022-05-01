@@ -52,6 +52,15 @@ class LoaderTestCase(BaseS3TestCase):
         expect(result.metadata["size"]).to_equal(len(expected))
         expect(result.metadata["updated_at"]).not_to_be_null()
 
+    @gen_test
+    async def test_reuse_s3_client(self):
+        """
+        Verifies that the s3_client is reused
+        """
+        client1 = thumbor_aws.loader.get_s3_client(self.context)
+        client2 = thumbor_aws.loader.get_s3_client(self.context)
+        expect(client1).to_equal(client2)
+
 
 @pytest.mark.usefixtures("test_images")
 class LoaderCompatibilityModeTestCase(LoaderTestCase):
