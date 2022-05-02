@@ -24,12 +24,6 @@ class S3Client:
     __session: AioSession = None
     context: Context = None
     configuration: Dict[str, object] = None
-    _instance = None
-
-    def __new__(cls, _context):
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-        return cls._instance
 
     def __init__(self, context):
         self.context = context
@@ -90,13 +84,12 @@ class S3Client:
     @property
     def session(self) -> AioSession:
         """Singleton Session used for connecting with AWS"""
-        if self.__session is None:
-            self.__session = get_session()
-        return self.__session
+        if S3Client.__session is None:
+            S3Client.__session = get_session()
+        return S3Client.__session
 
     def get_client(self) -> AioBaseClient:
         """Gets a connected client to use for S3"""
-
         return self.session.create_client(
             "s3",
             region_name=self.region_name,
