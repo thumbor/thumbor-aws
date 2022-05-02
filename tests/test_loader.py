@@ -20,14 +20,8 @@ import thumbor_aws.loader
 from thumbor_aws.storage import Storage
 
 
-class LoaderBaseTestCase(BaseS3TestCase):
-    def setUp(self):
-        super().setUp()
-        thumbor_aws.loader.load = thumbor_aws.loader.S3Loader().load
-
-
 @pytest.mark.usefixtures("test_images")
-class LoaderTestCase(LoaderBaseTestCase):
+class LoaderTestCase(BaseS3TestCase):
     @property
     def bucket_name(self):
         """Name of the bucket to put test files in"""
@@ -66,16 +60,6 @@ class LoaderTestCase(LoaderBaseTestCase):
 
         expect(result.successful).to_be_false()
 
-    @gen_test
-    async def test_reuse_s3_client(self):
-        """
-        Verifies that the s3_client is reused
-        """
-        s3_loader = thumbor_aws.loader.S3Loader()
-        client1 = s3_loader.get_s3_client(self.context)
-        client2 = s3_loader.get_s3_client(self.context)
-        expect(client1).to_equal(client2)
-
 
 @pytest.mark.usefixtures("test_images")
 class LoaderCompatibilityModeTestCase(LoaderTestCase):
@@ -89,7 +73,7 @@ class LoaderCompatibilityModeTestCase(LoaderTestCase):
 
 
 @pytest.mark.usefixtures("test_images")
-class EmptyBucketConfigLoaderTestCase(LoaderBaseTestCase):
+class EmptyBucketConfigLoaderTestCase(BaseS3TestCase):
     def get_config(self) -> Config:
         cfg = super().get_config()
         cfg.AWS_LOADER_BUCKET_NAME = ""
