@@ -71,6 +71,13 @@ Config.define(
 
 
 class Storage(BaseStorage, S3Client):
+    _instance = None
+
+    def __new__(cls, context):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls, context)
+        return cls._instance
+
     def __init__(self, context):
         BaseStorage.__init__(self, context)
         S3Client.__init__(self, context)

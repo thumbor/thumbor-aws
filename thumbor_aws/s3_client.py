@@ -24,6 +24,12 @@ class S3Client:
     __session: AioSession = None
     context: Context = None
     configuration: Dict[str, object] = None
+    _instance = None
+
+    def __new__(cls, context):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
 
     def __init__(self, context):
         self.context = context
@@ -90,6 +96,7 @@ class S3Client:
 
     def get_client(self) -> AioBaseClient:
         """Gets a connected client to use for S3"""
+
         return self.session.create_client(
             "s3",
             region_name=self.region_name,
