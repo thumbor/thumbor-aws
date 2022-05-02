@@ -159,17 +159,6 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
-name = "colorful"
-version = "0.5.4"
-description = "Terminal string styling done right, in Python."
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.dependencies]
-colorama = {version = "*", markers = "platform_system == \"Windows\""}
-
-[[package]]
 name = "coverage"
 version = "6.3.2"
 description = "Code coverage measurement for Python"
@@ -690,19 +679,6 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
 
 [[package]]
-name = "socketfromfd"
-version = "0.2.0"
-description = "socket.fromfd() with auto-detection of family and type"
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.extras]
-test = ["coverage", "pytest"]
-test_docs = ["docutils", "markdown"]
-test_pep8 = ["flake8", "pep8-naming"]
-
-[[package]]
 name = "statsd"
 version = "3.3.0"
 description = "A simple statsd client."
@@ -712,19 +688,18 @@ python-versions = "*"
 
 [[package]]
 name = "thumbor"
-version = "7.0.8"
+version = "7.0.9"
 description = "thumbor is an open-source photo thumbnail service by globo.com"
 category = "main"
 optional = false
 python-versions = ">=3.6"
 
 [package.dependencies]
-colorful = ">=0.5.4,<1.0.0"
+colorama = ">=0.4.3,<1.0.0"
 derpconf = ">=0.8.3,<1.0.0"
 libthumbor = ">=2.0.2,<3.0.0"
 Pillow = ">=9.0.0"
 pytz = ">=2019.3.0"
-socketfromfd = ">=0.2.0"
 statsd = ">=3.3.0,<4.0.0"
 thumbor-plugins-gifv = ">=0.1.2,<1.0.0"
 tornado = ">=6.0.3,<7.0.0"
@@ -733,7 +708,7 @@ webcolors = ">=1.10.0,<2.0.0"
 [package.extras]
 all = ["opencv-python-headless (>=4.2.0,<5.0.0)", "numpy (>=1.18.1,<2.0.0)", "cairosvg (>=2.5.2)", "pycurl (>=7.43.0,<8.0.0)", "py3exiv2 (>=0.7.1,!=0.7.2,!=0.8.0,!=0.9.3,<1.0.0)"]
 opencv = ["opencv-python-headless (>=4.2.0,<5.0.0)", "numpy (>=1.18.1,<2.0.0)"]
-tests = ["opencv-python-headless (>=4.2.0,<5.0.0)", "numpy (>=1.18.1,<2.0.0)", "cairosvg (>=2.5.2)", "pycurl (>=7.43.0,<8.0.0)", "py3exiv2 (>=0.7.1,!=0.7.2,!=0.8.0,!=0.9.3,<1.0.0)", "colorama (>=0.4.3,<1.0.0)", "coverage (>=6.3.2,<7.0.0)", "flake8 (>=3.7.9,<4.0.0)", "isort (>=4.3.21,<5.0.0)", "preggy (>=1.4.4,<2.0.0)", "pylint (>=2.4.4,<3.0.0)", "pyssim (>=0.4.0,<1.0.0)", "pytest (>=6.2.5)", "pytest-asyncio (>=0.10.0,<1.0.0)", "pytest-cov (>=3.0.0,<4.0.0)", "pytest-tldr (>=0.2.1,<1.0.0)", "pytest-xdist (>=2.4.0,<3.0.0)", "redis (>=3.4.0,<4.0.0)", "remotecv (>=2.3.0)", "sentry-sdk (>=0.14.1,<1.0.0)", "snapshottest (>=0.6.0,<1.0.0)", "yanc (>=0.3.3,<1.0.0)"]
+tests = ["opencv-python-headless (>=4.2.0,<5.0.0)", "numpy (>=1.18.1,<2.0.0)", "cairosvg (>=2.5.2)", "pycurl (>=7.43.0,<8.0.0)", "py3exiv2 (>=0.7.1,!=0.7.2,!=0.8.0,!=0.9.3,<1.0.0)", "coverage (>=6.3.2,<7.0.0)", "flake8 (>=3.7.9,<4.0.0)", "isort (>=4.3.21,<5.0.0)", "pre-commit (>=2.17.0,<3.0.0)", "preggy (>=1.4.4,<2.0.0)", "pylint (>=2.4.4,<3.0.0)", "pyssim (>=0.4.0,<1.0.0)", "pytest (>=6.2.5)", "pytest-asyncio (>=0.10.0,<1.0.0)", "pytest-cov (>=3.0.0,<4.0.0)", "pytest-tldr (>=0.2.1,<1.0.0)", "pytest-xdist (>=2.4.0,<3.0.0)", "redis (>=3.4.0,<4.0.0)", "remotecv (>=2.3.0)", "sentry-sdk (>=0.14.1,<1.0.0)", "snapshottest (>=0.6.0,<1.0.0)", "yanc (>=0.3.3,<1.0.0)"]
 
 [[package]]
 name = "thumbor-plugins-gifv"
@@ -1001,10 +976,6 @@ charset-normalizer = [
 colorama = [
     {file = "colorama-0.4.4-py2.py3-none-any.whl", hash = "sha256:9f47eda37229f68eee03b24b9748937c7dc3868f906e8ba69fbcbdd3bc5dc3e2"},
     {file = "colorama-0.4.4.tar.gz", hash = "sha256:5941b2b48a20143d2267e95b1c2a7603ce057ee39fd88e7329b0c292aa16869b"},
-]
-colorful = [
-    {file = "colorful-0.5.4-py2.py3-none-any.whl", hash = "sha256:8d264b52a39aae4c0ba3e2a46afbaec81b0559a99be0d2cfe2aba4cf94531348"},
-    {file = "colorful-0.5.4.tar.gz", hash = "sha256:86848ad4e2eda60cd2519d8698945d22f6f6551e23e95f3f14dfbb60997807ea"},
 ]
 coverage = [
     {file = "coverage-6.3.2-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:9b27d894748475fa858f9597c0ee1d4829f44683f3813633aaf94b19cb5453cf"},
@@ -1494,16 +1465,12 @@ six = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
     {file = "six-1.16.0.tar.gz", hash = "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"},
 ]
-socketfromfd = [
-    {file = "socketfromfd-0.2.0-py2.py3-none-any.whl", hash = "sha256:9c2737ad21168f0e9bc92ac0094aaffef8bbf04aae709d0fbcf1dabf9f020f72"},
-    {file = "socketfromfd-0.2.0.tar.gz", hash = "sha256:f0a4a1289c7831bd1c80677cee5968146cab79ca310c8a2d10153fe6e9057d53"},
-]
 statsd = [
     {file = "statsd-3.3.0-py2.py3-none-any.whl", hash = "sha256:c610fb80347fca0ef62666d241bce64184bd7cc1efe582f9690e045c25535eaa"},
     {file = "statsd-3.3.0.tar.gz", hash = "sha256:e3e6db4c246f7c59003e51c9720a51a7f39a396541cb9b147ff4b14d15b5dd1f"},
 ]
 thumbor = [
-    {file = "thumbor-7.0.8.tar.gz", hash = "sha256:ccad877d8826596856d6f5c14ca19176bb52514d6639461fbc7b22bc8a4ebdaa"},
+    {file = "thumbor-7.0.9.tar.gz", hash = "sha256:1c6c37bb45a86c003ddaa565250f2de23153184f17ca1a05c735a74ef3b0fedc"},
 ]
 thumbor-plugins-gifv = [
     {file = "thumbor-plugins-gifv-0.1.2.tar.gz", hash = "sha256:bd79cf820f25368b3ba7ef052ce6fae6c786532829d01d612f307ea0f43c82fc"},
