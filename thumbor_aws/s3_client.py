@@ -26,7 +26,7 @@ class S3Client:
     configuration: Dict[str, object] = None
     _instance = None
 
-    def __new__(cls, context):
+    def __new__(cls, _context):
         if cls._instance is None:
             cls._instance = super().__new__(cls)
         return cls._instance
