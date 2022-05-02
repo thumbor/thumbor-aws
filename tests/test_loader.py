@@ -16,7 +16,7 @@ from thumbor.config import Config
 from tornado.testing import gen_test
 
 from tests import BaseS3TestCase
-from thumbor_aws.loader import load
+import thumbor_aws.loader
 from thumbor_aws.storage import Storage
 
 
@@ -41,22 +41,30 @@ class LoaderTestCase(BaseS3TestCase):
         exists = await storage.exists(filepath)
         expect(exists).to_be_true()
 
-        result = await load(self.context, filepath)
+        result = await thumbor_aws.loader.load(self.context, filepath)
 
         expect(result.successful).to_be_true()
         expect(result.buffer).to_equal(expected)
         expect(result.metadata["size"]).to_equal(len(expected))
         expect(result.metadata["updated_at"]).not_to_be_null()
 
+    @gen_test
+    async def test_result_false_when_file_not_in_s3(self):
+        """
+        Verifies that result is false when image not present in S3
+        """
+        await self.ensure_bucket()
+        filepath = f"/test/can_put_file_{uuid4()}"
+
+        result = await thumbor_aws.loader.load(self.context, filepath)
+
+        expect(result.successful).to_be_false()
+
 
 @pytest.mark.usefixtures("test_images")
 class LoaderCompatibilityModeTestCase(LoaderTestCase):
     def get_config(self) -> Config:
         return self.get_compatibility_config()
-
-    @property
-    def _prefix(self):
-        return "/test-compat-st"
 
     @property
     def bucket_name(self):
@@ -66,10 +74,10 @@ class LoaderCompatibilityModeTestCase(LoaderTestCase):
 
 @pytest.mark.usefixtures("test_images")
 class EmptyBucketConfigLoaderTestCase(BaseS3TestCase):
-    @property
-    def bucket_name(self):
-        """Name of the bucket to put test files in"""
-        return self.context.config.AWS_LOADER_BUCKET_NAME
+    def get_config(self) -> Config:
+        cfg = super().get_config()
+        cfg.AWS_LOADER_BUCKET_NAME = ""
+        return cfg
 
     @gen_test
     async def test_can_load_file_from_s3(self):
@@ -86,14 +94,25 @@ class EmptyBucketConfigLoaderTestCase(BaseS3TestCase):
         expect(exists).to_be_true()
 
         filepath_with_bucket = (
-            f"/{self.context.config.AWS_LOADER_BUCKET_NAME}{filepath}"
+            f"/{self.context.config.AWS_STORAGE_BUCKET_NAME}{filepath}"
         )
 
-        self.context.config.AWS_LOADER_BUCKET_NAME = ""
-
-        result = await load(self.context, filepath_with_bucket)
+        result = await thumbor_aws.loader.load(
+            self.context, filepath_with_bucket
+        )
 
         expect(result.successful).to_be_true()
         expect(result.buffer).to_equal(expected)
         expect(result.metadata["size"]).to_equal(len(expected))
         expect(result.metadata["updated_at"]).not_to_be_null()
+
+
+@pytest.mark.usefixtures("test_images")
+class LoaderNoPrefixTestCase(LoaderTestCase):
+    def get_config(self) -> Config:
+        cfg = super().get_config()
+        cfg.AWS_LOADER_BUCKET_NAME = "test-bucket-loader-no-prefix"
+        cfg.AWS_STORAGE_BUCKET_NAME = "test-bucket-loader-no-prefix"
+        cfg.AWS_LOADER_ROOT_PATH = ""
+        cfg.AWS_STORAGE_ROOT_PATH = ""
+        return cfg
