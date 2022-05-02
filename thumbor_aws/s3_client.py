@@ -9,7 +9,7 @@
 # Copyright (c) 2021 Bernardo Heynemann heynemann@gmail.com
 
 import datetime
-from typing import Any, Dict, Mapping, Optional
+from typing import Any, Dict, Mapping, Optional, Tuple
 
 from aiobotocore.client import AioBaseClient
 from aiobotocore.session import AioSession, get_session
@@ -145,7 +145,7 @@ class S3Client:
 
     async def get_data(
         self, bucket: str, path: str, expiration: int = _default
-    ) -> (int, bytes, bytes, Optional[datetime.datetime]):
+    ) -> Tuple[int, bytes, bytes, Optional[datetime.datetime]]:
         """Gets an object's data from S3"""
         async with self.get_client() as client:
             try:
@@ -212,7 +212,7 @@ class S3Client:
         async with response["Body"] as stream:
             return await stream.read()
 
-    def _get_bucket_and_path(self, path) -> (str, str):
+    def _get_bucket_and_path(self, path) -> Tuple[str, str]:
         bucket = self.bucket_name
         real_path = path
         if not self.bucket_name:

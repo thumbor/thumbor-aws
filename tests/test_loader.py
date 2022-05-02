@@ -23,7 +23,7 @@ from thumbor_aws.storage import Storage
 class LoaderBaseTestCase(BaseS3TestCase):
     def setUp(self):
         super().setUp()
-        thumbor_aws.loader.S3_CLIENT = None
+        thumbor_aws.loader.load = thumbor_aws.loader.S3Loader().load
 
 
 @pytest.mark.usefixtures("test_images")
@@ -71,8 +71,9 @@ class LoaderTestCase(LoaderBaseTestCase):
         """
         Verifies that the s3_client is reused
         """
-        client1 = thumbor_aws.loader.get_s3_client(self.context)
-        client2 = thumbor_aws.loader.get_s3_client(self.context)
+        s3_loader = thumbor_aws.loader.S3Loader()
+        client1 = s3_loader.get_s3_client(self.context)
+        client2 = s3_loader.get_s3_client(self.context)
         expect(client1).to_equal(client2)
 
 

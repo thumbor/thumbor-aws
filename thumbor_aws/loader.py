@@ -8,11 +8,12 @@
 # http://www.opensource.org/licenses/mit-license
 # Copyright (c) 2011 globo.com thumbor@googlegroups.com
 
+from typing import Tuple
 
 from thumbor.loaders import LoaderResult
 
 from thumbor_aws.config import Config
-import thumbor_aws.s3_client
+from thumbor_aws.s3_client import S3Client
 
 Config.define(
     "AWS_LOADER_REGION_NAME",
@@ -57,81 +58,84 @@ Config.define(
 )
 
 
-S3_CLIENT = None
+class S3Loader:
+    _s3_client: S3Client = None
 
+    def get_s3_client(self, context) -> S3Client:
+        if not self._s3_client:
+            self._s3_client = S3Client(context)
+            self._s3_client.configuration = {
+                "region_name": context.config.AWS_LOADER_REGION_NAME,
+                "secret_access_key": context.config.AWS_LOADER_S3_SECRET_ACCESS_KEY,
+                "access_key_id": context.config.AWS_LOADER_S3_ACCESS_KEY_ID,
+                "endpoint_url": context.config.AWS_LOADER_S3_ENDPOINT_URL,
+                "bucket_name": context.config.AWS_LOADER_BUCKET_NAME,
+                "root_path": context.config.AWS_LOADER_ROOT_PATH,
+            }
+            if self._s3_client.compatibility_mode is True:
+                self._s3_client.configuration[
+                    "region_name"
+                ] = context.config.TC_AWS_REGION
+                self._s3_client.configuration[
+                    "endpoint_url"
+                ] = context.config.TC_AWS_ENDPOINT
+                self._s3_client.configuration[
+                    "bucket_name"
+                ] = context.config.TC_AWS_LOADER_BUCKET
+                self._s3_client.configuration[
+                    "root_path"
+                ] = context.config.TC_AWS_LOADER_ROOT_PATH
+        return self._s3_client
 
-def get_s3_client(context):
-    global S3_CLIENT  # pylint: disable=global-statement
-    if not S3_CLIENT:
-        S3_CLIENT = thumbor_aws.s3_client.S3Client(context)
-        S3_CLIENT.configuration = {
-            "region_name": context.config.AWS_LOADER_REGION_NAME,
-            "secret_access_key": context.config.AWS_LOADER_S3_SECRET_ACCESS_KEY,
-            "access_key_id": context.config.AWS_LOADER_S3_ACCESS_KEY_ID,
-            "endpoint_url": context.config.AWS_LOADER_S3_ENDPOINT_URL,
-            "bucket_name": context.config.AWS_LOADER_BUCKET_NAME,
-            "root_path": context.config.AWS_LOADER_ROOT_PATH,
-        }
-        if S3_CLIENT.compatibility_mode is True:
-            S3_CLIENT.configuration[
-                "region_name"
-            ] = context.config.TC_AWS_REGION
-            S3_CLIENT.configuration[
-                "endpoint_url"
-            ] = context.config.TC_AWS_ENDPOINT
-            S3_CLIENT.configuration[
-                "bucket_name"
-            ] = context.config.TC_AWS_LOADER_BUCKET
-            S3_CLIENT.configuration[
-                "root_path"
-            ] = context.config.TC_AWS_LOADER_ROOT_PATH
-    return S3_CLIENT
+    async def load(self, context, path) -> LoaderResult:
+        """Loader to get source files from S3"""
+        s3_client = self.get_s3_client(context)
+        bucket, real_path = self.get_bucket_and_path(
+            s3_client.configuration["bucket_name"], path
+        )
+        norm_path = self.normalize_url(
+            s3_client.configuration["root_path"], real_path
+        )
+        result = LoaderResult()
 
+        status_code, body, last_modified = await s3_client.get_data(
+            bucket, norm_path, expiration=None
+        )
 
-async def load(context, path):
-    """Loader to get source files from S3"""
-    s3_client = get_s3_client(context)
-    bucket, real_path = get_bucket_and_path(
-        s3_client.configuration["bucket_name"], path
-    )
-    norm_path = normalize_url(s3_client.configuration["root_path"], real_path)
-    result = LoaderResult()
+        if status_code != 200:
+            result.error = LoaderResult.ERROR_NOT_FOUND
+            result.extra = body
+            result.successful = False
+            return result
 
-    status_code, body, last_modified = await s3_client.get_data(
-        bucket, norm_path, expiration=None
-    )
+        result.successful = True
+        result.buffer = body
 
-    if status_code != 200:
-        result.error = LoaderResult.ERROR_NOT_FOUND
-        result.extra = body
-        result.successful = False
+        result.metadata.update(
+            size=len(body),
+            updated_at=last_modified,
+        )
+
         return result
 
-    result.successful = True
-    result.buffer = body
+    def get_bucket_and_path(
+        self, configured_bucket: str, path: str
+    ) -> Tuple[str, str]:
+        bucket = configured_bucket
+        real_path = path
 
-    result.metadata.update(
-        size=len(body),
-        updated_at=last_modified,
-    )
+        if not bucket:
+            split_path = path.lstrip("/").split("/")
+            bucket = split_path[0]
+            real_path = "/".join(split_path[1:])
 
-    return result
+        return bucket, real_path
 
-
-def get_bucket_and_path(configured_bucket: str, path: str) -> (str, str):
-    bucket = configured_bucket
-    real_path = path
-
-    if not bucket:
-        split_path = path.lstrip("/").split("/")
-        bucket = split_path[0]
-        real_path = "/".join(split_path[1:])
-
-    return bucket, real_path
+    def normalize_url(self, prefix: str, path: str) -> str:
+        """Function to normalize URLs before reaching into S3"""
+        if prefix:
+            return f"{prefix.rstrip('/')}/{path.lstrip('/')}"
+        return path
 
 
-def normalize_url(prefix: str, path: str) -> str:
-    """Function to normalize URLs before reaching into S3"""
-    if prefix:
-        return f"{prefix.rstrip('/')}/{path.lstrip('/')}"
-    return path
+load = S3Loader().load
