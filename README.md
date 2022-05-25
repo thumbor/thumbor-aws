@@ -95,6 +95,10 @@ thumbor-aws loader offer several configuration options:
 ## Defaults to: 'us-east-1'
 #AWS_LOADER_REGION_NAME = 'us-east-1'
 
+## Allow fallback http loader in the event you wish to also load non-S3 URLs
+## Defaults to: False
+#AWS_ENABLE_HTTP_LOADER = False
+
 ## S3 Bucket where thumbor's objects are loaded from.
 ## Defaults to: 'thumbor'
 #AWS_LOADER_BUCKET_NAME = 'thumbor'

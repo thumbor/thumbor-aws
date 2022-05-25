@@ -10,7 +10,7 @@
 
 
 from thumbor.loaders import LoaderResult
-
+import thumbor.loaders.http_loader as http_loader
 from thumbor_aws.config import Config
 from thumbor_aws.s3_client import S3Client
 
@@ -19,6 +19,13 @@ Config.define(
     "us-east-1",
     "Region where thumbor's objects are going to be loaded from.",
     "AWS Loader",
+)
+
+Config.define(
+    'AWS_ENABLE_HTTP_LOADER', 
+    False, 
+    'Enable HTTP Loader as well?', 
+    'AWS Loader'
 )
 
 Config.define(
@@ -58,6 +65,9 @@ Config.define(
 
 
 async def load(context, path):
+    if _use_http_loader(context, path):
+        return await http_loader.load(context, path)
+
     """Loader to get source files from S3"""
     client = S3Client(context)
     client.configuration = {
@@ -123,3 +133,14 @@ def normalize_url(prefix: str, path: str) -> str:
     if prefix:
         return f"{prefix.rstrip('/')}/{path.lstrip('/')}"
     return path
+
+def _use_http_loader(context, url):
+    """
+    Should we use HTTP Loader with given path? Based on configuration as well.
+    :param Context context: Thumbor's context
+    :param string url: URL to analyze
+    :return: Whether we should use HTTP Loader or not
+    :rtype: bool
+    """
+    enable_http_loader = context.config.get('AWS_ENABLE_HTTP_LOADER', default=False)
+    return enable_http_loader and url.startswith('http')

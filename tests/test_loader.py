@@ -14,7 +14,7 @@ import pytest
 from preggy import expect
 from thumbor.config import Config
 from tornado.testing import gen_test
-
+from mock import patch
 from tests import BaseS3TestCase
 import thumbor_aws.loader
 from thumbor_aws.storage import Storage
@@ -59,6 +59,22 @@ class LoaderTestCase(BaseS3TestCase):
         result = await thumbor_aws.loader.load(self.context, filepath)
 
         expect(result.successful).to_be_false()
+
+    @patch('thumbor.loaders.http_loader.load')
+    @gen_test
+    async def test_should_use_http_loader(self, load_sync_patch):
+        conf = Config(AWS_ENABLE_HTTP_LOADER=True)
+        self.context.config = conf
+        await thumbor_aws.loader.load(self.context, 'http://foo.bar')
+        self.assertTrue(load_sync_patch.called)
+
+    @patch('thumbor.loaders.http_loader.load')
+    @gen_test
+    async def test_should_not_use_http_loader_if_not_prefixed_with_scheme(self, load_sync_patch):
+        conf = Config(AWS_ENABLE_HTTP_LOADER=True)
+        self.context.config = conf
+        await thumbor_aws.loader.load(self.context, 'foo/bar')
+        self.assertFalse(load_sync_patch.called)
 
 
 @pytest.mark.usefixtures("test_images")
