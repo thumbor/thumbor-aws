@@ -14,7 +14,7 @@ import pytest
 from preggy import expect
 from thumbor.config import Config
 from tornado.testing import gen_test
-from mock import patch
+from unittest.mock import patch
 from tests import BaseS3TestCase
 import thumbor_aws.loader
 from thumbor_aws.storage import Storage
