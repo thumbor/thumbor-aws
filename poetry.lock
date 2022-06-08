@@ -1,6 +1,6 @@
 [[package]]
 name = "aiobotocore"
-version = "2.3.2"
+version = "2.3.3"
 description = "Async client for aws services using botocore and aiohttp"
 category = "main"
 optional = false
@@ -857,7 +857,7 @@ content-hash = "2a040dc9d66088086c7ce367229b6e355741dbef4dda376f83e1cbc6a12c846b
 
 [metadata.files]
 aiobotocore = [
-    {file = "aiobotocore-2.3.2.tar.gz", hash = "sha256:4b6e88312170a4d25f6fad0047ea055fd15fc19cffc9120af75cfc45e1d2bd07"},
+    {file = "aiobotocore-2.3.3.tar.gz", hash = "sha256:13d403a067e1afc997f756a3107d125ffe964e7213f117f327c62fe763c67e2e"},
 ]
 aiohttp = [
     {file = "aiohttp-3.8.1-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:1ed0b6477896559f17b9eaeb6d38e07f7f9ffe40b9f0f9627ae8b9926ae260a8"},
