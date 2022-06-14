@@ -142,5 +142,5 @@ def _use_http_loader(context, url):
     :return: Whether we should use HTTP Loader or not
     :rtype: bool
     """
-    enable_http_loader = context.config.get('AWS_ENABLE_HTTP_LOADER', default=False)
+    enable_http_loader = context.config.get('AWS_ENABLE_HTTP_LOADER', default=False)    
     return enable_http_loader and url.startswith('http')
