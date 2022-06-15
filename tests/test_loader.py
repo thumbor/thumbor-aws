@@ -73,6 +73,7 @@ class LoaderTestCase(BaseS3TestCase):
         result = await thumbor_aws.loader.load(self.context, 'http://foo.bar')
         self.assertEquals("httploader result", result)
 
+
 @pytest.mark.usefixtures("test_images")
 class LoaderCompatibilityModeTestCase(LoaderTestCase):
     def get_config(self) -> Config:

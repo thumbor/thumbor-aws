@@ -134,6 +134,7 @@ def normalize_url(prefix: str, path: str) -> str:
         return f"{prefix.rstrip('/')}/{path.lstrip('/')}"
     return path
 
+
 def _use_http_loader(context, url):
     """
     Should we use HTTP Loader with given path? Based on configuration as well.
