@@ -33,7 +33,7 @@ class LoaderTestCase(BaseS3TestCase):
         Verifies that an image can be loaded from S3
         using Loader and that it's there
         """
-        await self.ensure_bucket()        
+        await self.ensure_bucket()
         storage = Storage(self.context)
         filepath = f"/test/can_put_file_{uuid4()}"
         expected = self.test_images["default"]
@@ -41,8 +41,8 @@ class LoaderTestCase(BaseS3TestCase):
         exists = await storage.exists(filepath)
         expect(exists).to_be_true()
 
-        # ensures we are testing if the Thumbor HTTP Loader 
-        # config key was set to True and the scheme was not http        
+        # ensures we are testing if the Thumbor HTTP Loader
+        # config key was set to True and the scheme was not http
         self.context.config.AWS_ENABLE_HTTP_LOADER = True
         result = await thumbor_aws.loader.load(self.context, filepath)
 
@@ -68,7 +68,7 @@ class LoaderTestCase(BaseS3TestCase):
     async def test_should_use_http_loader(self, httploader):
         conf = Config(AWS_ENABLE_HTTP_LOADER=True)
         await self.ensure_bucket()
-        self.context.config = conf        
+        self.context.config = conf
         httploader.return_value = "httploader result"
         result = await thumbor_aws.loader.load(self.context, 'http://foo.bar')
         self.assertEquals("httploader result", result)
