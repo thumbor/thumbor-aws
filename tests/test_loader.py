@@ -67,7 +67,7 @@ class LoaderTestCase(BaseS3TestCase):
     @gen_test
     async def test_should_use_http_loader(self, httploader):
         conf = Config(AWS_ENABLE_HTTP_LOADER=True)
-        self.context.config = conf        
+        self.context.config = conf
         await thumbor_aws.loader.load(self.context, 'http://foo.bar')
         self.assertTrue(httploader.called)
 
