@@ -11,6 +11,7 @@
 from uuid import uuid4
 
 from unittest.mock import patch
+from unittest.mock import AsyncMock
 import pytest
 from preggy import expect
 from thumbor.config import Config
@@ -19,6 +20,12 @@ from tests import BaseS3TestCase
 import thumbor_aws.loader
 from thumbor_aws.storage import Storage
 
+
+@pytest.fixture()
+def mock_loader(mocker):
+    async_mock = AsyncMock()
+    mocker.patch('thumbor.loaders.http_loader.load', side_effect=async_mock)
+    return async_mock
 
 @pytest.mark.usefixtures("test_images")
 class LoaderTestCase(BaseS3TestCase):
@@ -63,7 +70,8 @@ class LoaderTestCase(BaseS3TestCase):
 
         expect(result.successful).to_be_false()
 
-    @patch('thumbor.loaders.http_loader.load')
+    # @patch('thumbor.loaders.http_loader.load')
+    @pytest.mark.asyncio
     @gen_test
     async def test_should_use_http_loader(self, httploader):
         conf = Config(AWS_ENABLE_HTTP_LOADER=True)
