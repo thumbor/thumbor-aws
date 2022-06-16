@@ -73,11 +73,11 @@ class LoaderTestCase(BaseS3TestCase):
     # @patch('thumbor.loaders.http_loader.load')
     @pytest.mark.asyncio
     @gen_test
-    async def test_should_use_http_loader(self, httploader):
+    async def test_should_use_http_loader(self, mock_loader):
         conf = Config(AWS_ENABLE_HTTP_LOADER=True)
         self.context.config = conf
         await thumbor_aws.loader.load(self.context, 'http://foo.bar')
-        self.assertTrue(httploader.called)
+        self.assertTrue(mock_loader.called)
 
 
 @pytest.mark.usefixtures("test_images")
