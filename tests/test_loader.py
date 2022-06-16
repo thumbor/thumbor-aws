@@ -10,14 +10,16 @@
 
 from uuid import uuid4
 
+from unittest.mock import patch
 import pytest
 from preggy import expect
 from thumbor.config import Config
 from tornado.testing import gen_test
-
 from tests import BaseS3TestCase
 import thumbor_aws.loader
 from thumbor_aws.storage import Storage
+import asyncio
+
 
 
 @pytest.mark.usefixtures("test_images")
@@ -41,6 +43,9 @@ class LoaderTestCase(BaseS3TestCase):
         exists = await storage.exists(filepath)
         expect(exists).to_be_true()
 
+        # ensures we are testing if the Thumbor HTTP Loader
+        # config key was set to True and the scheme was not http
+        self.context.config.AWS_ENABLE_HTTP_LOADER = True
         result = await thumbor_aws.loader.load(self.context, filepath)
 
         expect(result.successful).to_be_true()
@@ -59,6 +64,22 @@ class LoaderTestCase(BaseS3TestCase):
         result = await thumbor_aws.loader.load(self.context, filepath)
 
         expect(result.successful).to_be_false()
+
+    @pytest.fixture()
+    def mock_loader(mocker):
+        future = asyncio.Future()
+        mocker.patch('thumbor.loaders.http_loader.load', return_value=future)
+        return future
+        
+    # @patch('thumbor.loaders.http_loader.load')
+    @gen_test
+    @pytest.mark.asyncio
+    async def test_should_use_http_loader(self, mock_loader):
+        conf = Config(AWS_ENABLE_HTTP_LOADER=True)
+        self.context.config = conf
+        mock_loader.set_result(True)
+        await thumbor_aws.loader.load(self.context, 'http://foo.bar')
+        self.assertTrue(mock_loader.called)
 
 
 @pytest.mark.usefixtures("test_images")
