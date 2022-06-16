@@ -10,11 +10,11 @@
 
 from uuid import uuid4
 
+from unittest.mock import patch
 import pytest
 from preggy import expect
 from thumbor.config import Config
 from tornado.testing import gen_test
-from unittest.mock import patch
 from tests import BaseS3TestCase
 import thumbor_aws.loader
 from thumbor_aws.storage import Storage
@@ -67,11 +67,9 @@ class LoaderTestCase(BaseS3TestCase):
     @gen_test
     async def test_should_use_http_loader(self, httploader):
         conf = Config(AWS_ENABLE_HTTP_LOADER=True)
-        await self.ensure_bucket()
-        self.context.config = conf
-        httploader.return_value = "httploader result"
-        result = await thumbor_aws.loader.load(self.context, 'http://foo.bar')
-        self.assertEquals("httploader result", result)
+        self.context.config = conf        
+        await thumbor_aws.loader.load(self.context, 'http://foo.bar')
+        self.assertTrue(httploader.called)
 
 
 @pytest.mark.usefixtures("test_images")

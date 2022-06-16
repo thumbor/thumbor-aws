@@ -10,7 +10,7 @@
 
 
 from thumbor.loaders import LoaderResult
-import thumbor.loaders.http_loader as http_loader
+from thumbor.loaders import http_loader
 from thumbor_aws.config import Config
 from thumbor_aws.s3_client import S3Client
 
@@ -65,10 +65,13 @@ Config.define(
 
 
 async def load(context, path):
+    """
+    Loader to get source files from S3. Also supports fallback
+    to http loader if it detects an http scheme
+    """
     if _use_http_loader(context, path):
         return await http_loader.load(context, path)
 
-    """Loader to get source files from S3"""
     client = S3Client(context)
     client.configuration = {
         "region_name": context.config.AWS_LOADER_REGION_NAME,
