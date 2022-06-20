@@ -528,7 +528,7 @@ diagrams = ["railroad-diagrams", "jinja2"]
 
 [[package]]
 name = "pyssim"
-version = "0.4"
+version = "0.5"
 description = "Module for computing Structured Similarity Image Metric (SSIM) in Python"
 category = "dev"
 optional = false
@@ -853,7 +853,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7,<3.11"
-content-hash = "2a040dc9d66088086c7ce367229b6e355741dbef4dda376f83e1cbc6a12c846b"
+content-hash = "d1bbe94b9bb200d492a83c623f5f231bea7769b1c09d3196ccb90e151e7a8845"
 
 [metadata.files]
 aiobotocore = [
@@ -1360,7 +1360,7 @@ pyparsing = [
     {file = "pyparsing-3.0.9.tar.gz", hash = "sha256:2b020ecf7d21b687f219b71ecad3631f644a47f01403fa1d1036b0c6416d70fb"},
 ]
 pyssim = [
-    {file = "pyssim-0.4.tar.gz", hash = "sha256:52184c85e6ed0362a508617497c70251837ab38a62531793e3ea7eeaf7a2e150"},
+    {file = "pyssim-0.5.tar.gz", hash = "sha256:438ff84a371f05e443f136ed6cba0afad4dd486038da39b6d0d9d189a80973a4"},
 ]
 pytest = [
     {file = "pytest-7.1.2-py3-none-any.whl", hash = "sha256:13d0e3ccfc2b6e26be000cb6568c832ba67ba32e719443bfe725814d3c42433c"},

@@ -47,7 +47,7 @@ pytest-cov = "^3.0.0"
 pytest-tldr = "^0.2.1"
 pytest-xdist = "^2.5.0"
 yanc = "^0.3.3"
-pyssim = "^0.4.0"
+pyssim = "^0.5"
 scipy = "^1.7.3"
 
 [build-system]
