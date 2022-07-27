@@ -427,8 +427,8 @@ python-versions = ">=3.6"
 importlib-metadata = {version = ">=0.12", markers = "python_version < \"3.8\""}
 
 [package.extras]
-dev = ["pre-commit", "tox"]
-testing = ["pytest", "pytest-benchmark"]
+testing = ["pytest-benchmark", "pytest"]
+dev = ["tox", "pre-commit"]
 
 [[package]]
 name = "pre-commit"
@@ -589,7 +589,7 @@ coverage = {version = ">=5.2.1", extras = ["toml"]}
 pytest = ">=4.6"
 
 [package.extras]
-testing = ["fields", "hunter", "process-tests", "six", "pytest-xdist", "virtualenv"]
+testing = ["virtualenv", "pytest-xdist", "six", "process-tests", "hunter", "fields"]
 
 [[package]]
 name = "pytest-forked"
@@ -688,7 +688,7 @@ python-versions = "*"
 
 [[package]]
 name = "thumbor"
-version = "7.0.10"
+version = "7.1.0"
 description = "thumbor is an open-source photo thumbnail service by globo.com"
 category = "main"
 optional = false
@@ -706,9 +706,9 @@ tornado = ">=6.0.3,<7.0.0"
 webcolors = ">=1.10.0,<2.0.0"
 
 [package.extras]
-all = ["cairosvg (>=2.5.2)", "numpy (>=1.18.1,<2.0.0)", "opencv-python-headless (>=4.2.0,<5.0.0)", "py3exiv2 (>=0,<0.7.2)", "pycurl (>=7.43.0,<8.0.0)"]
-opencv = ["numpy (>=1.18.1,<2.0.0)", "opencv-python-headless (>=4.2.0,<5.0.0)"]
-tests = ["cairosvg (>=2.5.2)", "coverage (>=6.3.2,<7.0.0)", "flake8 (>=3.7.9,<4.0.0)", "isort (>=4.3.21,<5.0.0)", "numpy (>=1.18.1,<2.0.0)", "opencv-python-headless (>=4.2.0,<5.0.0)", "pre-commit (>=2.17.0,<3.0.0)", "preggy (>=1.4.4,<2.0.0)", "py3exiv2 (>=0,<0.7.2)", "pycurl (>=7.43.0,<8.0.0)", "pylint (>=2.4.4,<3.0.0)", "pyssim (>=0.4.0,<1.0.0)", "pytest-asyncio (>=0.10.0,<1.0.0)", "pytest-cov (>=3.0.0,<4.0.0)", "pytest-tldr (>=0.2.1,<1.0.0)", "pytest-xdist (>=2.4.0,<3.0.0)", "pytest (>=6.2.5)", "redis (>=3.4.0,<4.0.0)", "remotecv (>=2.3.0)", "sentry-sdk (>=0.14.1,<1.0.0)", "yanc (>=0.3.3,<1.0.0)"]
+all = ["opencv-python-headless (>=4.2.0,<5.0.0)", "numpy (>=1.18.1,<2.0.0)", "cairosvg (>=2.5.2)", "pycurl (>=7.43.0,<8.0.0)", "py3exiv2 (>=0,<0.7.2)"]
+opencv = ["opencv-python-headless (>=4.2.0,<5.0.0)", "numpy (>=1.18.1,<2.0.0)"]
+tests = ["opencv-python-headless (>=4.2.0,<5.0.0)", "numpy (>=1.18.1,<2.0.0)", "cairosvg (>=2.5.2)", "pycurl (>=7.43.0,<8.0.0)", "py3exiv2 (>=0,<0.7.2)", "coverage (>=6.3.2,<7.0.0)", "flake8 (>=3.7.9,<4.0.0)", "isort (>=4.3.21,<5.0.0)", "pre-commit (>=2.17.0,<3.0.0)", "preggy (>=1.4.4,<2.0.0)", "pylint (>=2.4.4,<3.0.0)", "pyssim (>=0.4.0,<1.0.0)", "pytest (>=6.2.5)", "pytest-asyncio (>=0.10.0,<1.0.0)", "pytest-cov (>=3.0.0,<4.0.0)", "pytest-tldr (>=0.2.1,<1.0.0)", "pytest-xdist (>=2.4.0,<3.0.0)", "redis (>=4.2.2,<5.0.0)", "remotecv (>=2.3.0)", "sentry-sdk (>=0.14.1,<1.0.0)", "yanc (>=0.3.3,<1.0.0)"]
 
 [[package]]
 name = "thumbor-plugins-gifv"
@@ -1470,7 +1470,7 @@ statsd = [
     {file = "statsd-3.3.0.tar.gz", hash = "sha256:e3e6db4c246f7c59003e51c9720a51a7f39a396541cb9b147ff4b14d15b5dd1f"},
 ]
 thumbor = [
-    {file = "thumbor-7.0.10.tar.gz", hash = "sha256:720f8688412197b16926fed0d52254bd62874c39aca2cecf6eb824ce73c15c09"},
+    {file = "thumbor-7.1.0.tar.gz", hash = "sha256:272006191f4b847089c1e15090a1fa9a55ad3672c4e19e120571ab6c6bee8a92"},
 ]
 thumbor-plugins-gifv = [
     {file = "thumbor-plugins-gifv-0.1.2.tar.gz", hash = "sha256:bd79cf820f25368b3ba7ef052ce6fae6c786532829d01d612f307ea0f43c82fc"},
