@@ -597,7 +597,7 @@ pytest = ">=3.10"
 
 [[package]]
 name = "pytest-tldr"
-version = "0.2.4"
+version = "0.2.5"
 description = "A pytest plugin that limits the output to just the things you need."
 category = "dev"
 optional = false
@@ -858,7 +858,7 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.7,<3.11"
-content-hash = "fbec2963a0cb0bf504f89582e1ddac3841af63132abee9b237c512d8e6979a26"
+content-hash = "61d9e462545c47395a633c0872e87fde9016e3f3d79437ca3c054a8da642238f"
 
 [metadata.files]
 aiobotocore = [
@@ -1391,8 +1391,8 @@ pytest-forked = [
     {file = "pytest_forked-1.4.0-py3-none-any.whl", hash = "sha256:bbbb6717efc886b9d64537b41fb1497cfaf3c9601276be8da2cccfea5a3c8ad8"},
 ]
 pytest-tldr = [
-    {file = "pytest-tldr-0.2.4.tar.gz", hash = "sha256:764f928e9ecdc615c2b4e6f78cee3bb865c76a08c57fdf93ee5f0ee99f5f25ee"},
-    {file = "pytest_tldr-0.2.4-py3-none-any.whl", hash = "sha256:f538fe13764a6ea512a0b7d1c874ba8088a5c541d885cba4096fd7593cbd2943"},
+    {file = "pytest-tldr-0.2.5.tar.gz", hash = "sha256:43f43fe758569df620c433a79d3cbee698e77268efebbc6e22ce1e66095a0881"},
+    {file = "pytest_tldr-0.2.5-py3-none-any.whl", hash = "sha256:abc51c90d31e1a188ebf1800a73a65be73df9d94b01c4c4a494097282a120bf9"},
 ]
 pytest-xdist = [
     {file = "pytest-xdist-2.5.0.tar.gz", hash = "sha256:4580deca3ff04ddb2ac53eba39d76cb5dd5edeac050cb6fbc768b0dd712b4edf"},
