@@ -693,7 +693,7 @@ python-versions = "*"
 
 [[package]]
 name = "thumbor"
-version = "7.2.1"
+version = "7.3.0"
 description = "thumbor is an open-source photo thumbnail service by globo.com"
 category = "main"
 optional = false
@@ -711,9 +711,9 @@ tornado = ">=6.0.3,<7.0.0"
 webcolors = ">=1.10.0,<2.0.0"
 
 [package.extras]
-all = ["cairosvg (>=2.5.2)", "numpy (>=1.18.1,<2.0.0)", "opencv-python-headless (>=4.2.0,<5.0.0)", "pillow-avif-plugin (>=1.2.2,<2.0.0)", "py3exiv2 (>=0,<0.7.2)", "pycurl (>=7.43.0,<8.0.0)"]
+all = ["cairosvg (>=2.5.2)", "numpy (>=1.18.1,<2.0.0)", "opencv-python-headless (>=4.2.0,<5.0.0)", "pillow-avif-plugin (>=1.2.2,<2.0.0)", "pillow-heif (>=0.7.0)", "py3exiv2 (>=0,<0.7.2)", "pycurl (>=7.43.0,<8.0.0)"]
 opencv = ["numpy (>=1.18.1,<2.0.0)", "opencv-python-headless (>=4.2.0,<5.0.0)"]
-tests = ["cairosvg (>=2.5.2)", "coverage (>=6.3.2,<7.0.0)", "flake8 (>=3.7.9,<4.0.0)", "isort (>=4.3.21,<5.0.0)", "numpy (>=1.18.1,<2.0.0)", "opencv-python-headless (>=4.2.0,<5.0.0)", "pillow-avif-plugin (>=1.2.2,<2.0.0)", "pre-commit (>=2.17.0,<3.0.0)", "preggy (>=1.4.4,<2.0.0)", "py3exiv2 (>=0,<0.7.2)", "pycurl (>=7.43.0,<8.0.0)", "pylint (>=2.4.4,<3.0.0)", "pyssim (>=0.4.0,<1.0.0)", "pytest (>=6.2.5)", "pytest-asyncio (>=0.10.0,<1.0.0)", "pytest-cov (>=3.0.0,<4.0.0)", "pytest-tldr (>=0.2.1,<1.0.0)", "pytest-xdist (>=2.4.0,<3.0.0)", "redis (>=4.2.2,<5.0.0)", "remotecv (>=2.3.0)", "sentry-sdk (>=0.14.1,<1.0.0)", "yanc (>=0.3.3,<1.0.0)"]
+tests = ["cairosvg (>=2.5.2)", "coverage (>=6.3.2,<7.0.0)", "flake8 (>=3.7.9,<4.0.0)", "isort (>=4.3.21,<5.0.0)", "numpy (>=1.18.1,<2.0.0)", "opencv-python-headless (>=4.2.0,<5.0.0)", "pillow-avif-plugin (>=1.2.2,<2.0.0)", "pillow-heif (>=0.7.0)", "pre-commit (>=2.17.0,<3.0.0)", "preggy (>=1.4.4,<2.0.0)", "py3exiv2 (>=0,<0.7.2)", "pycurl (>=7.43.0,<8.0.0)", "pylint (>=2.4.4,<3.0.0)", "pyssim (>=0.4.0,<1.0.0)", "pytest (>=6.2.5)", "pytest-asyncio (>=0.10.0,<1.0.0)", "pytest-cov (>=3.0.0,<4.0.0)", "pytest-tldr (>=0.2.1,<1.0.0)", "pytest-xdist (>=2.4.0,<3.0.0)", "redis (>=4.2.2,<5.0.0)", "remotecv (>=2.3.0)", "sentry-sdk (>=0.14.1,<1.0.0)", "yanc (>=0.3.3,<1.0.0)"]
 
 [[package]]
 name = "thumbor-plugins-gifv"
@@ -1492,7 +1492,7 @@ statsd = [
     {file = "statsd-3.3.0.tar.gz", hash = "sha256:e3e6db4c246f7c59003e51c9720a51a7f39a396541cb9b147ff4b14d15b5dd1f"},
 ]
 thumbor = [
-    {file = "thumbor-7.2.1.tar.gz", hash = "sha256:8a83ee3a9e462fd03e908c191d53d11e6f81c82076e3fc7d84f0c301debef882"},
+    {file = "thumbor-7.3.0.tar.gz", hash = "sha256:1dbd73bd6a024a7dc3a68c52cc7184f2aee5889bf447500bfab95cc5df8b90d1"},
 ]
 thumbor-plugins-gifv = [
     {file = "thumbor-plugins-gifv-0.1.2.tar.gz", hash = "sha256:bd79cf820f25368b3ba7ef052ce6fae6c786532829d01d612f307ea0f43c82fc"},
