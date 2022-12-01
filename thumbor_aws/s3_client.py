@@ -9,6 +9,7 @@
 # Copyright (c) 2021 Bernardo Heynemann heynemann@gmail.com
 
 import datetime
+import warnings
 from typing import Any, Dict, Mapping, Optional, Tuple
 
 from aiobotocore.client import AioBaseClient
@@ -136,7 +137,7 @@ class S3Client:
                     f"Unable to process response from AWS to {path}: "
                     "Location Headers was not found in response"
                 )
-                logger.warning(msg)
+                warnings.warn(msg, UserWarning)
                 location = default_location.format(
                     bucket_name=self.bucket_name
                 )
