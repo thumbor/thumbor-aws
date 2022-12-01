@@ -9,6 +9,8 @@
 # Copyright (c) 2011 globo.com thumbor@googlegroups.com
 
 
+from urllib.parse import unquote
+
 from thumbor.loaders import LoaderResult
 
 from thumbor_aws.config import Config
@@ -108,7 +110,7 @@ async def load(context, path):
 
 def get_bucket_and_path(configured_bucket: str, path: str) -> (str, str):
     bucket = configured_bucket
-    real_path = path
+    real_path = unquote(path)
 
     if not bucket:
         split_path = path.lstrip("/").split("/")
