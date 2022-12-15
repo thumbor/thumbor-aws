@@ -8,7 +8,6 @@
 # http://www.opensource.org/licenses/mit-license
 # Copyright (c) 2021 Bernardo Heynemann heynemann@gmail.com
 
-from unittest.mock import patch
 from uuid import uuid4
 
 import pytest
@@ -127,28 +126,6 @@ class StorageTestCase(BaseS3TestCase):
 
         expect(status).to_equal(410)
         expect(data).to_equal(b"")
-
-    @gen_test
-    async def test_can_upload_with_valid_location(self):
-        """Verifies that uploading with valid location returns location"""
-        await self.ensure_bucket()
-        storage = Storage(self.context)
-        filepath = f"/test/can_put_file_{uuid4()}"
-
-        with patch.object(
-            storage.__class__, "get_location", return_value=None
-        ):
-            response = await storage.upload(
-                storage.normalize_path(filepath),
-                b"ACME-SEC2",
-                "application/text",
-                "https://my-site.com/{bucket_name}",
-            )
-
-            expect(response).to_equal(
-                "https://my-site.com/"
-                f"{self.bucket_name}{self._prefix}{filepath}"
-            )
 
     @gen_test
     async def test_can_get_crypto_from_s3(self):

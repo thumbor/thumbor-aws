@@ -130,16 +130,7 @@ class S3Client:
                 logger.error(msg)
                 raise RuntimeError(msg)
 
-            location = self.get_location(response)
-            if location is None:
-                msg = (
-                    f"Unable to process response from AWS to {path}: "
-                    "Location Headers was not found in response"
-                )
-                logger.warning(msg)
-                location = default_location.format(
-                    bucket_name=self.bucket_name
-                )
+            location = default_location.format(bucket_name=self.bucket_name)
 
             return f"{location.rstrip('/')}/{path.lstrip('/')}"
 
@@ -196,16 +187,6 @@ class S3Client:
         ):
             return 500
         return response["ResponseMetadata"]["HTTPStatusCode"]
-
-    def get_location(self, response: Mapping[str, Any]) -> Optional[str]:
-        """Gets the location from an AWS response object"""
-        if (
-            "ResponseMetadata" not in response
-            or "HTTPHeaders" not in response["ResponseMetadata"]
-            or "location" not in response["ResponseMetadata"]["HTTPHeaders"]
-        ):
-            return None
-        return response["ResponseMetadata"]["HTTPHeaders"]["location"]
 
     async def get_body(self, response: Any) -> bytes:
         """Gets the body from an AWS response object"""
