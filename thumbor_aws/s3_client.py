@@ -185,11 +185,11 @@ class S3Client:
                     return False
                 raise
 
-    async def get_object_acl(self, filepath: str):
+    async def get_object_metadata(self, filepath: str):
         """Gets an object's metadata"""
 
         async with self.get_client() as client:
-            return await client.get_object_acl(
+            return await client.head_object(
                 Bucket=self.bucket_name, Key=filepath
             )
 

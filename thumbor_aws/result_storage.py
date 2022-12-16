@@ -214,7 +214,7 @@ class Storage(BaseStorage, S3Client):
         file_abspath = self.normalize_path(path)
         logger.debug("[RESULT_STORAGE] getting from %s", file_abspath)
 
-        response = await self.get_object_acl(file_abspath)
+        response = await self.get_object_metadata(file_abspath)
         return datetime.strptime(
             response["ResponseMetadata"]["HTTPHeaders"]["last-modified"],
             "%a, %d %b %Y %H:%M:%S %Z",
