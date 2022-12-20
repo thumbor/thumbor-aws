@@ -43,6 +43,10 @@ class BaseS3TestCase(TestCase):
         cfg.STORAGE = "thumbor_aws.storage"
         cfg.RESULT_STORAGE = "thumbor_aws.result_storage"
 
+        cfg.AWS_DEFAULT_LOCATION = (
+            "https://{bucket_name}.s3.localhost.localstack.cloud:4566"
+        )
+
         # Storage Config
         cfg.AWS_STORAGE_REGION_NAME = "local"
         cfg.AWS_STORAGE_BUCKET_NAME = "test-bucket-st"
@@ -73,6 +77,10 @@ class BaseS3TestCase(TestCase):
         cfg.LOADER = "thumbor_aws.loader"
         cfg.STORAGE = "thumbor_aws.storage"
         cfg.RESULT_STORAGE = "thumbor_aws.result_storage"
+
+        cfg.AWS_DEFAULT_LOCATION = (
+            "https://{bucket_name}.s3.localhost.localstack.cloud:4566"
+        )
 
         cfg.THUMBOR_AWS_RUN_IN_COMPATIBILITY_MODE = True
         cfg.TC_AWS_REGION = "local"
