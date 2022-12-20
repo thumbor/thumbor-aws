@@ -164,18 +164,23 @@ class S3Client:
 
         async with self.get_client() as client:
             try:
-                await client.get_object_acl(
+                await client.head_object(
                     Bucket=self.bucket_name, Key=filepath
                 )
                 return True
             except client.exceptions.NoSuchKey:
                 return False
+            except client.exceptions.ClientError as err:
+                # NOTE: This case is required because of https://github.com/boto/boto3/issues/2442
+                if err.response["Error"]["Code"] == "404":
+                    return False
+                raise
 
-    async def get_object_acl(self, filepath: str):
+    async def get_object_metadata(self, filepath: str):
         """Gets an object's metadata"""
 
         async with self.get_client() as client:
-            return await client.get_object_acl(
+            return await client.head_object(
                 Bucket=self.bucket_name, Key=filepath
             )
 
