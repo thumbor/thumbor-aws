@@ -5,7 +5,7 @@ include = '\.pyi?$'
 
 [tool.poetry]
 name = "thumbor_aws"
-version = "0.4.3"
+version = "0.5.0"
 authors = ["Bernardo Heynemann <heynemann@gmail.com>"]
 description = "thumbor_aws provides extensions for thumbor using AWS"
 readme = "README.md"
