@@ -766,7 +766,7 @@ python-versions = "*"
 
 [[package]]
 name = "thumbor"
-version = "7.4.0"
+version = "7.4.2"
 description = "thumbor is an open-source photo thumbnail service by globo.com"
 category = "main"
 optional = false
@@ -1716,16 +1716,16 @@ statsd = [
     {file = "statsd-3.3.0.tar.gz", hash = "sha256:e3e6db4c246f7c59003e51c9720a51a7f39a396541cb9b147ff4b14d15b5dd1f"},
 ]
 thumbor = [
-    {file = "thumbor-7.4.0-cp37-abi3-macosx_10_9_universal2.whl", hash = "sha256:ea8b90b4716b838439b7b6a0522b2ae31d59333456809df96898428197d885b6"},
-    {file = "thumbor-7.4.0-cp37-abi3-macosx_10_9_x86_64.whl", hash = "sha256:3c9e51bfa14386dc15a6d7055552a4619e0672d0c629720b65346889123f32bd"},
-    {file = "thumbor-7.4.0-cp37-abi3-macosx_11_0_arm64.whl", hash = "sha256:40a3fd85203550142c394461b463be7e127e497340c01f3ed13bbe30e8e14084"},
-    {file = "thumbor-7.4.0-cp37-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:35bba99a8c97c81377b6097c982ad80bbcfc25060c21e377dfb271c5439ed31d"},
-    {file = "thumbor-7.4.0-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:2ca40523f215354c597575f77d3a2aa704c49a29b70b96b3188fb2f44cc3ccb7"},
-    {file = "thumbor-7.4.0-cp37-abi3-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:236502c3d900327e2046742da7be5ea7dfbc01f39c43bce3fba59bf40ef554c7"},
-    {file = "thumbor-7.4.0-cp37-abi3-musllinux_1_1_aarch64.whl", hash = "sha256:8ebc3d73e32feaa45c982059553726eb2830f7c5851a86ecaa01d03de667d3a7"},
-    {file = "thumbor-7.4.0-cp37-abi3-musllinux_1_1_i686.whl", hash = "sha256:3c46379531c52ba9ee0a996ef9d1c1389f96643b299e6083363cf853efbc3721"},
-    {file = "thumbor-7.4.0-cp37-abi3-musllinux_1_1_x86_64.whl", hash = "sha256:8f207e6602da539d319e39386baa137d3572cb82540b7234aded2538d706e5a1"},
-    {file = "thumbor-7.4.0.tar.gz", hash = "sha256:33a3fdc1942ae614db0d148abed8e15967158dfe18015dadd705d19975a58d2c"},
+    {file = "thumbor-7.4.2-cp37-abi3-macosx_10_9_universal2.whl", hash = "sha256:0f0ef8e679668f3993b8c5df045fc300e02ba39d75215b2379b8d0e5490508c4"},
+    {file = "thumbor-7.4.2-cp37-abi3-macosx_10_9_x86_64.whl", hash = "sha256:1b6842600a891efd455a79c174bb1a47af18c927239dd5eb75d51cf989b017b8"},
+    {file = "thumbor-7.4.2-cp37-abi3-macosx_11_0_arm64.whl", hash = "sha256:a8abcc098d6b9358bd4c9105bec15b2e408815512c2f8dd347c9369701549df5"},
+    {file = "thumbor-7.4.2-cp37-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:4b6f83e2d2a9abc3f52057e3aea894e10c2721b1b28c7a5fb79fd89a1b3a40da"},
+    {file = "thumbor-7.4.2-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:382b376e86bc973d0d03887032fbc4d2fdf21613d104506f9e185fe67606a073"},
+    {file = "thumbor-7.4.2-cp37-abi3-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:626b7a810be8c62352bcb1a53d10e835a3f4a786a368d4bb46af170f044cfedd"},
+    {file = "thumbor-7.4.2-cp37-abi3-musllinux_1_1_aarch64.whl", hash = "sha256:ac82484a89de4382e941fa2b630b681f19dca59cffe0f8acd477a4b5b2b402d2"},
+    {file = "thumbor-7.4.2-cp37-abi3-musllinux_1_1_i686.whl", hash = "sha256:67886afe86679c9262ce7a6ef448c0abf463725271670536c8d6c3e6d28f99fc"},
+    {file = "thumbor-7.4.2-cp37-abi3-musllinux_1_1_x86_64.whl", hash = "sha256:9729cbf082d14b57a7f7b43d54f29c36d7d07664838e9f602593262674ba02dd"},
+    {file = "thumbor-7.4.2.tar.gz", hash = "sha256:525dfc464b646088009050ae47d2aeed3fd908c0ea3780e92fa7ec59bde36e1c"},
 ]
 thumbor-plugins-gifv = [
     {file = "thumbor-plugins-gifv-0.1.2.tar.gz", hash = "sha256:bd79cf820f25368b3ba7ef052ce6fae6c786532829d01d612f307ea0f43c82fc"},
