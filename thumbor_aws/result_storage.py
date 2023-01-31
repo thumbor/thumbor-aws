@@ -10,7 +10,6 @@
 
 
 from datetime import datetime, timezone
-from urllib.parse import unquote
 
 from deprecated import deprecated
 from thumbor.engines import BaseEngine

@@ -10,7 +10,6 @@
 
 from json import dumps, loads
 from typing import Any
-from urllib.parse import unquote
 
 from thumbor import storages
 from thumbor.engines import BaseEngine

@@ -1,5 +1,6 @@
 from urllib.parse import unquote
 
+
 def normalize_path(prefix: str, path: str) -> str:
     """Convert a URL received from Thumbor to a key in a S3 bucket."""
     # Thumbor calls load/store functions with a URL that is  URL-encoded and

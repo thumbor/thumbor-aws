@@ -17,6 +17,7 @@ from tornado.testing import gen_test
 
 from tests import BaseS3TestCase
 from thumbor_aws.storage import Storage
+from thumbor_aws.utils import normalize_path
 
 
 @pytest.mark.usefixtures("test_images")
@@ -43,7 +44,7 @@ class StorageTestCase(BaseS3TestCase):
             f"{self._prefix}{filepath}",
         )
         status, data, _ = await storage.get_data(
-            self.bucket_name, storage.normalize_path(filepath)
+            self.bucket_name, normalize_path(storage.root_path, filepath)
         )
         expect(status).to_equal(200)
         expect(data).to_equal(expected)
@@ -65,7 +66,8 @@ class StorageTestCase(BaseS3TestCase):
             f"{self._prefix}{filepath}.txt",
         )
         status, data, _ = await storage.get_data(
-            self.bucket_name, storage.normalize_path(filepath + ".txt")
+            self.bucket_name,
+            normalize_path(storage.root_path, filepath + ".txt"),
         )
         expect(status).to_equal(200)
         expect(data).to_equal("ACME-SEC")
@@ -90,7 +92,7 @@ class StorageTestCase(BaseS3TestCase):
         )
         status, data, _ = await storage.get_data(
             self.bucket_name,
-            storage.normalize_path(filepath + ".detectors.txt"),
+            normalize_path(storage.root_path, filepath + ".detectors.txt"),
         )
         expect(status).to_equal(200)
         expect(data).to_equal(b'{"some": "data"}')
@@ -121,7 +123,9 @@ class StorageTestCase(BaseS3TestCase):
         await storage.put(filepath, expected)
 
         status, data, _ = await storage.get_data(
-            self.bucket_name, storage.normalize_path(filepath), expiration=0
+            self.bucket_name,
+            normalize_path(storage.root_path, filepath),
+            expiration=0,
         )
 
         expect(status).to_equal(410)
@@ -138,7 +142,7 @@ class StorageTestCase(BaseS3TestCase):
         filepath = f"/test/can_put_file_{uuid4()}"
 
         await storage.upload(
-            storage.normalize_path(filepath + ".txt"),
+            normalize_path(storage.root_path, filepath + ".txt"),
             b"ACME-SEC2",
             "application/text",
             "http://my-site.com",
@@ -155,7 +159,7 @@ class StorageTestCase(BaseS3TestCase):
         storage = Storage(self.context)
         filepath = f"/test/can_put_file_{uuid4()}"
         await storage.upload(
-            storage.normalize_path(filepath + ".detectors.txt"),
+            normalize_path(storage.root_path, filepath + ".detectors.txt"),
             b'{"some": "data"}',
             "application/text",
             "",
