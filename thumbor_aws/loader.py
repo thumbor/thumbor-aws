@@ -13,6 +13,7 @@ from thumbor.loaders import LoaderResult
 
 from thumbor_aws.config import Config
 from thumbor_aws.s3_client import S3Client
+from thumbor_aws.utils import normalize_path
 
 Config.define(
     "AWS_LOADER_REGION_NAME",
@@ -82,7 +83,7 @@ async def load(context, path):
         client.configuration["bucket_name"], path
     )
 
-    norm_path = normalize_url(client.configuration["root_path"], real_path)
+    norm_path = normalize_path(client.configuration["root_path"], real_path)
     result = LoaderResult()
 
     status_code, body, last_modified = await client.get_data(
@@ -116,10 +117,3 @@ def get_bucket_and_path(configured_bucket: str, path: str) -> (str, str):
         real_path = "/".join(split_path[1:])
 
     return bucket, real_path
-
-
-def normalize_url(prefix: str, path: str) -> str:
-    """Function to normalize URLs before reaching into S3"""
-    if prefix:
-        return f"{prefix.rstrip('/')}/{path.lstrip('/')}"
-    return path

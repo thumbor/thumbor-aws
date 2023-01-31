@@ -10,7 +10,6 @@
 
 
 from datetime import datetime, timezone
-from urllib.parse import unquote
 
 from deprecated import deprecated
 from thumbor.engines import BaseEngine
@@ -19,6 +18,7 @@ from thumbor.utils import logger
 
 from thumbor_aws.config import Config
 from thumbor_aws.s3_client import S3Client
+from thumbor_aws.utils import normalize_path
 
 Config.define(
     "AWS_RESULT_STORAGE_REGION_NAME",
@@ -135,7 +135,7 @@ class Storage(BaseStorage, S3Client):
         )
 
     async def put(self, image_bytes: bytes) -> str:
-        file_abspath = self.normalize_path(self.context.request.url)
+        file_abspath = normalize_path(self.prefix, self.context.request.url)
         logger.debug("[RESULT_STORAGE] putting at %s", file_abspath)
         content_type = BaseEngine.get_mimetype(image_bytes)
         response = await self.upload(
@@ -159,19 +159,13 @@ class Storage(BaseStorage, S3Client):
             self.context.config.AUTO_WEBP and self.context.request.accepts_webp
         )
 
-    def normalize_path(self, path: str) -> str:
-        """Returns the path used for result storage"""
-        prefix = "auto_webp/" if self.is_auto_webp else ""
-        fs_path = unquote(path).lstrip("/")
-        return (
-            f"{self.root_path.rstrip('/')}/"
-            f"{prefix.lstrip('/')}"
-            f"{fs_path.lstrip('/')}"
-        )
+    @property
+    def prefix(self) -> str:
+        return ("auto_webp/" if self.is_auto_webp else "") + self.root_path
 
     async def get(self) -> ResultStorageResult:
         path = self.context.request.url
-        file_abspath = self.normalize_path(path)
+        file_abspath = normalize_path(self.prefix, path)
 
         logger.debug("[RESULT_STORAGE] getting from %s", file_abspath)
 
@@ -211,7 +205,7 @@ class Storage(BaseStorage, S3Client):
         self,
     ) -> datetime:
         path = self.context.request.url
-        file_abspath = self.normalize_path(path)
+        file_abspath = normalize_path(self.prefix, path)
         logger.debug("[RESULT_STORAGE] getting from %s", file_abspath)
 
         response = await self.get_object_metadata(file_abspath)

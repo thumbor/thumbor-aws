@@ -10,7 +10,6 @@
 
 from json import dumps, loads
 from typing import Any
-from urllib.parse import unquote
 
 from thumbor import storages
 from thumbor.engines import BaseEngine
@@ -18,6 +17,7 @@ from thumbor.utils import logger
 
 from thumbor_aws.config import Config
 from thumbor_aws.s3_client import S3Client
+from thumbor_aws.utils import normalize_path
 
 Config.define(
     "AWS_STORAGE_REGION_NAME",
@@ -93,7 +93,7 @@ class Storage(storages.BaseStorage, S3Client):
 
     async def put(self, path: str, file_bytes: bytes) -> str:
         content_type = BaseEngine.get_mimetype(file_bytes)
-        normalized_path = self.normalize_path(path)
+        normalized_path = normalize_path(self.root_path, path)
         logger.debug("[STORAGE] putting at %s", normalized_path)
         path = await self.upload(
             normalized_path,
@@ -113,7 +113,7 @@ class Storage(storages.BaseStorage, S3Client):
                 "True if no SECURITY_KEY specified"
             )
 
-        normalized_path = self.normalize_path(path)
+        normalized_path = normalize_path(self.root_path, path)
         crypto_path = f"{normalized_path}.txt"
         key = self.context.server.security_key.encode()
         s3_path = await self.upload(
@@ -128,7 +128,7 @@ class Storage(storages.BaseStorage, S3Client):
         return s3_path
 
     async def put_detector_data(self, path: str, data: Any) -> str:
-        normalized_path = self.normalize_path(path)
+        normalized_path = normalize_path(self.root_path, path)
         filepath = f"{normalized_path}.detectors.txt"
         details = dumps(data)
         return await self.upload(
@@ -139,7 +139,7 @@ class Storage(storages.BaseStorage, S3Client):
         )
 
     async def get(self, path: str) -> bytes:
-        normalized_path = self.normalize_path(path)
+        normalized_path = normalize_path(self.root_path, path)
         status, body, _ = await self.get_data(
             self.bucket_name, normalized_path
         )
@@ -149,7 +149,7 @@ class Storage(storages.BaseStorage, S3Client):
         return body
 
     async def get_crypto(self, path: str) -> str:
-        normalized_path = self.normalize_path(path)
+        normalized_path = normalize_path(self.root_path, path)
         crypto_path = f"{normalized_path}.txt"
         status, body, _ = await self.get_data(self.bucket_name, crypto_path)
         if status != 200:
@@ -158,7 +158,7 @@ class Storage(storages.BaseStorage, S3Client):
         return body.decode("utf-8")
 
     async def get_detector_data(self, path: str) -> Any:
-        normalized_path = self.normalize_path(path)
+        normalized_path = normalize_path(self.root_path, path)
         detector_path = f"{normalized_path}.detectors.txt"
         status, body, _ = await self.get_data(self.bucket_name, detector_path)
         if status != 200:
@@ -167,7 +167,7 @@ class Storage(storages.BaseStorage, S3Client):
         return loads(body)
 
     async def exists(self, path: str) -> bool:
-        normalized_path = self.normalize_path(path)
+        normalized_path = normalize_path(self.root_path, path)
         return await self.object_exists(normalized_path)
 
     async def remove(self, path: str):
@@ -176,7 +176,7 @@ class Storage(storages.BaseStorage, S3Client):
             return
 
         async with self.get_client() as client:
-            normalized_path = self.normalize_path(path)
+            normalized_path = normalize_path(self.root_path, path)
             response = await client.delete_object(
                 Bucket=self.bucket_name,
                 Key=normalized_path,
@@ -186,8 +186,3 @@ class Storage(storages.BaseStorage, S3Client):
                 raise RuntimeError(
                     f"Failed to remove {normalized_path}: Status {status}"
                 )
-
-    def normalize_path(self, path: str) -> str:
-        """Returns the path used for storage"""
-        path = unquote(path).lstrip("/")
-        return f"{self.root_path.rstrip('/')}/{path.lstrip('/')}"
