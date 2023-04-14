@@ -46,7 +46,7 @@ pylint = [
     { version = "^2.13.8", python = "3.7"},
     { version = "^2.15.8", python = ">3.8"}
 ]
-pytest = "^7.2.0"
+pytest = "^7.3.1"
 pytest-asyncio = "^0.20.3"
 pytest-cov = "^4.0.0"
 pytest-tldr = "^0.2.5"
