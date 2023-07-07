@@ -121,14 +121,10 @@ class BaseS3TestCase(TestCase):
                 "endpoint_url"
             ] = self.config.TC_AWS_ENDPOINT
 
-        location = {
-            "LocationConstraint": self.region_name,
-        }
         async with s3client.get_client() as client:
             try:
                 await client.create_bucket(
                     Bucket=self.bucket_name,
-                    CreateBucketConfiguration=location,
                 )
             except client.exceptions.BucketAlreadyOwnedByYou:
                 pass

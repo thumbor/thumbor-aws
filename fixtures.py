@@ -34,10 +34,8 @@ async def upload():
 
         # Ensure Bucket is there
         try:
-            location = {"LocationConstraint": "us-east-1"}
             await client.create_bucket(
                 Bucket="fixtures",
-                CreateBucketConfiguration=location,
             )
         except client.exceptions.BucketAlreadyOwnedByYou:
             pass
