@@ -48,20 +48,20 @@ class BaseS3TestCase(TestCase):
         )
 
         # Storage Config
-        cfg.AWS_STORAGE_REGION_NAME = "local"
+        cfg.AWS_STORAGE_REGION_NAME = "us-east-1"
         cfg.AWS_STORAGE_BUCKET_NAME = "test-bucket-st"
         cfg.AWS_STORAGE_ROOT_PATH = "/test-st"
         cfg.AWS_STORAGE_S3_ENDPOINT_URL = "https://localhost:4566"
 
         # Result Storage Config
-        cfg.AWS_RESULT_STORAGE_REGION_NAME = "local"
+        cfg.AWS_RESULT_STORAGE_REGION_NAME = "us-east-1"
         cfg.AWS_RESULT_STORAGE_BUCKET_NAME = "test-bucket-rs"
         cfg.AWS_RESULT_STORAGE_S3_ENDPOINT_URL = "https://localhost:4566"
         cfg.AWS_RESULT_STORAGE_ROOT_PATH = "/test-rs"
         cfg.STORES_CRYPTO_KEY_FOR_EACH_IMAGE = True
 
         # Loader Config
-        cfg.AWS_LOADER_REGION_NAME = "local"
+        cfg.AWS_LOADER_REGION_NAME = "us-east-1"
         cfg.AWS_LOADER_BUCKET_NAME = "test-bucket-st"
         cfg.AWS_LOADER_ROOT_PATH = "/test-st"
         cfg.AWS_LOADER_S3_ENDPOINT_URL = "https://localhost:4566"
@@ -83,7 +83,7 @@ class BaseS3TestCase(TestCase):
         )
 
         cfg.THUMBOR_AWS_RUN_IN_COMPATIBILITY_MODE = True
-        cfg.TC_AWS_REGION = "local"
+        cfg.TC_AWS_REGION = "us-east-1"
         cfg.TC_AWS_MAX_RETRY = 0
         cfg.TC_AWS_ENDPOINT = "https://localhost:4566"
 

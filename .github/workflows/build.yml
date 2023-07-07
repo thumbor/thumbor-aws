@@ -20,7 +20,7 @@ jobs:
           - '3.11'
     services:
       localstack:
-        image: localstack/localstack:2.0.2
+        image: localstack/localstack
         ports:
         - "4510-4530:4510-4530"
         - "4566:4566"

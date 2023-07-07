@@ -28,13 +28,13 @@ async def upload():
     session = get_session()
     async with session.create_client(
         "s3",
-        region_name="local",
+        region_name="us-east-1",
         endpoint_url="https://localhost:4566",
     ) as client:
 
         # Ensure Bucket is there
         try:
-            location = {"LocationConstraint": "local"}
+            location = {"LocationConstraint": "us-east-1"}
             await client.create_bucket(
                 Bucket="fixtures",
                 CreateBucketConfiguration=location,
