@@ -644,6 +644,17 @@ files = [
 ]
 
 [[package]]
+name = "jpegiptc"
+version = "1.5"
+description = "Jpeg Iptc data raw extract/copy"
+optional = false
+python-versions = "*"
+files = [
+    {file = "JpegIPTC-1.5-py3-none-any.whl", hash = "sha256:a31a14ab6ca1172f41527b35d19531bd246e8769329712a59d2ee4db0422d90b"},
+    {file = "JpegIPTC-1.5.tar.gz", hash = "sha256:2fe8cb5d5ad667c261c86adc7f958478b0f2a3f8a33b5854a481a8b7d0fc7826"},
+]
+
+[[package]]
 name = "lazy-object-proxy"
 version = "1.8.0"
 description = "A fast and thorough lazy object proxy."
@@ -1489,29 +1500,30 @@ files = [
 
 [[package]]
 name = "thumbor"
-version = "7.4.0"
+version = "7.5.2"
 description = "thumbor is an open-source photo thumbnail service by globo.com"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "thumbor-7.4.0-cp37-abi3-macosx_10_9_universal2.whl", hash = "sha256:ea8b90b4716b838439b7b6a0522b2ae31d59333456809df96898428197d885b6"},
-    {file = "thumbor-7.4.0-cp37-abi3-macosx_10_9_x86_64.whl", hash = "sha256:3c9e51bfa14386dc15a6d7055552a4619e0672d0c629720b65346889123f32bd"},
-    {file = "thumbor-7.4.0-cp37-abi3-macosx_11_0_arm64.whl", hash = "sha256:40a3fd85203550142c394461b463be7e127e497340c01f3ed13bbe30e8e14084"},
-    {file = "thumbor-7.4.0-cp37-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:35bba99a8c97c81377b6097c982ad80bbcfc25060c21e377dfb271c5439ed31d"},
-    {file = "thumbor-7.4.0-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:2ca40523f215354c597575f77d3a2aa704c49a29b70b96b3188fb2f44cc3ccb7"},
-    {file = "thumbor-7.4.0-cp37-abi3-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:236502c3d900327e2046742da7be5ea7dfbc01f39c43bce3fba59bf40ef554c7"},
-    {file = "thumbor-7.4.0-cp37-abi3-musllinux_1_1_aarch64.whl", hash = "sha256:8ebc3d73e32feaa45c982059553726eb2830f7c5851a86ecaa01d03de667d3a7"},
-    {file = "thumbor-7.4.0-cp37-abi3-musllinux_1_1_i686.whl", hash = "sha256:3c46379531c52ba9ee0a996ef9d1c1389f96643b299e6083363cf853efbc3721"},
-    {file = "thumbor-7.4.0-cp37-abi3-musllinux_1_1_x86_64.whl", hash = "sha256:8f207e6602da539d319e39386baa137d3572cb82540b7234aded2538d706e5a1"},
-    {file = "thumbor-7.4.0.tar.gz", hash = "sha256:33a3fdc1942ae614db0d148abed8e15967158dfe18015dadd705d19975a58d2c"},
+    {file = "thumbor-7.5.2-cp37-abi3-macosx_10_9_universal2.whl", hash = "sha256:dbc397844dab97c98c3c63acdf6b1d9e16c987b1cd14d589f54963dbaeaf5da8"},
+    {file = "thumbor-7.5.2-cp37-abi3-macosx_10_9_x86_64.whl", hash = "sha256:b664b75e034ec0ac5b0f9f0b30b8a5477e1bcdb4e74d085275aa208b053330d9"},
+    {file = "thumbor-7.5.2-cp37-abi3-macosx_11_0_arm64.whl", hash = "sha256:3fba2a479c15fe43d98f29636fbeea56ee5bf35e657a430046e25444fccdd285"},
+    {file = "thumbor-7.5.2-cp37-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:a585760577bed505787033902a2554325b02a7a9c34f7f725339a58f311d0231"},
+    {file = "thumbor-7.5.2-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:753069ed106367a3a38ae305d9f2849fe0da9d9f8cd9d9da691a4f2682d3ce39"},
+    {file = "thumbor-7.5.2-cp37-abi3-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:b03b2e5ca78534b2ccc4468b0adbd9b83345f446fd5f6b7fd4efecf054d11e26"},
+    {file = "thumbor-7.5.2-cp37-abi3-musllinux_1_1_aarch64.whl", hash = "sha256:ff33878d4f0a9ca02f462d5f6b4630ff7c776aa748ba3f6a8f9c97a208f2170b"},
+    {file = "thumbor-7.5.2-cp37-abi3-musllinux_1_1_i686.whl", hash = "sha256:ccf08366bd822d32b4ed5735637c06cf8ab8e1f8cdabeb20c7b323bd8f370351"},
+    {file = "thumbor-7.5.2-cp37-abi3-musllinux_1_1_x86_64.whl", hash = "sha256:e9b06adc686d18fff7f588980c82f28a70a82a2fa368e950b00268698428e09d"},
+    {file = "thumbor-7.5.2.tar.gz", hash = "sha256:86b15e415c1813914b5146f2e7c31e820866d5a8f6bfdfbdf674d20485190fcd"},
 ]
 
 [package.dependencies]
 colorama = ">=0.4.3,<1.dev0"
 derpconf = ">=0.8.3,<1.dev0"
+JpegIPTC = ">=1.4"
 libthumbor = ">=2.0.2,<3.dev0"
 piexif = ">=1.1.3,<2.dev0"
-Pillow = ">=9.0.0"
+Pillow = "==9.*"
 pytz = ">=2019.3.0"
 statsd = ">=3.3.0,<4.dev0"
 thumbor-plugins-gifv = ">=0.1.2,<1.dev0"
