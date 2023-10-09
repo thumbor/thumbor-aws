@@ -23,13 +23,14 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3 :: Only",
     "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
     "Topic :: Multimedia :: Graphics :: Presentation",
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.8,<3.12"
+python = ">=3.8,<3.13"
 thumbor = "^7"
 aiobotocore = "^2.0.0"
 pycurl = "^7.44.1"
