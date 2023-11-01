@@ -49,7 +49,7 @@ pytest-cov = "^4.1.0"
 pytest-tldr = "^0.2.5"
 pytest-xdist = "^3.3.1"
 yanc = "^0.3.3"
-pyssim = "^0.4.0"
+pyssim = "^0.7"
 numpy = "^1.23.5"
 scipy = "^1.9.3"
 

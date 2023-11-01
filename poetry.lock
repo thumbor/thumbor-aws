@@ -1049,12 +1049,12 @@ testutils = ["gitpython (>3)"]
 
 [[package]]
 name = "pyssim"
-version = "0.4"
+version = "0.7"
 description = "Module for computing Structured Similarity Image Metric (SSIM) in Python"
 optional = false
 python-versions = "*"
 files = [
-    {file = "pyssim-0.4.tar.gz", hash = "sha256:52184c85e6ed0362a508617497c70251837ab38a62531793e3ea7eeaf7a2e150"},
+    {file = "pyssim-0.7.tar.gz", hash = "sha256:1ae82fd3579c504fa51e460c7a454b2902d00cb789c6bcc4388fb11bcf5cd2bb"},
 ]
 
 [package.dependencies]
@@ -1677,4 +1677,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<3.12"
-content-hash = "54078dfd0ce5b95f68cd363b08fed30050eaec072829ea587b1a07ff0b92f83f"
+content-hash = "cda5a71a0603b78acff4ba78d31db166e3cf38a2be5323de63a719b86ab342e5"
