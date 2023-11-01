@@ -110,12 +110,12 @@ class S3Client:
         async with self.get_client() as client:
             response = None
             try:
-                settings = dict(
-                    Bucket=self.bucket_name,
-                    Key=path,
-                    Body=data,
-                    ContentType=content_type,
-                )
+                settings = {
+                    "Bucket": self.bucket_name,
+                    "Key": path,
+                    "Body": data,
+                    "ContentType": content_type,
+                }
                 if self.file_acl is not None:
                     settings["ACL"] = self.file_acl
 
