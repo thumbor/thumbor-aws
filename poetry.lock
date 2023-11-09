@@ -1316,21 +1316,21 @@ files = [
 
 [[package]]
 name = "thumbor"
-version = "7.7.0"
+version = "7.7.1"
 description = "thumbor is an open-source photo thumbnail service by globo.com"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "thumbor-7.7.0-cp38-abi3-macosx_10_9_universal2.whl", hash = "sha256:1a1cce1347cad589f0f1b12333badad96beffd0e954fd38273da396e09c27579"},
-    {file = "thumbor-7.7.0-cp38-abi3-macosx_10_9_x86_64.whl", hash = "sha256:f79b991ed5be7361017e0c6257e5708219042af0176b8d0fd82080dfc44b4554"},
-    {file = "thumbor-7.7.0-cp38-abi3-macosx_11_0_arm64.whl", hash = "sha256:907b5d317236354867cd6bd57eadc482bad4919f62c53f63a9f3b9ce93f8aef2"},
-    {file = "thumbor-7.7.0-cp38-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:809efda055b39c57687a71adac7c464b668c90de42d32741bdc686523991db76"},
-    {file = "thumbor-7.7.0-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:434b0a7e07e15521b9eb032f3a3b8100c86e1bf522f415912bd16fd75cba941f"},
-    {file = "thumbor-7.7.0-cp38-abi3-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:cc0c0292794481f595af2be00cef13b4b8e3cced972234b4cb0d893a53f41c52"},
-    {file = "thumbor-7.7.0-cp38-abi3-musllinux_1_1_aarch64.whl", hash = "sha256:1fe51c0c2d597787fd8b7f7584355a7b62cd15e1c23ab4d25ee48145f4ee240a"},
-    {file = "thumbor-7.7.0-cp38-abi3-musllinux_1_1_i686.whl", hash = "sha256:a1f3d7ec8d6c7d97e7bb92f40060a33a89a4b3a298ccb032974d05edb9776cfc"},
-    {file = "thumbor-7.7.0-cp38-abi3-musllinux_1_1_x86_64.whl", hash = "sha256:f63aa85e3b746cd0f477ede71ce5449008189816602cba8ebc20360aff903713"},
-    {file = "thumbor-7.7.0.tar.gz", hash = "sha256:3fd03d1e7aad5c099c151c0794963f8560f081dc9439d327ae062344c0a37cc3"},
+    {file = "thumbor-7.7.1-cp38-abi3-macosx_10_9_universal2.whl", hash = "sha256:3a3d767d5d1218059017c51b7f94e622274c5a87e0671ed8b6187a02c52a3f85"},
+    {file = "thumbor-7.7.1-cp38-abi3-macosx_10_9_x86_64.whl", hash = "sha256:001005d7f330c16334d58563229d7c0b1aa4715c908ac7bbb6ecb17b1a02ca36"},
+    {file = "thumbor-7.7.1-cp38-abi3-macosx_11_0_arm64.whl", hash = "sha256:bdb21e20b2f2c8694a12e92978e32252b7d98f8d98065ecb9cbd26f1a007833b"},
+    {file = "thumbor-7.7.1-cp38-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:6ec65537adeb5c9bb0eb38211a1a39e8b40c44ab040d999990054ebfb871da47"},
+    {file = "thumbor-7.7.1-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:d9effc8d1097ff7300cb18017dfe9e492cdb0b34d29dc145e17eebc8b1678df9"},
+    {file = "thumbor-7.7.1-cp38-abi3-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:0f9558488957a73650f8ad7a10c3c25c7f1422d97c0e06b751b1bc8bfac436ad"},
+    {file = "thumbor-7.7.1-cp38-abi3-musllinux_1_1_aarch64.whl", hash = "sha256:85be425c38c0e2599e7d4270df03d247fc0595c889d172b467aa03a7eac226ca"},
+    {file = "thumbor-7.7.1-cp38-abi3-musllinux_1_1_i686.whl", hash = "sha256:c34a53e83cbd11a76623836e893b925d994fb90b1191838dca223632dc6e3c4d"},
+    {file = "thumbor-7.7.1-cp38-abi3-musllinux_1_1_x86_64.whl", hash = "sha256:1627b7454e6b6db1363537d79f13ffcf929c02a4ac2be9707a20537dddefef0f"},
+    {file = "thumbor-7.7.1.tar.gz", hash = "sha256:e6ba1571e8d3f7b39ad714851f34984831dc202ab850cfc0957283e01a19d57b"},
 ]
 
 [package.dependencies]
@@ -1349,7 +1349,7 @@ webcolors = ">=1.10.0,<2.dev0"
 [package.extras]
 all = ["cairosvg (>=2.5.2)", "numpy (>=1.dev0,<1.27.0)", "opencv-python-headless (>=4.2.0,<5.dev0)", "pillow-avif-plugin (>=1.2.2,<2.dev0)", "pillow-heif (>=0.7.0)", "pycurl (>=7.43.0,<8.dev0)"]
 opencv = ["numpy (>=1.dev0,<1.27.0)", "opencv-python-headless (>=4.2.0,<5.dev0)"]
-tests = ["cairosvg (>=2.5.2)", "coverage (>=6.3.2,<7.dev0)", "flake8 (>=3.7.9,<4.dev0)", "isort (>=4.3.21,<5.dev0)", "numpy (>=1.dev0,<1.27.0)", "opencv-python-headless (>=4.2.0,<5.dev0)", "pillow-avif-plugin (>=1.2.2,<2.dev0)", "pillow-heif (>=0.7.0)", "pre-commit (>=2.17.0,<3.dev0)", "preggy (>=1.4.4,<2.dev0)", "pycurl (>=7.43.0,<8.dev0)", "pylint (==3.*)", "pyssim (>=0.4.0,<1.dev0)", "pytest (>=6.2.5)", "pytest-asyncio (>=0.10.0,<1.dev0)", "pytest-cov (>=3.0.0,<4.dev0)", "pytest-tldr (>=0.2.1,<1.dev0)", "pytest-xdist (>=2.4.0,<3.dev0)", "redis (>=4.2.2,<5.dev0)", "remotecv (>=2.3.0)", "sentry-sdk (>=0.14.1,<1.dev0)", "yanc (>=0.3.3,<1.dev0)"]
+tests = ["cairosvg (>=2.5.2)", "coverage (>=6.3.2,<7.dev0)", "flake8 (>=3.7.9,<4.dev0)", "isort (>=4.3.21,<5.dev0)", "numpy (>=1.dev0,<1.27.0)", "opencv-python-headless (>=4.2.0,<5.dev0)", "pillow-avif-plugin (>=1.2.2,<2.dev0)", "pillow-heif (>=0.7.0)", "pre-commit (>=2.17.0,<3.dev0)", "preggy (>=1.4.4,<2.dev0)", "pycurl (>=7.43.0,<8.dev0)", "pylint (==3.*)", "pyssim (>=0.4.0,<1.dev0)", "pytest (>=6.2.5)", "pytest-asyncio (>=0.10.0,<1.dev0)", "pytest-cov (>=3.0.0,<4.dev0)", "pytest-tldr (>=0.2.1,<1.dev0)", "pytest-xdist (>=2.4.0,<3.dev0)", "redis (>=5.0.1,<6.dev0)", "remotecv (>=2.3.0)", "sentry-sdk (>=0.14.1,<1.dev0)", "yanc (>=0.3.3,<1.dev0)"]
 
 [[package]]
 name = "thumbor-plugins-gifv"
