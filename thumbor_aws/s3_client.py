@@ -164,9 +164,7 @@ class S3Client:
 
         async with self.get_client() as client:
             try:
-                await client.head_object(
-                    Bucket=self.bucket_name, Key=filepath
-                )
+                await client.head_object(Bucket=self.bucket_name, Key=filepath)
                 return True
             except client.exceptions.NoSuchKey:
                 return False
