@@ -31,7 +31,6 @@ async def upload():
         region_name="us-east-1",
         endpoint_url="https://localhost:4566",
     ) as client:
-
         # Ensure Bucket is there
         try:
             await client.create_bucket(

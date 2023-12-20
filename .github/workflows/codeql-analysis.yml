@@ -24,14 +24,14 @@ jobs:
         language: [ 'python' ]
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: APT Update
       run: sudo apt-get update -y
     - name: APT Install
       run: sudo apt-get install -y python3-dev libcurl4-openssl-dev libgnutls28-dev
         python3-all-dev make zlib1g-dev gcc libssl-dev build-essential
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@v2
+      uses: github/codeql-action/init@v3
       with:
         languages: ${{ matrix.language }}
         config-file: ./.github/codeql/codeql-config.yml
@@ -57,4 +57,4 @@ jobs:
     - name: Set CodeQL python
       run: echo "CODEQL_PYTHON=$(which python)" >> $GITHUB_ENV
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v2
+      uses: github/codeql-action/analyze@v3
