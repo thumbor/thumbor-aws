@@ -161,7 +161,7 @@ class Storage(BaseStorage, S3Client):
 
     @property
     def prefix(self) -> str:
-        return ("auto_webp/" if self.is_auto_webp else "") + self.root_path
+        return self.root_path + ("/auto_webp" if self.is_auto_webp else "")
 
     async def get(self) -> ResultStorageResult:
         path = self.context.request.url
