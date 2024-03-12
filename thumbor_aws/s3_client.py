@@ -22,6 +22,7 @@ _default = object()
 
 class S3Client:
     __session: AioSession = None
+    __clients: Dict[tuple, AioBaseClient] = {}
     context: Context = None
     configuration: Dict[str, object] = None
 
@@ -89,14 +90,20 @@ class S3Client:
         return S3Client.__session
 
     def get_client(self) -> AioBaseClient:
-        """Gets a connected client to use for S3"""
-        return self.session.create_client(
+        """Key to allow reuse of S3 client"""
+        key = (self.config.AWS_LOADER_BUCKET_NAME, self.config.AWS_LOADER_REGION_NAME, self.config.AWS_LOADER_S3_ENDPOINT_URL)
+
+        if not S3Client.__clients.get(key):
+            """S3 client does not exist yet - create new connected client to use for S3"""
+            S3Client.__clients[key] = self.session.create_client(
             "s3",
             region_name=self.region_name,
             aws_secret_access_key=self.secret_access_key,
             aws_access_key_id=self.access_key_id,
             endpoint_url=self.endpoint_url,
         )
+        
+        return S3Client.__clients.get(key)
 
     async def upload(
         self,
