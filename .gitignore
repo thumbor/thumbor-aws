@@ -130,6 +130,7 @@ dmypy.json
 test-results/
 cobertura.xml
 coverage
+coverage.lcov
 cc-test-reporter
 
 .vscode

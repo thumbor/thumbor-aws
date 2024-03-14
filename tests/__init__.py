@@ -43,6 +43,8 @@ class BaseS3TestCase(TestCase):
         cfg.STORAGE = "thumbor_aws.storage"
         cfg.RESULT_STORAGE = "thumbor_aws.result_storage"
 
+        cfg.AUTO_WEBP = True
+
         cfg.AWS_DEFAULT_LOCATION = (
             "https://{bucket_name}.s3.localhost.localstack.cloud:4566"
         )
@@ -77,6 +79,8 @@ class BaseS3TestCase(TestCase):
         cfg.LOADER = "thumbor_aws.loader"
         cfg.STORAGE = "thumbor_aws.storage"
         cfg.RESULT_STORAGE = "thumbor_aws.result_storage"
+
+        cfg.AUTO_WEBP = True
 
         cfg.AWS_DEFAULT_LOCATION = (
             "https://{bucket_name}.s3.localhost.localstack.cloud:4566"

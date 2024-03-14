@@ -38,7 +38,7 @@ class ResultStorageTestCase(BaseS3TestCase):
         return self.context.config.AWS_RESULT_STORAGE_REGION_NAME
 
     @gen_test
-    async def test_can_put_file_in_s3(self):
+    async def test_can_put_file_in_s3_with_webp(self):
         """
         Verifies that submitting an image to S3 through
         Result Storage works and the image is there
@@ -47,6 +47,33 @@ class ResultStorageTestCase(BaseS3TestCase):
         filepath = f"test/can_put_file_{uuid4()}"
         self.context.request = Mock(url=filepath)
         storage = ResultStorage(self.context)
+        expected = self.test_images["default"]
+
+        path = await storage.put(expected)
+
+        expect(path).to_equal(
+            f"https://{self.bucket_name}.s3.localhost.localstack.cloud:4566"
+            f"{self._prefix}/auto_webp/{filepath}",
+        )
+        status, data, _ = await storage.get_data(
+            self.bucket_name, f"{self._prefix}/auto_webp/{filepath}"
+        )
+        expect(status).to_equal(200)
+        expect(data).to_equal(expected)
+
+    @gen_test
+    async def test_can_put_file_in_s3_without_webp(self):
+        """
+        Verifies that submitting an image to S3 through
+        Result Storage works and the image is there
+        """
+        await self.ensure_bucket()
+        filepath = f"test/can_put_file_{uuid4()}"
+
+        context_without_webp = self.get_context()
+        context_without_webp.request = Mock(url=filepath)
+        context_without_webp.request.accepts_webp = False
+        storage = ResultStorage(context_without_webp)
         expected = self.test_images["default"]
 
         path = await storage.put(expected)
