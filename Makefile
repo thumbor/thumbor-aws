@@ -28,7 +28,7 @@ test:
 	@$(MAKE) flake
 
 unit:
-	@poetry run pytest --cov=thumbor_aws tests/
+	@poetry run pytest --cov=thumbor_aws -n auto tests/
 
 sequential-unit:
 	@poetry run pytest -sv --cov=thumbor_aws tests/
