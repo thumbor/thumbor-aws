@@ -104,9 +104,9 @@ class S3Client:
         data: bytes,
         content_type,
         default_location,
+        encryption
     ) -> str:
         """Uploads a File to S3"""
-
         async with self.get_client() as client:
             response = None
             try:
@@ -114,10 +114,12 @@ class S3Client:
                     "Bucket": self.bucket_name,
                     "Key": path,
                     "Body": data,
-                    "ContentType": content_type,
+                    "ContentType": content_type
                 }
                 if self.file_acl is not None:
                     settings["ACL"] = self.file_acl
+                if encryption:
+                    settings["ServerSideEncryption"] = "AES256"
 
                 response = await client.put_object(**settings)
             except Exception as error:
