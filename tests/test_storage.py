@@ -146,7 +146,7 @@ class StorageTestCase(BaseS3TestCase):
             b"ACME-SEC2",
             "application/text",
             "http://my-site.com",
-            false
+            False
         )
 
         data = await storage.get_crypto(filepath)
@@ -164,7 +164,7 @@ class StorageTestCase(BaseS3TestCase):
             b'{"some": "data"}',
             "application/text",
             "",
-            false
+            False
         )
 
         data = await storage.get_detector_data(filepath)
