@@ -75,8 +75,6 @@ Config.define(
     "AWS Storage",
 )
 
-
-
 class Storage(storages.BaseStorage, S3Client):
     def __init__(self, context):
         S3Client.__init__(self, context)
