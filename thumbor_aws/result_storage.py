@@ -69,13 +69,6 @@ Config.define(
     "AWS Result Storage",
 )
 
-Config.define(
-    "AWS_RESULT_STORAGE_S3_SSE",
-    False,
-    "Use server side encryption for result storage.",
-    "AWS Result Storage",
-)
-
 
 class Storage(BaseStorage, S3Client):
     def __init__(self, context):
@@ -150,7 +143,6 @@ class Storage(BaseStorage, S3Client):
             image_bytes,
             content_type,
             self.context.config.AWS_DEFAULT_LOCATION,
-            self.context.config.AWS_RESULT_STORAGE_S3_SSE,
         )
         logger.info(
             "[RESULT_STORAGE] Image uploaded successfully to %s", file_abspath
