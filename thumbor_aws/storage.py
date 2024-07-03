@@ -21,7 +21,6 @@ from thumbor_aws.s3_client import S3Client
 from thumbor_aws.utils import normalize_path
 
 
-
 Config.define(
     "AWS_STORAGE_REGION_NAME",
     "us-east-1",
