@@ -44,7 +44,7 @@ class StorageTestCase(BaseS3TestCase):
             f"{self._prefix}{filepath}",
         )
         status, data, _ = await storage.get_data(
-            self.bucket_name, normalize_path(storage.root_path, filepath)
+            self.bucket_name, normalize_path(self.context, storage.root_path, filepath)
         )
         expect(status).to_equal(200)
         expect(data).to_equal(expected)
@@ -67,7 +67,7 @@ class StorageTestCase(BaseS3TestCase):
         )
         status, data, _ = await storage.get_data(
             self.bucket_name,
-            normalize_path(storage.root_path, filepath + ".txt"),
+            normalize_path(self.context, storage.root_path, filepath + ".txt"),
         )
         expect(status).to_equal(200)
         expect(data).to_equal("ACME-SEC")
@@ -92,7 +92,7 @@ class StorageTestCase(BaseS3TestCase):
         )
         status, data, _ = await storage.get_data(
             self.bucket_name,
-            normalize_path(storage.root_path, filepath + ".detectors.txt"),
+            normalize_path(self.context, storage.root_path, filepath + ".detectors.txt"),
         )
         expect(status).to_equal(200)
         expect(data).to_equal(b'{"some": "data"}')
@@ -124,7 +124,7 @@ class StorageTestCase(BaseS3TestCase):
 
         status, data, _ = await storage.get_data(
             self.bucket_name,
-            normalize_path(storage.root_path, filepath),
+            normalize_path(self.context, storage.root_path, filepath),
             expiration=0,
         )
 
@@ -142,7 +142,7 @@ class StorageTestCase(BaseS3TestCase):
         filepath = f"/test/can_put_file_{uuid4()}"
 
         await storage.upload(
-            normalize_path(storage.root_path, filepath + ".txt"),
+            normalize_path(self.context, storage.root_path, filepath + ".txt"),
             b"ACME-SEC2",
             "application/text",
             "http://my-site.com",
@@ -159,7 +159,7 @@ class StorageTestCase(BaseS3TestCase):
         storage = Storage(self.context)
         filepath = f"/test/can_put_file_{uuid4()}"
         await storage.upload(
-            normalize_path(storage.root_path, filepath + ".detectors.txt"),
+            normalize_path(self.context, storage.root_path, filepath + ".detectors.txt"),
             b'{"some": "data"}',
             "application/text",
             "",
