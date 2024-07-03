@@ -10,6 +10,7 @@
 
 from json import dumps, loads
 from typing import Any
+from urllib.parse import unquote
 
 from thumbor import storages
 from thumbor.engines import BaseEngine
@@ -19,8 +20,6 @@ from thumbor_aws.config import Config
 from thumbor_aws.s3_client import S3Client
 from thumbor_aws.utils import normalize_path
 
-# for default normalizer
-from urllib.parse import unquote
 
 
 Config.define(
@@ -75,7 +74,7 @@ Config.define(
 Config.define(
     "AWS_NORMALIZER",
     lambda path: unquote(path).lstrip("/"),
-    "How to normalize storage paths, identity is the default but you can also implement hashing or more semantic keys",
+    "How to normalize storage paths before adding the prefix",
     "AWS Storage",
 )
 
