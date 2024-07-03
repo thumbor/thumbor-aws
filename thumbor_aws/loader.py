@@ -83,7 +83,7 @@ async def load(context, path):
         client.configuration["bucket_name"], path
     )
 
-    norm_path = normalize_path(client.configuration["root_path"], real_path)
+    norm_path = normalize_path(context, client.configuration["root_path"], real_path)
     result = LoaderResult()
 
     status_code, body, last_modified = await client.get_data(

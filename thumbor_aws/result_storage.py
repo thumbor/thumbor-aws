@@ -69,6 +69,13 @@ Config.define(
     "AWS Result Storage",
 )
 
+Config.define(
+    "AWS_RESULT_STORAGE_S3_SSE",
+    False,
+    "Use server side encryption for result storage.",
+    "AWS Result Storage",
+)
+
 
 class Storage(BaseStorage, S3Client):
     def __init__(self, context):
@@ -135,7 +142,7 @@ class Storage(BaseStorage, S3Client):
         )
 
     async def put(self, image_bytes: bytes) -> str:
-        file_abspath = normalize_path(self.prefix, self.context.request.url)
+        file_abspath = normalize_path(self.context, self.prefix, self.context.request.url)
         logger.debug("[RESULT_STORAGE] putting at %s", file_abspath)
         content_type = BaseEngine.get_mimetype(image_bytes)
         response = await self.upload(
@@ -143,6 +150,7 @@ class Storage(BaseStorage, S3Client):
             image_bytes,
             content_type,
             self.context.config.AWS_DEFAULT_LOCATION,
+            self.context.config.AWS_RESULT_STORAGE_S3_SSE,
         )
         logger.info(
             "[RESULT_STORAGE] Image uploaded successfully to %s", file_abspath
@@ -165,7 +173,7 @@ class Storage(BaseStorage, S3Client):
 
     async def get(self) -> ResultStorageResult:
         path = self.context.request.url
-        file_abspath = normalize_path(self.prefix, path)
+        file_abspath = normalize_path(self.context, self.prefix, path)
 
         logger.debug("[RESULT_STORAGE] getting from %s", file_abspath)
 
@@ -205,7 +213,7 @@ class Storage(BaseStorage, S3Client):
         self,
     ) -> datetime:
         path = self.context.request.url
-        file_abspath = normalize_path(self.prefix, path)
+        file_abspath = normalize_path(self.context, self.prefix, path)
         logger.debug("[RESULT_STORAGE] getting from %s", file_abspath)
 
         response = await self.get_object_metadata(file_abspath)
