@@ -13,19 +13,19 @@ jobs:
       fail-fast: false
       matrix:
         python-version:
-          - '3.8'
-          - '3.9'
-          - '3.10'
-          - '3.11'
-          - '3.12'
+          - "3.8"
+          - "3.9"
+          - "3.10"
+          - "3.11"
+          - "3.12"
     services:
       localstack:
         image: localstack/localstack
         ports:
-        - "4510-4530:4510-4530"
-        - "4566:4566"
+          - "4510-4530:4510-4530"
+          - "4566:4566"
         env:
-         SERVICES: s3
+          SERVICES: s3
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python
@@ -36,7 +36,8 @@ jobs:
       - name: APT Update
         run: sudo apt-get update -y
       - name: APT Install
-        run: sudo apt-get install -y python3-dev libcurl4-openssl-dev libgnutls28-dev
+        run:
+          sudo apt-get install -y python3-dev libcurl4-openssl-dev libgnutls28-dev
           python3-all-dev make zlib1g-dev gcc libssl-dev build-essential
       - name: Install Poetry
         uses: snok/install-poetry@v1
@@ -75,8 +76,8 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-    - name: Coveralls Finished
-      uses: coverallsapp/github-action@v2.3.0
-      with:
-        github-token: ${{ secrets.github_token }}
-        parallel-finished: true
+      - name: Coveralls Finished
+        uses: coverallsapp/github-action@v2.3.0
+        with:
+          github-token: ${{ secrets.github_token }}
+          parallel-finished: true
