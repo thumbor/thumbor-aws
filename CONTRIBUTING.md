@@ -93,3 +93,5 @@ $ git pull thumbor master
 
 If there was anything to merge, just run your tests again. If they pass,
 [send a pull request](https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request).
+
+This project uses [Conventional Commit](https://www.conventionalcommits.org/en/v1.0.0/#summary)
