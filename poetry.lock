@@ -2,24 +2,24 @@
 
 [[package]]
 name = "aiobotocore"
-version = "2.15.0"
+version = "2.15.1"
 description = "Async client for aws services using botocore and aiohttp"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "aiobotocore-2.15.0-py3-none-any.whl", hash = "sha256:6d0b4a51d70bc33b1b4eba411076b0cc979aecbdad8e084bab202202423c0725"},
-    {file = "aiobotocore-2.15.0.tar.gz", hash = "sha256:988eef33fd9dd4b070959cfec922278e84166950695b2160bd581623cb6a420c"},
+    {file = "aiobotocore-2.15.1-py3-none-any.whl", hash = "sha256:0f738cde74108553b753b24655094289a3c7ea0f0f179ed1c0f8cea488999a35"},
+    {file = "aiobotocore-2.15.1.tar.gz", hash = "sha256:1f9f16eec2a3da32df162b5db12da779ec6d6c6311715c936cad511f436efa74"},
 ]
 
 [package.dependencies]
 aiohttp = ">=3.9.2,<4.0.0"
 aioitertools = ">=0.5.1,<1.0.0"
-botocore = ">=1.35.16,<1.35.17"
+botocore = ">=1.35.16,<1.35.24"
 wrapt = ">=1.10.10,<2.0.0"
 
 [package.extras]
-awscli = ["awscli (>=1.34.16,<1.34.17)"]
-boto3 = ["boto3 (>=1.35.16,<1.35.17)"]
+awscli = ["awscli (>=1.34.16,<1.34.24)"]
+boto3 = ["boto3 (>=1.35.16,<1.35.24)"]
 
 [[package]]
 name = "aiohappyeyeballs"
