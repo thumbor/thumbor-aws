@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.2](https://github.com/thumbor/thumbor-aws/compare/v0.8.1...v0.8.2) (2024-12-13)
+
+
+### Bug Fixes
+
+* GH action release tag match ([ef436e9](https://github.com/thumbor/thumbor-aws/commit/ef436e92dcd86815c94af674ef61a90d69ca023b))
+
 ## [0.8.1](https://github.com/thumbor/thumbor-aws/compare/0.8.0...v0.8.1) (2024-09-02)
 
 
