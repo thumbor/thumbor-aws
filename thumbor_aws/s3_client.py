@@ -97,7 +97,7 @@ class S3Client:
             connect_timeout=10,
             read_timeout=30,
         )
-        
+
         return self.session.create_client(
             "s3",
             region_name=self.region_name,
@@ -211,7 +211,7 @@ class S3Client:
                 try:
                     await stream.close()
                 except Exception:
-                    pass 
+                    pass
             logger.error(f"Error reading response body: {error}")
             raise
 
