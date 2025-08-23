@@ -17,6 +17,7 @@ jobs:
           - "3.10"
           - "3.11"
           - "3.12"
+          - "3.13"
     services:
       localstack:
         image: localstack/localstack
@@ -26,7 +27,7 @@ jobs:
         env:
           SERVICES: s3
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Python
         id: setup-python
         uses: actions/setup-python@v5
