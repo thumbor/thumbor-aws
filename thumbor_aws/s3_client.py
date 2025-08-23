@@ -13,6 +13,7 @@ from typing import Any, Dict, Mapping, Optional, Tuple
 
 from aiobotocore.client import AioBaseClient
 from aiobotocore.session import AioSession, get_session
+from botocore.config import Config as BotocoreConfig
 from thumbor.config import Config
 from thumbor.context import Context
 from thumbor.utils import logger
@@ -90,12 +91,20 @@ class S3Client:
 
     def get_client(self) -> AioBaseClient:
         """Gets a connected client to use for S3"""
+        config = BotocoreConfig(
+            max_pool_connections=50,
+            retries={'max_attempts': 3, 'mode': 'adaptive'},
+            connect_timeout=10,
+            read_timeout=30,
+        )
+        
         return self.session.create_client(
             "s3",
             region_name=self.region_name,
             aws_secret_access_key=self.secret_access_key,
             aws_access_key_id=self.access_key_id,
             endpoint_url=self.endpoint_url,
+            config=config,
         )
 
     async def upload(
@@ -193,8 +202,18 @@ class S3Client:
 
     async def get_body(self, response: Any) -> bytes:
         """Gets the body from an AWS response object"""
-        async with response["Body"] as stream:
-            return await stream.read()
+        stream = response["Body"]
+        try:
+            async with stream:
+                return await stream.read()
+        except Exception as error:
+            if hasattr(stream, 'close') and not stream.closed:
+                try:
+                    await stream.close()
+                except Exception:
+                    pass 
+            logger.error(f"Error reading response body: {error}")
+            raise
 
     def _get_bucket_and_path(self, path) -> Tuple[str, str]:
         bucket = self.bucket_name
