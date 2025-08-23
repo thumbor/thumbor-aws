@@ -212,7 +212,7 @@ class S3Client:
                     await stream.close()
                 except Exception:
                     pass
-            logger.error(f"Error reading response body: {error}")
+            logger.error("Error reading response body: %s", error)
             raise
 
     def _get_bucket_and_path(self, path) -> Tuple[str, str]:
