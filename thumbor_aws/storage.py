@@ -10,7 +10,6 @@
 
 from json import dumps, loads
 from typing import Any
-from urllib.parse import unquote
 
 from thumbor import storages
 from thumbor.engines import BaseEngine
@@ -67,13 +66,6 @@ Config.define(
     "AWS_STORAGE_S3_ACL",
     "public-read",
     "Storage ACL for files written in bucket",
-    "AWS Storage",
-)
-
-Config.define(
-    "AWS_NORMALIZER",
-    lambda path: unquote(path).lstrip("/"),
-    "How to normalize storage paths before adding the prefix",
     "AWS Storage",
 )
 
