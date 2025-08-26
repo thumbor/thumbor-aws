@@ -8,6 +8,7 @@
 # http://www.opensource.org/licenses/mit-license
 # Copyright (c) 2021 Bernardo Heynemann heynemann@gmail.com
 
+from urllib.parse import unquote
 
 from thumbor.config import Config, config
 
@@ -122,6 +123,13 @@ Config.define(
     False,
     "Store result with metadata (for instance content-type)",
     "tc_aws Compatibility",
+)
+
+Config.define(
+    "AWS_NORMALIZER",
+    lambda path: unquote(path).lstrip("/"),
+    "How to normalize storage paths before adding the prefix",
+    "AWS Storage",
 )
 
 
