@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.1](https://github.com/thumbor/thumbor-aws/compare/v0.9.0...v0.9.1) (2025-08-26)
+
+
+### Bug Fixes
+
+* Move the `AWS_NORMALIZER` config to top-level configuration list ([#316](https://github.com/thumbor/thumbor-aws/issues/316)) ([375414a](https://github.com/thumbor/thumbor-aws/commit/375414aa2b8ccd963d443d763637d92792ab74d9))
+
 ## [0.9.0](https://github.com/thumbor/thumbor-aws/compare/v0.8.1...v0.9.0) (2025-08-23)
 
 
