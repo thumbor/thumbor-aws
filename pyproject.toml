@@ -32,7 +32,7 @@ classifiers = [
 [tool.poetry.dependencies]
 python = ">=3.9,<3.14"
 thumbor = "^7.7"
-aiobotocore = "^2.0"
+aiobotocore = ">=2,<4"
 pycurl = "^7.44"
 deprecated = "^1.2"
 
