@@ -8,7 +8,7 @@ setup:
 	@poetry install
 
 services: docker-down
-	@docker-compose up
+	@docker compose up
 
 coverage:
 	@poetry run coverage report -m --fail-under=75
@@ -17,11 +17,11 @@ coverage:
 ci: unit coverage
 
 docker-up:
-	@docker-compose up -d
+	@docker compose up -d
 
 docker-down:
-	@docker-compose stop
-	@docker-compose rm -f
+	@docker compose stop
+	@docker compose rm -f
 
 test:
 	@$(MAKE) unit
