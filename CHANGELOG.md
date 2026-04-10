@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.0](https://github.com/thumbor/thumbor-aws/compare/v0.9.1...v1.0.0) (2026-04-10)
+
+
+### ⚠ BREAKING CHANGES
+
+* Drop support to Python 3.9 ([#344](https://github.com/thumbor/thumbor-aws/issues/344))
+
+### Features
+
+* Drop support to Python 3.9 ([#344](https://github.com/thumbor/thumbor-aws/issues/344)) ([8d3863f](https://github.com/thumbor/thumbor-aws/commit/8d3863f85d9d7b58f87c6629021a28bb21b07066))
+
 ## [0.9.1](https://github.com/thumbor/thumbor-aws/compare/v0.9.0...v0.9.1) (2025-08-26)
 
 
