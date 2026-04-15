@@ -69,6 +69,13 @@ Config.define(
     "AWS Result Storage",
 )
 
+Config.define(
+    "AWS_RESULT_STORAGE_TAGGING",
+    False,
+    "If Result Storage Objects should be tagged with Original Filename",
+    "AWS Result Storage",
+)
+
 
 class Storage(BaseStorage, S3Client):
     def __init__(self, context):
@@ -138,11 +145,15 @@ class Storage(BaseStorage, S3Client):
         file_abspath = normalize_path(self.context, self.prefix, self.context.request.url)
         logger.debug("[RESULT_STORAGE] putting at %s", file_abspath)
         content_type = BaseEngine.get_mimetype(image_bytes)
+        tags = None
+        if self.context.config.AWS_RESULT_STORAGE_TAGGING:
+            tags = {"AWS_RESULT_STORAGE_ORIGINAL": self.context.request.image_url}
         response = await self.upload(
             file_abspath,
             image_bytes,
             content_type,
             self.context.config.AWS_DEFAULT_LOCATION,
+            tags=tags,
         )
         logger.info(
             "[RESULT_STORAGE] Image uploaded successfully to %s", file_abspath

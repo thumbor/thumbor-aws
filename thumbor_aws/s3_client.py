@@ -113,6 +113,7 @@ class S3Client:
         data: bytes,
         content_type,
         default_location,
+        tags: dict[str, str] | None = None,
     ) -> str:
         """Uploads a File to S3"""
 
@@ -127,6 +128,8 @@ class S3Client:
                 }
                 if self.file_acl is not None:
                     settings["ACL"] = self.file_acl
+                if tags is not None:
+                    settings["Tagging"] = "&".join(f"{key}={value}" for key, value in tags.items())
 
                 response = await client.put_object(**settings)
             except Exception as error:
