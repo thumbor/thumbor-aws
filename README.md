@@ -55,7 +55,7 @@ Configure your `thumbor.conf` file to point to `thumbor_aws`:
 ```
 ## The loader thumbor should use to find source images.
 ## This must be the full name of a python module (python must be able to import it)
-LOADER = "thumbor.loaders.http_loader"
+LOADER = "thumbor_aws.loader"
 
 ## The file storage thumbor should use to store original images.
 ## This must be the full name of a python module (python must be able to import it)
