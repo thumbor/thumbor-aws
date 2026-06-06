@@ -60,6 +60,7 @@ class BaseS3TestCase(TestCase):
         cfg.AWS_RESULT_STORAGE_BUCKET_NAME = "test-bucket-rs"
         cfg.AWS_RESULT_STORAGE_S3_ENDPOINT_URL = "https://localhost:4566"
         cfg.AWS_RESULT_STORAGE_ROOT_PATH = "/test-rs"
+        cfg.AWS_RESULT_STORAGE_TAGGING = True
         cfg.STORES_CRYPTO_KEY_FOR_EACH_IMAGE = True
 
         # Loader Config
@@ -98,6 +99,7 @@ class BaseS3TestCase(TestCase):
         # Result Storage Config
         cfg.TC_AWS_RESULT_STORAGE_BUCKET = "test-bucket-compat-rs"
         cfg.TC_AWS_RESULT_STORAGE_ROOT_PATH = "/test-compat-rs"
+        cfg.AWS_RESULT_STORAGE_TAGGING = True
         cfg.STORES_CRYPTO_KEY_FOR_EACH_IMAGE = True
 
         # Loader Config
