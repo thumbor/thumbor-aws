@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.0](https://github.com/thumbor/thumbor-aws/compare/v1.0.0...v1.1.0) (2026-06-25)
+
+
+### Features
+
+* **release:** add PyPI attestation via trusted publishing ([#386](https://github.com/thumbor/thumbor-aws/issues/386)) ([93fa26e](https://github.com/thumbor/thumbor-aws/commit/93fa26e843353548ffebc305595aa4d94464506f))
+
+
+### Bug Fixes
+
+* **s3_client:** fallback to application/octet-stream when content_type is None ([#383](https://github.com/thumbor/thumbor-aws/issues/383)) ([365a2be](https://github.com/thumbor/thumbor-aws/commit/365a2be4301dfbfd79a316dc7f38350a95d17a60)), closes [#375](https://github.com/thumbor/thumbor-aws/issues/375)
+
 ## [1.0.0](https://github.com/thumbor/thumbor-aws/compare/v0.9.1...v1.0.0) (2026-06-05)
 
 
