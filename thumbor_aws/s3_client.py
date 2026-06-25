@@ -123,7 +123,7 @@ class S3Client:
                     "Bucket": self.bucket_name,
                     "Key": path,
                     "Body": data,
-                    "ContentType": content_type,
+                    "ContentType": content_type or "application/octet-stream",
                 }
                 if self.file_acl is not None:
                     settings["ACL"] = self.file_acl
