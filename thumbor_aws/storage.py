@@ -69,6 +69,13 @@ Config.define(
     "AWS Storage",
 )
 
+Config.define(
+    "AWS_STORAGE_S3_SSE",
+    False,
+    "Use server side encryption for storage.",
+    "AWS Storage",
+)
+
 
 class Storage(storages.BaseStorage, S3Client):
     def __init__(self, context):
@@ -101,6 +108,7 @@ class Storage(storages.BaseStorage, S3Client):
             file_bytes,
             content_type,
             self.context.config.AWS_DEFAULT_LOCATION,
+            self.context.config.AWS_STORAGE_S3_SSE,
         )
         return path
 
@@ -122,6 +130,7 @@ class Storage(storages.BaseStorage, S3Client):
             key,
             "application/text",
             self.context.config.AWS_DEFAULT_LOCATION,
+            self.context.config.AWS_STORAGE_S3_SSE,
         )
 
         logger.debug("Stored crypto at %s", crypto_path)
@@ -137,6 +146,7 @@ class Storage(storages.BaseStorage, S3Client):
             details,
             "application/json",
             self.context.config.AWS_DEFAULT_LOCATION,
+            self.context.config.AWS_STORAGE_S3_SSE,
         )
 
     async def get(self, path: str) -> bytes:
