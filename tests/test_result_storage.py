@@ -20,6 +20,7 @@ from tests import BaseS3TestCase
 from thumbor_aws.result_storage import Storage as ResultStorage
 from thumbor_aws.utils import normalize_path
 
+
 @pytest.mark.usefixtures("test_images")
 class ResultStorageTestCase(BaseS3TestCase):
     @property
@@ -157,7 +158,11 @@ class ResultStorageTestCase(BaseS3TestCase):
         async with storage.get_client() as client:
             fileabspath = normalize_path(storage.context, storage.prefix, filepath)
             response = await client.get_object_tagging(Bucket=storage.bucket_name, Key=fileabspath)
-            assert any(item["Key"] == "AWS_RESULT_STORAGE_ORIGINAL" and item["Value"] == filepath for item in response["TagSet"])
+            assert any(
+                item["Key"] == "AWS_RESULT_STORAGE_ORIGINAL" and item["Value"] == filepath
+                for item in response["TagSet"]
+            )
+
 
 @pytest.mark.usefixtures("test_images")
 class ResultStorageCompatibilityTestCase(ResultStorageTestCase):
