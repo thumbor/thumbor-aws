@@ -132,6 +132,31 @@ class StorageTestCase(BaseS3TestCase):
         expect(data).to_equal(b"")
 
     @gen_test
+    async def test_upload_with_none_content_type_uses_octet_stream(self):
+        """
+        Verifies that uploading with None content_type falls back to
+        application/octet-stream instead of failing S3 parameter validation
+        """
+        await self.ensure_bucket()
+        storage = Storage(self.context)
+        filepath = f"/test/none_content_type_{uuid4()}"
+
+        path = await storage.upload(
+            normalize_path(self.context, storage.root_path, filepath),
+            b"some binary data",
+            None,
+            self.context.config.AWS_DEFAULT_LOCATION,
+        )
+
+        expect(path).not_to_be_null()
+        status, data, _ = await storage.get_data(
+            self.bucket_name,
+            normalize_path(self.context, storage.root_path, filepath),
+        )
+        expect(status).to_equal(200)
+        expect(data).to_equal(b"some binary data")
+
+    @gen_test
     async def test_can_get_crypto_from_s3(self):
         """
         Verifies that security information can be

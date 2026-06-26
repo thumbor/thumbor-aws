@@ -5,7 +5,7 @@ include = '\.pyi?$'
 
 [tool.poetry]
 name = "thumbor_aws"
-version = "1.0.0"
+version = "1.1.0"
 authors = ["Bernardo Heynemann <heynemann@gmail.com>"]
 description = "thumbor_aws provides extensions for thumbor using AWS"
 readme = "README.md"
@@ -31,26 +31,26 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.15"
-thumbor = "^7.7"
-aiobotocore = "^3.0"
-pycurl = "^7.44"
-deprecated = "^1.2"
+thumbor = "^7.8"
+aiobotocore = "^3.7"
+pycurl = "^7.46"
+deprecated = "^1.3"
 
 [tool.poetry.group.dev.dependencies]
-pre-commit = ">=3.5,<5.0"
-coverage = "^7.6"
-flake8 = "^7.1"
-isort = ">=5.13,<9.0"
+pre-commit = ">=4.6,<6.0"
+coverage = "^7.14"
+flake8 = "^7.3"
+isort = ">=8.0,<10.0"
 preggy = "^1.4"
-pylint = ">=3.2,<5.0"
-pytest = ">=8.3,<10.0"
-pytest-cov = "^5.0"
-pytest-tldr = "^0.2.5"
-pytest-xdist = "^3.6"
+pylint = ">=4.0,<6.0"
+pytest = ">=9.1,<11.0"
+pytest-cov = "^7.1"
+pytest-tldr = "^0.2.6"
+pytest-xdist = "^3.8"
 yanc = "^0.3.3"
 pyssim = "^0.7"
-numpy = ">=1.26,<3.0"
-scipy = "^1.11.2"
+numpy = "^2.2"
+scipy = "^1.15"
 
 
 [build-system]
