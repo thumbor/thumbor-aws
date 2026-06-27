@@ -18,6 +18,7 @@ from tornado.testing import gen_test
 
 from tests import BaseS3TestCase
 from thumbor_aws.result_storage import Storage as ResultStorage
+from thumbor_aws.utils import normalize_path
 
 
 @pytest.mark.usefixtures("test_images")
@@ -45,7 +46,7 @@ class ResultStorageTestCase(BaseS3TestCase):
         """
         await self.ensure_bucket()
         filepath = f"test/can_put_file_{uuid4()}"
-        self.context.request = Mock(url=filepath)
+        self.context.request = Mock(url=filepath, image_url=filepath)
         storage = ResultStorage(self.context)
         expected = self.test_images["default"]
 
@@ -71,7 +72,7 @@ class ResultStorageTestCase(BaseS3TestCase):
         filepath = f"test/can_put_file_{uuid4()}"
 
         context_without_webp = self.get_context()
-        context_without_webp.request = Mock(url=filepath)
+        context_without_webp.request = Mock(url=filepath, image_url=filepath)
         context_without_webp.request.accepts_webp = False
         storage = ResultStorage(context_without_webp)
         expected = self.test_images["default"]
@@ -96,7 +97,7 @@ class ResultStorageTestCase(BaseS3TestCase):
         """
         await self.ensure_bucket()
         filepath = f"/test/can_put_file_{uuid4()}"
-        self.context.request = Mock(url=filepath)
+        self.context.request = Mock(url=filepath, image_url=filepath)
         storage = ResultStorage(self.context)
         expected = self.test_images["default"]
         await storage.put(expected)
@@ -117,7 +118,7 @@ class ResultStorageTestCase(BaseS3TestCase):
         """
         await self.ensure_bucket()
         filepath = f"/test/can_put_file_{uuid4()}"
-        self.context.request = Mock(url=filepath)
+        self.context.request = Mock(url=filepath, image_url=filepath)
         storage = ResultStorage(self.context)
 
         data = await storage.get()
@@ -132,7 +133,7 @@ class ResultStorageTestCase(BaseS3TestCase):
         """
         await self.ensure_bucket()
         filepath = f"/test/can_put_file_{uuid4()}"
-        self.context.request = Mock(url=filepath)
+        self.context.request = Mock(url=filepath, image_url=filepath)
         storage = ResultStorage(self.context)
         expected = self.test_images["default"]
         await storage.put(expected)
@@ -140,6 +141,27 @@ class ResultStorageTestCase(BaseS3TestCase):
         last_updated = await storage.last_updated()
 
         expect(last_updated).not_to_be_null()
+
+    @gen_test
+    async def test_has_set_object_tags(self):
+        """
+        Verifies that an image has the
+        AWS_RESULT_STORAGE_ORIGINAL tag
+        """
+        await self.ensure_bucket()
+        filepath = f"/test/can_put_file_{uuid4()}"
+        self.context.request = Mock(url=filepath, image_url=filepath)
+        storage = ResultStorage(self.context)
+        expected = self.test_images["default"]
+        await storage.put(expected)
+
+        async with storage.get_client() as client:
+            fileabspath = normalize_path(storage.context, storage.prefix, filepath)
+            response = await client.get_object_tagging(Bucket=storage.bucket_name, Key=fileabspath)
+            assert any(
+                item["Key"] == "AWS_RESULT_STORAGE_ORIGINAL" and item["Value"] == filepath
+                for item in response["TagSet"]
+            )
 
 
 @pytest.mark.usefixtures("test_images")
