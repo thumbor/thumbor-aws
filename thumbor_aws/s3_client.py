@@ -113,6 +113,7 @@ class S3Client:
         data: bytes,
         content_type,
         default_location,
+        *,
         tags: dict[str, str] | None = None,
     ) -> str:
         """Uploads a File to S3"""
