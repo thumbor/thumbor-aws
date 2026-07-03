@@ -118,6 +118,14 @@ thumbor-aws loader offer several configuration options:
 ################################################################################
 ```
 
+⚠️ **Security note**: when `AWS_LOADER_BUCKET_NAME` (or `TC_AWS_LOADER_BUCKET`
+in compatibility mode) is empty, the first segment of the image URL is used as
+the bucket name. On deployments that serve unsigned URLs
+(`ALLOW_UNSAFE_URL = True`), this lets anyone request images from *any* bucket
+the loader's credentials can access. If you rely on this mode, scope the
+loader's IAM policy to only the buckets you intend to serve, and prefer signed
+URLs.
+
 #### Storage
 
 Below you can see the result of running thumbor's config generation after importing thumbor-aws:
