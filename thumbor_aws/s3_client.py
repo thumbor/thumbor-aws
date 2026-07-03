@@ -145,7 +145,7 @@ class S3Client:
 
     async def get_data(
         self, bucket: str, path: str, expiration: int = _default
-    ) -> Tuple[int, bytes, bytes, Optional[datetime.datetime]]:
+    ) -> Tuple[int, bytes, Optional[datetime.datetime]]:
         """Gets an object's data from S3"""
         async with self.get_client() as client:
             try:
@@ -155,9 +155,9 @@ class S3Client:
 
             status_code = self.get_status_code(response)
             if status_code != 200:
-                msg = f"Unable to upload image to {path}: Status Code {status_code}"
+                msg = f"Unable to retrieve image at {path}: Status Code {status_code}"
                 logger.error(msg)
-                return status_code, msg, None
+                return status_code, msg.encode("utf-8"), None
 
             last_modified = response["LastModified"]
 
