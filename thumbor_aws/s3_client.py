@@ -113,8 +113,12 @@ class S3Client:
         data: bytes,
         content_type,
         default_location,
+        acl: str = _default,
     ) -> str:
         """Uploads a File to S3"""
+
+        if acl is _default:
+            acl = self.file_acl
 
         async with self.get_client() as client:
             response = None
@@ -125,8 +129,8 @@ class S3Client:
                     "Body": data,
                     "ContentType": content_type or "application/octet-stream",
                 }
-                if self.file_acl is not None:
-                    settings["ACL"] = self.file_acl
+                if acl is not None:
+                    settings["ACL"] = acl
 
                 response = await client.put_object(**settings)
             except Exception as error:

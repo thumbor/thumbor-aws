@@ -117,11 +117,14 @@ class Storage(storages.BaseStorage, S3Client):
         normalized_path = normalize_path(self.context, self.root_path, path)
         crypto_path = f"{normalized_path}.txt"
         key = self.context.server.security_key.encode()
+        # Never apply the configured ACL (public-read by default) to the
+        # security key: a publicly readable key allows forging signed URLs.
         s3_path = await self.upload(
             crypto_path,
             key,
             "application/text",
             self.context.config.AWS_DEFAULT_LOCATION,
+            acl=None,
         )
 
         logger.debug("Stored crypto at %s", crypto_path)
