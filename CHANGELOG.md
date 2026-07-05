@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.1.1](https://github.com/thumbor/thumbor-aws/compare/v1.1.0...v1.1.1) (2026-07-05)
+
+
+### Bug Fixes
+
+* never store the security key with a public ACL ([#392](https://github.com/thumbor/thumbor-aws/issues/392)) ([5143470](https://github.com/thumbor/thumbor-aws/commit/514347030547d33a8004c2384a93ea5dd09960ff))
+* return bytes and correct log message on get_data errors ([abe6c51](https://github.com/thumbor/thumbor-aws/commit/abe6c5103a0d5808d0a592a21d985c0bea7784d1))
+* run stale workflow once every six hours instead of every minute ([349e698](https://github.com/thumbor/thumbor-aws/commit/349e698625c889f4c2590109ba0a36a03c2ec2a9))
+
+
+### Documentation
+
+* warn about URL-controlled bucket selection in the loader ([16e2382](https://github.com/thumbor/thumbor-aws/commit/16e2382ee6adf2b89af80c70e01a52bd36ec6d23))
+
 ## [1.1.0](https://github.com/thumbor/thumbor-aws/compare/v1.0.0...v1.1.0) (2026-06-25)
 
 
