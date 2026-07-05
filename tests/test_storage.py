@@ -73,6 +73,30 @@ class StorageTestCase(BaseS3TestCase):
         expect(data).to_equal("ACME-SEC")
 
     @gen_test
+    async def test_put_crypto_is_never_public(self):
+        """
+        Verifies that the security key is stored without
+        a public ACL even when AWS_STORAGE_S3_ACL is public
+        """
+        await self.ensure_bucket()
+        self.context.config.AWS_STORAGE_S3_ACL = "public-read"
+        storage = Storage(self.context)
+        filepath = f"/test/can_put_file_{uuid4()}"
+
+        await storage.put_crypto(filepath)
+
+        key = normalize_path(
+            self.context, storage.root_path, filepath + ".txt"
+        )
+        async with storage.get_client() as client:
+            acl = await client.get_object_acl(
+                Bucket=self.bucket_name, Key=key
+            )
+        for grant in acl["Grants"]:
+            grantee_uri = grant["Grantee"].get("URI", "")
+            expect(grantee_uri).not_to_include("AllUsers")
+
+    @gen_test
     async def test_can_put_detector_data_in_s3(self):
         """Verifies that detector data can be placed in S3 using Storage"""
         await self.ensure_bucket()
