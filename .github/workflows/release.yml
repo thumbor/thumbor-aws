@@ -26,7 +26,7 @@ jobs:
       - name: Build package
         run: poetry build
       - name: Publish a Python distribution to PyPI
-        uses: pypa/gh-action-pypi-publish@v1.14.0
+        uses: pypa/gh-action-pypi-publish@v1.14.1
         with:
           attestations: true
           skip_existing: true
