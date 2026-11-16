@@ -20,6 +20,7 @@ jobs:
           - "3.12"
           - "3.13"
           - "3.14"
+          - "3.15"
     services:
       localstack:
         image: localstack/localstack:4.14.0
@@ -40,13 +41,7 @@ jobs:
       - name: APT Install
         run:
           sudo apt-get install -y python3-dev libcurl4-openssl-dev libgnutls28-dev
-          python3-all-dev make zlib1g-dev gcc libssl-dev build-essential 
-      - name: Install Pillow dependencies(Python 3.14 only)
-        if: ${{ matrix.python-version == '3.14' }}
-        run:
-          sudo apt-get install libtiff5-dev libjpeg8-dev libopenjp2-7-dev zlib1g-dev 
-          libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python3-tk 
-          libharfbuzz-dev libfribidi-dev libxcb1-dev
+          python3-all-dev make zlib1g-dev gcc libssl-dev build-essential
       - name: Install Poetry
         uses: snok/install-poetry@v1
         with:
